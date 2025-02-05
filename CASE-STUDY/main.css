@@ -1,0 +1,63 @@
+.game {
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+}
+
+.menu {
+    margin: 100px 30px;
+}
+
+.btn {
+    justify-self: center;
+}
+
+button {
+    display: block;
+    width: 300px;
+    height: 100px;
+    margin: 10px 0;
+    font-size: 50px;
+    cursor: pointer;
+    border-radius: 30px;
+}
+
+button:first-child {
+    background-color: lightgreen;
+}
+
+button:nth-child(2) {
+    background-color: yellow;
+}
+
+button:last-child {
+    background-color: red;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 50px;
+}
+
+td {
+    border: 3px solid gray;
+    width: 70px;
+    height: 70px;
+    text-align: center;
+    font-size: 50px;
+    font-weight: bold;
+    color: blue;
+}
+
+td:hover {
+    cursor: pointer;
+}
+
+.highlight {
+    background-color: lightyellow;
+}
+
+.startnumber {
+    background-color: lightsteelblue;
+    font-weight: bold;
+    color: black;
+}
