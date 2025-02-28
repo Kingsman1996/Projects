@@ -1,23 +1,23 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class QuanLyNhanVien {
-    private ArrayList<NhanVien> workerList;
+public class WorkerManaging {
+    private ArrayList<Worker> workerList;
     private int workerAmount;
 
-    public QuanLyNhanVien() {
+    public WorkerManaging() {
         workerAmount = 0;
         workerList = new ArrayList<>();
     }
 
-    public void addWorker(NhanVien newNhanVien) {
-        workerList.add(newNhanVien);
+    public void addWorker(Worker newWorker) {
+        workerList.add(newWorker);
         workerAmount++;
     }
 
-    public void removeWorker(NhanVien nhanVien) {
-        if (workerList.contains(nhanVien)) {
-            workerList.remove(nhanVien);
+    public void removeWorker(Worker worker) {
+        if (workerList.contains(worker)) {
+            workerList.remove(worker);
             workerAmount--;
         }
     }
@@ -26,13 +26,13 @@ public class QuanLyNhanVien {
         return workerAmount;
     }
 
-    public NhanVien getWorkerByIndex(int index) {
+    public Worker getWorkerByIndex(int index) {
         return workerList.get(index);
     }
 
-    public ArrayList<NhanVien> getWorkersByName(String name) {
-        ArrayList<NhanVien> tempList = new ArrayList<>();
-        for (NhanVien each : workerList) {
+    public ArrayList<Worker> getWorkersByName(String name) {
+        ArrayList<Worker> tempList = new ArrayList<>();
+        for (Worker each : workerList) {
             if (each.getName().equals(name)) {
                 tempList.add(each);
             }
@@ -42,22 +42,22 @@ public class QuanLyNhanVien {
 
     public double getAverageSalary() {
         double sum = 0;
-        for (NhanVien each : workerList) {
+        for (Worker each : workerList) {
             sum += each.getRealSalary();
         }
         return sum / workerAmount;
     }
 
-    public boolean isLowSalaryFullTime(NhanVien nhanVien, double averageSalary) {
-        if (isFullTime(nhanVien)) {
-            return nhanVien.getRealSalary() < averageSalary;
+    public boolean isLowSalaryFullTime(Worker worker, double averageSalary) {
+        if (isFullTime(worker)) {
+            return worker.getRealSalary() < averageSalary;
         }
         return false;
     }
 
-    public ArrayList<NhanVien> getLowSalaryFullTime() {
-        ArrayList<NhanVien> tempList = new ArrayList<>();
-        for (NhanVien each : workerList) {
+    public ArrayList<Worker> getLowSalaryFullTime() {
+        ArrayList<Worker> tempList = new ArrayList<>();
+        for (Worker each : workerList) {
             if (isLowSalaryFullTime(each, getAverageSalary())) {
                 tempList.add(each);
             }
@@ -65,17 +65,17 @@ public class QuanLyNhanVien {
         return tempList;
     }
 
-    public boolean isFullTime(NhanVien nhanVien) {
-        return nhanVien instanceof NhanVienFullTime;
+    public boolean isFullTime(Worker worker) {
+        return worker instanceof FullTimeWorker;
     }
 
-    public boolean isPartTime(NhanVien nhanVien) {
-        return nhanVien instanceof NhanVienPartTime;
+    public boolean isPartTime(Worker worker) {
+        return worker instanceof PartTimeWorker;
     }
 
     public double sumPartTimeRealSaraly() {
         double sum = 0;
-        for (NhanVien each : workerList) {
+        for (Worker each : workerList) {
             if (isPartTime(each)) {
                 sum += each.getRealSalary();
             }
@@ -83,9 +83,9 @@ public class QuanLyNhanVien {
         return sum;
     }
 
-    public ArrayList<NhanVien> getAllFullTimeSortedSalary() {
-        ArrayList<NhanVien> tempList = new ArrayList<>();
-        for (NhanVien each : workerList) {
+    public ArrayList<Worker> getAllFullTimeSortedSalary() {
+        ArrayList<Worker> tempList = new ArrayList<>();
+        for (Worker each : workerList) {
             if (isFullTime(each)) {
                 tempList.add(each);
             }

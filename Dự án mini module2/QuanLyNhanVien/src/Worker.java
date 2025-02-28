@@ -1,14 +1,14 @@
-public abstract class NhanVien implements Comparable<NhanVien> {
+public abstract class Worker implements Comparable<Worker> {
     private int id;
     private String name;
     private int age;
     private String phoneNumber;
     private String mailAddress;
 
-    public NhanVien() {
+    public Worker() {
     }
 
-    public NhanVien(int id, String name, int age, String phoneNumber, String mailAddress) {
+    public Worker(int id, String name, int age, String phoneNumber, String mailAddress) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -59,7 +59,7 @@ public abstract class NhanVien implements Comparable<NhanVien> {
     public abstract double getRealSalary();
 
     @Override
-    public int compareTo(NhanVien other) {
+    public int compareTo(Worker other) {
         return Double.compare(getRealSalary(), other.getRealSalary());
     }
 
