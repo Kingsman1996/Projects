@@ -1,4 +1,4 @@
-public class TestWorker {
+public class Main {
     public static void main(String[] args) {
         System.out.println("-----Quản lý nhân viên-----");
         WorkerManaging workerList = new WorkerManaging();
