@@ -163,7 +163,6 @@ function gameStart(how) {
                         })
                         clearInterval(timer)
                         setTimeout(alert("Xuất sắc, bạn đã hoàn thành thử thách!"), 2000)
-
                     }
                 }
             });
