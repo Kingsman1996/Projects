@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataHandler {
+
     public static List<String> readFile(String path) {
         List<String> lines = new ArrayList<>();
         File file = new File(path);

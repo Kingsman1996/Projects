@@ -3,17 +3,23 @@ package actors.product.classes;
 import actors.product.interfaces.Sizeable;
 
 public class Pizza extends Food implements Sizeable {
-    private String size;
+    private String size = "Medium";
 
-    public Pizza(int price) {
-        super(price);
+    public Pizza() {
         this.name = "Pizza";
-        this.size = "Medium";
+        this.price = 80000;
     }
 
-    public Pizza(int price, String size) {
-        super(price);
+    public Pizza(String size) {
         this.name = "Pizza";
+        this.price = 80000;
+        if (size.equals("Small") || size.equals("Large")) {
+            this.size = size;
+        }
+    }
+
+    public Pizza(String name, int price, String size) {
+        super(name, price);
         this.size = size;
     }
 
@@ -29,6 +35,6 @@ public class Pizza extends Food implements Sizeable {
 
     @Override
     public String toString() {
-        return super.toString() + ", size: " + size;
+        return super.toString() + ", " + size;
     }
 }

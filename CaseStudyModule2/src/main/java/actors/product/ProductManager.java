@@ -1,6 +1,7 @@
 package actors.product;
 
 import actors.product.classes.*;
+import data.DataHandler;
 import data.ProductDataHandler;
 import message.ProductMessage;
 import validate.Validator;
@@ -10,60 +11,79 @@ import java.util.List;
 
 public class ProductManager {
     private List<Product> productList;
+    private final String filePath;
 
     public ProductManager() {
         productList = new ArrayList<>();
-        loadProductsFromFile();
+        filePath = ProductDataHandler.getProductFile();
+        loadFile();
     }
 
-    public void loadProductsFromFile() {
-        List<String> lines = ProductDataHandler.readProducts();
-        for (String line : lines) {
-            Product product = createProduct(line.split(",")[0].trim(), line.split(",")[1].trim());
-            productList.add(product);
+    public void loadFile() {
+        for (String line : ProductDataHandler.readProducts()) {
+            String[] parts = line.split(",");
+            String name = parts[0].trim();
+            int price = Integer.parseInt(parts[1].trim());
+            if (parts.length == 2) {
+                switch (name) {
+                    case "Fried Rice":
+                        productList.add(new FriedRice(name, price));
+                        break;
+                    case "Sting":
+                        productList.add(new Sting(name, price));
+                        break;
+                }
+            }
+            if (parts.length == 3) {
+                String size = parts[2].trim();
+                switch (name) {
+                    case "Milk Tea":
+                        productList.add(new MilkTea(name,price,size));
+                        break;
+                    case "Pizza":
+                        productList.add(new Pizza(name,price,size));
+                        break;
+                }
+            }
         }
     }
 
     public void add(Product product) {
         productList.add(product);
-        ProductDataHandler.appendToFile(ProductDataHandler.getProductFile(), product.toString());
+        DataHandler.appendToFile(filePath, product.toString());
         ProductMessage.addedDone(product.getName());
     }
 
-    public int findIndex(String searchName) {
-        int index = -1;
-        for (int i = 0; i < productList.size(); i++) {
-            if (productList.get(i).getName().equals(searchName)) {
-                index = i;
-                break;
+    public void remove(String name) {
+        List<Product> toRemove = getProductByName(name);
+        productList.removeAll(toRemove);
+        saveChanges();
+        ProductMessage.deletedSuccess();
+    }
+
+    public List<Product> getProductByName(String searchName) {
+        List<Product> found = new ArrayList<>();
+        for (Product product : productList) {
+            if (product.getName().toLowerCase().contains(searchName.toLowerCase())) {
+                found.add(product);
             }
         }
-        return index;
+        return found;
     }
 
-    public Product getProductByName(String searchName) {
-        Product product = null;
-        int index = findIndex(searchName);
-        if (index != -1) {
-            product = productList.get(index);
-        }
-        return product;
-    }
-
-    public List<Product> getProductList() {
+    public List<Product> getAll() {
         return productList;
     }
 
-
-    public void remove(String searchName) {
-        int index = findIndex(searchName);
-        if (index == -1) {
-            ProductMessage.notFound();
+    public void updateProductPrice(String searchName, String newPrice) {
+        if (!Validator.isValidProductPrice(newPrice)) {
             return;
         }
-        productList.remove(index);
+        for (Product product : getProductByName(searchName)) {
+            product.setPrice(Integer.parseInt(newPrice));
+        }
         saveChanges();
-        ProductMessage.deletedSuccess();
+        ProductMessage.fixedSuccess();
     }
 
     public List<String> productListToString() {
@@ -74,37 +94,7 @@ public class ProductManager {
         return list;
     }
 
-    public void updateProductPrice(String searchName, String newPrice) {
-        int index = findIndex(searchName);
-        if (index == -1) {
-            ProductMessage.notFound();
-            return;
-        }
-        if (!Validator.isValidProductPrice(newPrice)) {
-            return;
-        }
-        productList.set(index, createProduct(searchName, newPrice));
-        saveChanges();
-        ProductMessage.fixedSuccess();
-    }
-
     public void saveChanges() {
-        ProductDataHandler.writeFile(ProductDataHandler.getProductFile(), productListToString());
-    }
-
-    public Product createProduct(String name, String price) {
-        int integerPrice = Integer.parseInt(price);
-        switch (name.toLowerCase()) {
-            case "fried rice":
-                return new FriedRice(integerPrice);
-            case "milk tea":
-                return new MilkTea(integerPrice);
-            case "pizza":
-                return new Pizza(integerPrice);
-            case "sting":
-                return new Sting(integerPrice);
-            default:
-                return null;
-        }
+        DataHandler.writeFile(filePath, productListToString());
     }
 }

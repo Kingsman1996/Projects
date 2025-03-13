@@ -17,24 +17,24 @@ public class Admin extends User implements AddProductable, ViewProductable, View
 
     @Override
     public void viewOrder() {
-        AdminActionHandler.handleAction(1);
+        AdminActionHandler.handleFirstAction(1);
     }
 
     @Override
     public void viewProducts() {
-        AdminActionHandler.handleAction(2);
+        AdminActionHandler.handleFirstAction(2);
     }
 
     @Override
     public void addProduct() {
-        AdminActionHandler.handleAction(3);
+        AdminActionHandler.handleFirstAction(3);
     }
 
     public void editProduct() {
-        AdminActionHandler.handleAction(4);
+        AdminActionHandler.handleFirstAction(4);
     }
 
     public void deleteProduct() {
-        AdminActionHandler.handleAction(5);
+        AdminActionHandler.handleFirstAction(5);
     }
 }

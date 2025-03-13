@@ -4,22 +4,25 @@ import actors.product.interfaces.Preparable;
 import actors.product.interfaces.Sizeable;
 
 public class MilkTea extends Drink implements Sizeable, Preparable {
-    private String size;
-    private int prepareTime;
+    private String size = "Medium";
+    private int prepareTime = 5000;
 
-
-    public MilkTea(int price) {
-        super(price);
+    public MilkTea() {
         this.name = "Milk Tea";
-        this.size = "Medium";
-        this.prepareTime = 5000;
+        this.price = 40000;
     }
 
-    public MilkTea(int price, String size, int prepareTime) {
-        super(price);
+    public MilkTea(String size) {
         this.name = "Milk Tea";
+        this.price = 40000;
+        if (size.equals("Small") || size.equals("Large")) {
+            this.size = size;
+        }
+    }
+
+    public MilkTea(String name, int price, String size) {
+        super(name, price);
         this.size = size;
-        this.prepareTime = prepareTime;
     }
 
     @Override
@@ -44,6 +47,6 @@ public class MilkTea extends Drink implements Sizeable, Preparable {
 
     @Override
     public String toString() {
-        return super.toString() + ", " + (cold ? "with ice" : "no ice") + ", size: " + size;
+        return super.toString() + ", " + size;
     }
 }

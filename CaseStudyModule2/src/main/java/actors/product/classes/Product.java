@@ -1,10 +1,15 @@
 package actors.product.classes;
 
-import java.io.Serializable;
-
-public abstract class Product implements Serializable {
+public abstract class Product {
     protected String name;
     protected int price;
+
+    public Product() {
+    }
+
+    public Product(String name) {
+        this.name = name;
+    }
 
     public Product(int price) {
         this.price = price;

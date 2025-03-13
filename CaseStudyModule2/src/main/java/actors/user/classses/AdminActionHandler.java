@@ -6,7 +6,7 @@ import message.ProductMessage;
 import message.UserMessage;
 
 public class AdminActionHandler extends UserActionHandler {
-    public static void handleAction(int action) {
+    public static void handleFirstAction(int action) {
         while (action != 0) {
             switch (action) {
                 case 1:

@@ -21,6 +21,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/src/main/java/actors/order/OrderManager.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/actors/product/ProductManager.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/actors/user/classses/UserActionHandler.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/message/OrderMessage.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/message/UserMessage.java" root0="SKIP_INSPECTION" />
@@ -119,7 +120,7 @@
       <workItem from="1741830620611" duration="23655000" />
       <workItem from="1741856867621" duration="2875000" />
       <workItem from="1741860076127" duration="1523000" />
-      <workItem from="1741873525607" duration="2957000" />
+      <workItem from="1741873525607" duration="11619000" />
     </task>
     <servers />
   </component>

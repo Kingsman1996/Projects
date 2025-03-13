@@ -1,5 +1,3 @@
-Pizza, 10000, size: Medium
-Milk Tea, 11121221, size: Large
-Pizza, 50000, size: Medium
+Milk Tea, 88888, size: Large
 Fried Rice, 70000
-Milk Tea, 999999999, Small, With ice
+Milk Tea, 88888, Small

@@ -1,10 +1,8 @@
 import actors.order.Order;
 import actors.order.OrderManager;
 import actors.order.OrderProcessor;
-import actors.product.classes.FriedRice;
-import actors.product.classes.MilkTea;
-import actors.product.classes.Pizza;
-import actors.product.classes.Sting;
+import actors.product.ProductManager;
+import actors.product.classes.*;
 import actors.user.classses.Customer;
 import actors.user.classses.CustomerActionHandler;
 import data.OrderDataHandler;
@@ -26,21 +24,24 @@ public class Main {
 //        scanner.nextLine();
 //        CustomerActionHandler.handleAction(choice);
 
-        Order order = new Order();
-        order.add(new Pizza(50000));
-        order.add(new FriedRice(40000));
-//        OrderDataHandler.saveOrder(order);
-        Order order2 = new Order();
-        order2.add(new Sting(20000));
-        order2.add(new MilkTea(35000));
+//        Order order = new Order();
+//        order.add(new Pizza());
+//        order.add(new FriedRice());
+//        Order order2 = new Order();
+//        order2.add(new Sting());
+//        order2.add(new MilkTea());
+//        OrderManager orderManager = new OrderManager();
+//        orderManager.addOrder(order);
+//        orderManager.addOrder(order2);
+//        System.out.println(new ProductManager().getAll());
 //        OrderDataHandler.saveOrder(order2);
-        OrderManager orderManager = new OrderManager();
-        orderManager.addOrder(order);
-        orderManager.addOrder(order2);
+//        OrderDataHandler.saveOrder(order);
 //        System.out.println(orderManager.getAllOrders());
 
-        OrderProcessor orderProcessor = new OrderProcessor(orderManager);
+//        OrderProcessor orderProcessor = new OrderProcessor(orderManager);
 //        orderProcessor.processOne(1);
-        orderProcessor.processAll();
+//        orderProcessor.processAll();
+        ProductManager pm = new ProductManager();
+        pm.updateProductPrice("Milk Tea","88888");
     }
 }

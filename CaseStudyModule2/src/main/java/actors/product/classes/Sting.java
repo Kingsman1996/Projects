@@ -3,18 +3,23 @@ package actors.product.classes;
 import actors.product.interfaces.Discountable;
 
 public class Sting extends Drink implements Discountable {
-    private int discountPercent;
+    private int discountPercent = 5;
+
+    public Sting() {
+        this.name = "Sting";
+        this.price = 15000;
+    }
+
+    public Sting(String name) {
+        super(name);
+    }
 
     public Sting(int price) {
         super(price);
-        this.name = "Sting";
-        this.discountPercent = 5;
     }
 
-    public Sting(int price, int discountPercent) {
-        super(price);
-        this.name = "Sting";
-        this.discountPercent = discountPercent;
+    public Sting(String name, int price) {
+        super(name, price);
     }
 
     @Override

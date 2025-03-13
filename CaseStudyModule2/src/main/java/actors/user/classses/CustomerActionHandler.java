@@ -74,7 +74,7 @@ public class CustomerActionHandler extends UserActionHandler {
         }
     }
 
-    public static void handleAction(int action) {
+    public static void handleFirstAction(int action) {
         while (action != 0) {
             switch (action) {
                 case 1:
