@@ -1,17 +1,19 @@
-package product.classes;
+package actors.product.classes;
 
-import product.interfaces.Preparable;
+import actors.product.interfaces.Preparable;
 
 public class FriedRice extends Food implements Preparable {
     private int prepareTime;
 
-    public FriedRice(String name, double price) {
-        super(name, price);
+    public FriedRice(int price) {
+        super(price);
+        this.name = "Fried Rice";
         this.prepareTime = 8000;
     }
 
-    public FriedRice(String name, double price, int prepareTime) {
-        super(name, price);
+    public FriedRice(int price, int prepareTime) {
+        super(price);
+        this.name = "Fried Rice";
         this.prepareTime = prepareTime;
     }
 

@@ -1,19 +1,20 @@
 package data;
 
+import actors.order.Order;
+
 import java.util.Iterator;
 import java.util.List;
 
 public class OrderDataHandler extends DataHandler {
     private static final String ORDER_FILE = "src/main/resources/orders.txt";
+    private static final String CART_FILE = "src/main/resources/cart.txt";
 
     public static List<String> getAllOrders() {
         return readFile(ORDER_FILE);
     }
 
-    public static void addOrder(String orderLine) {
-        List<String> orders = getAllOrders();
-        orders.add(orderLine);
-        writeFile(ORDER_FILE, orders);
+    public static void saveOrder(Order order) {
+        appendToFile(ORDER_FILE, order.toString());
     }
 
     public static void deleteOrder(String orderId) {
@@ -26,5 +27,11 @@ public class OrderDataHandler extends DataHandler {
             }
         }
         writeFile(ORDER_FILE, orders);
+    }
+    public static String getOrderFile(){
+        return ORDER_FILE;
+    }
+    public static String getCartFile(){
+        return CART_FILE;
     }
 }

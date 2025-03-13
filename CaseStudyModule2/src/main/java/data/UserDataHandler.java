@@ -10,10 +10,8 @@ public class UserDataHandler extends DataHandler {
         return readFile(USER_FILE);
     }
 
-    public static void addUser(String userLine) {
-        List<String> users = getAllUsers();
-        users.add(userLine);
-        writeFile(USER_FILE, users);
+    public static void addUser(String userInfo) {
+        appendToFile(USER_FILE, userInfo);
     }
 
     public static void deleteUser(String username) {

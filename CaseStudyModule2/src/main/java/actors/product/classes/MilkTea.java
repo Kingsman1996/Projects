@@ -1,21 +1,23 @@
-package product.classes;
+package actors.product.classes;
 
-import product.interfaces.Preparable;
-import product.interfaces.Sizeable;
+import actors.product.interfaces.Preparable;
+import actors.product.interfaces.Sizeable;
 
 public class MilkTea extends Drink implements Sizeable, Preparable {
     private String size;
     private int prepareTime;
 
 
-    public MilkTea(String name, double price) {
-        super(name, price);
+    public MilkTea(int price) {
+        super(price);
+        this.name = "Milk Tea";
         this.size = "Medium";
         this.prepareTime = 5000;
     }
 
-    public MilkTea(String name, double price, String size, int prepareTime) {
-        super(name, price);
+    public MilkTea(int price, String size, int prepareTime) {
+        super(price);
+        this.name = "Milk Tea";
         this.size = size;
         this.prepareTime = prepareTime;
     }
@@ -42,6 +44,6 @@ public class MilkTea extends Drink implements Sizeable, Preparable {
 
     @Override
     public String toString() {
-        return super.toString() + ", " + (cold ? "thêm đá" : "không đá") + ", size: " + size;
+        return super.toString() + ", " + (cold ? "with ice" : "no ice") + ", size: " + size;
     }
 }

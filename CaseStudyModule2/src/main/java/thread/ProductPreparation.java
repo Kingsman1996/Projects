@@ -1,8 +1,8 @@
 package thread;
 
 import message.OrderMessage;
-import product.classes.Product;
-import product.interfaces.Preparable;
+import actors.product.classes.Product;
+import actors.product.interfaces.Preparable;
 
 public class ProductPreparation implements Runnable {
     private Product product;

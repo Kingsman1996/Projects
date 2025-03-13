@@ -1,17 +1,19 @@
-package product.classes;
+package actors.product.classes;
 
-import product.interfaces.Sizeable;
+import actors.product.interfaces.Sizeable;
 
 public class Pizza extends Food implements Sizeable {
     private String size;
 
-    public Pizza(String name, double price) {
-        super(name, price);
+    public Pizza(int price) {
+        super(price);
+        this.name = "Pizza";
         this.size = "Medium";
     }
 
-    public Pizza(String name, double price, String size) {
-        super(name, price);
+    public Pizza(int price, String size) {
+        super(price);
+        this.name = "Pizza";
         this.size = size;
     }
 
@@ -27,6 +29,6 @@ public class Pizza extends Food implements Sizeable {
 
     @Override
     public String toString() {
-        return super.toString() + ", " + (hot ? "nóng" : "lạnh") + ", size: " + size;
+        return super.toString() + ", size: " + size;
     }
 }

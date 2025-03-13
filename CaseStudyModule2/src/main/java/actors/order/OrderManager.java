@@ -1,4 +1,4 @@
-package order;
+package actors.order;
 
 import java.util.*;
 
@@ -28,7 +28,13 @@ public class OrderManager {
         }
         return order;
     }
+
     public List<Integer> getAllOrderIds() {
         return new ArrayList<>(orders.keySet());
+    }
+
+    @Override
+    public String toString() {
+        return orders.toString();
     }
 }

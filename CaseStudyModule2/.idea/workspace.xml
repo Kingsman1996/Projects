@@ -13,16 +13,17 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="JUnit5 Test Class" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/java/actors/user/classses/UserActionHandler.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/message/OrderMessage.java" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/src/main/java/order/OrderProcessor.java" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/src/main/java/user/Admin.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/message/UserMessage.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/validate/Validator.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
@@ -34,22 +35,27 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Debug&quot;,
     &quot;JUnit.OrderManagerTest.testPrepareProducts.executor&quot;: &quot;Debug&quot;,
     &quot;JUnit.OrderManagerTest.testProcessOrder.executor&quot;: &quot;Debug&quot;,
     &quot;JUnit.OrderManagerTest.testProcessProducts.executor&quot;: &quot;Debug&quot;,
     &quot;JUnit.OrderProcessorTest.processOrderTest.executor&quot;: &quot;Debug&quot;,
     &quot;JUnit.OrderTest.testToString.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.ProductManagerTest.add.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.ProductManagerTest.findIndex.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.ProductManagerTest.getProductByName.executor&quot;: &quot;Debug&quot;,
     &quot;JUnit.ProductThreadTest.runTest.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;deletionFromPopupRequiresConfirmation&quot;: &quot;false&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/ASUS/Desktop/MyProjects/CaseStudyModule2&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;File.Encoding&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -58,81 +64,22 @@
       <recent name="" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="product" />
       <recent name="thread" />
       <recent name="order" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.AlertMessageProcessTest.processOrderTest">
-    <configuration name="AlertMessageProcessTest.processOrderTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="CaseStudyModule2" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="thread.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="order" />
-      <option name="MAIN_CLASS_NAME" value="order.AlertMessageProcessTest" />
-      <option name="METHOD_NAME" value="processOrderTest" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="AlertMessageProcessTest.testPrepareProducts" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="CaseStudyModule2" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="thread.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="order" />
-      <option name="MAIN_CLASS_NAME" value="order.AlertMessageProcessTest" />
-      <option name="METHOD_NAME" value="testPrepareProducts" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="AlertMessageTest.testToString" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="CaseStudyModule2" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="thread.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="order" />
-      <option name="MAIN_CLASS_NAME" value="order.AlertMessageTest" />
-      <option name="METHOD_NAME" value="testToString" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ProductPreparationTest.runTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="CaseStudyModule2" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="thread.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="thread" />
-      <option name="MAIN_CLASS_NAME" value="thread.ProductPreparationTest" />
-      <option name="METHOD_NAME" value="runTest" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ProductPreparationTest.runTest" />
-        <item itemvalue="JUnit.AlertMessageProcessTest.testPrepareProducts" />
-        <item itemvalue="JUnit.AlertMessageTest.testToString" />
-        <item itemvalue="JUnit.AlertMessageProcessTest.processOrderTest" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -163,10 +110,31 @@
       <workItem from="1741668617981" duration="17831000" />
       <workItem from="1741700137490" duration="8681000" />
       <workItem from="1741745458061" duration="43000" />
+      <workItem from="1741749287478" duration="19354000" />
+      <workItem from="1741782850541" duration="11264000" />
+      <workItem from="1741827684908" duration="1800000" />
+      <workItem from="1741829823129" duration="407000" />
+      <workItem from="1741830620611" duration="23655000" />
+      <workItem from="1741856867621" duration="2875000" />
+      <workItem from="1741860076127" duration="548000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.NumberFormatException" package="java.lang" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

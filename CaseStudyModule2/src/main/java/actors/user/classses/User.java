@@ -1,12 +1,12 @@
-package user;
-
-import java.util.Scanner;
+package actors.user.classses;
 
 public abstract class User {
     protected String username;
     protected String password;
     protected boolean admin = false;
-    protected static Scanner scanner = new Scanner(System.in);
+
+    public User() {
+    }
 
     public User(String username, String password) {
         this.username = username;
@@ -36,6 +36,4 @@ public abstract class User {
     public void setAdmin(boolean admin) {
         this.admin = admin;
     }
-
-    public abstract void makeChoice();
 }

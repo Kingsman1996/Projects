@@ -1,4 +1,4 @@
-package product.interfaces;
+package actors.product.interfaces;
 
 public interface Preparable {
     public int getPrepareTime();

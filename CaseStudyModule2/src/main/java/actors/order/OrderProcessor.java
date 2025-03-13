@@ -1,7 +1,7 @@
-package order;
+package actors.order;
 
 import message.OrderMessage;
-import product.classes.Product;
+import actors.product.classes.Product;
 import thread.ProductPreparation;
 import thread.ThreadManager;
 

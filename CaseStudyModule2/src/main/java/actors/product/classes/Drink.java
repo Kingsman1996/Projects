@@ -1,9 +1,13 @@
-package product.classes;
+package actors.product.classes;
 
 public abstract class Drink extends Product {
     protected boolean cold = true;
 
-    public Drink(String name, double price) {
+    public Drink(int price) {
+        super(price);
+    }
+
+    public Drink(String name, int price) {
         super(name, price);
     }
 

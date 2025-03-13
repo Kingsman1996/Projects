@@ -1,29 +1,38 @@
 package message;
 
 import data.OrderDataHandler;
-import product.classes.Product;
+import actors.product.classes.Product;
+
+import java.util.List;
 
 public class OrderMessage {
     public static void alertOrderStart(int id) {
-        System.out.println("Đang chuẩn bị đơn hàng, id: " + id);
+        System.out.println("Processing order, ID: " + id);
     }
 
     public static void alertOrderEnd(int id) {
-        System.out.println("Đơn hàng " + id + " đã hoàn thành");
+        System.out.println("Order " + id + " completed.");
     }
 
     public static void alertPreparingProduct(Product product) {
-        System.out.println("Đang chuẩn bị " + product.getName());
+        System.out.println("Preparing " + product.getName() + "...");
     }
 
     public static void alertReadyProduct(Product product) {
-        System.out.println(product.getName() + " đã sẵn sàng");
+        System.out.println(product.getName() + " is ready.");
     }
 
-    public static void showOrderList() {
-        System.out.println("Danh sách đơn hàng:");
-        for (String line : OrderDataHandler.getAllOrders()) {
-            System.out.println(line);
+    public static void showOrder() {
+        System.out.println("=== Order List ===");
+        List<String> orders = OrderDataHandler.getAllOrders();
+        if (orders.isEmpty()) {
+            System.out.println("No orders found.");
+        } else {
+            for (String order : orders) {
+                System.out.println(order);
+            }
         }
+        UserMessage.back();
     }
 }
+

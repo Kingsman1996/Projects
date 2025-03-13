@@ -1,12 +1,16 @@
-package product.classes;
+package actors.product.classes;
 
 import java.io.Serializable;
 
 public abstract class Product implements Serializable {
     protected String name;
-    protected double price;
+    protected int price;
 
-    public Product(String name, double price) {
+    public Product(int price) {
+        this.price = price;
+    }
+
+    public Product(String name, int price) {
         this.name = name;
         this.price = price;
     }
@@ -19,16 +23,16 @@ public abstract class Product implements Serializable {
         this.name = name;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
     @Override
     public String toString() {
-        return "\n" + name;
+        return name + ", " + price;
     }
 }
