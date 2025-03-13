@@ -11,9 +11,9 @@ public class OrderProcessor {
     private OrderManager orderManager;
     private ThreadManager threadManager;
 
-    public OrderProcessor() {
+    public OrderProcessor(OrderManager orderManager) {
         this.threadManager = new ThreadManager();
-        this.orderManager = new OrderManager();
+        this.orderManager = orderManager;
     }
 
     public void processOne(int id) {

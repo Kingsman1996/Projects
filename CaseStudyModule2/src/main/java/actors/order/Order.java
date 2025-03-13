@@ -6,11 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
-    private int id;
     private List<Product> products;
 
-    public Order(int id) {
-        this.id = id;
+    public Order() {
         this.products = new ArrayList<>();
     }
 
@@ -26,24 +24,8 @@ public class Order {
         return products;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Id=").append(id).append(", Products=");
-        for (int i = 0; i < products.size(); i++) {
-            sb.append(products.get(i));
-            if (i < products.size() - 1) {
-                sb.append(", ");
-            }
-        }
-        return sb.toString();
+        return products.toString();
     }
 }

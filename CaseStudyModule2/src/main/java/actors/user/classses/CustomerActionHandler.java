@@ -69,7 +69,7 @@ public class CustomerActionHandler extends UserActionHandler {
 
         if (confirm == 1) {
             UserMessage.orderConfirmed();
-            DataHandler.appendToFile(OrderDataHandler.getOrderFile(), String.join("\n", cartItems));
+            DataHandler.appendToFile(OrderDataHandler.getOrderFile(), String.join("|", cartItems));
             DataHandler.writeFile(OrderDataHandler.getCartFile(), new ArrayList<>());
         }
     }

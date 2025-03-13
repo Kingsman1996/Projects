@@ -13,8 +13,8 @@ public class ProductPreparation implements Runnable {
 
     @Override
     public void run() {
+        OrderMessage.alertPreparingProduct(product);
         if (product instanceof Preparable) {
-            OrderMessage.alertPreparingProduct(product);
             try {
                 Preparable item = (Preparable) product;
                 Thread.sleep(item.getPrepareTime());
@@ -23,7 +23,7 @@ public class ProductPreparation implements Runnable {
                 e.printStackTrace();
             }
         } else {
-            OrderMessage.alertPreparingProduct(product);
+            OrderMessage.alertReadyProduct(product);
         }
     }
 }
