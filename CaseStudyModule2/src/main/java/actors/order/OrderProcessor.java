@@ -2,6 +2,7 @@ package actors.order;
 
 import message.OrderMessage;
 import actors.product.classes.Product;
+import message.UserMessage;
 import thread.ProductPreparation;
 import thread.ThreadManager;
 
@@ -16,24 +17,19 @@ public class OrderProcessor {
         this.orderManager = orderManager;
     }
 
-    public void processOne(int id) {
-        Order order = orderManager.getOrderById(id);
-        OrderMessage.alertOrderStart(id);
+    public void processCart(int id, List<Product> cart) {
+        if (cart.isEmpty()) {
+            UserMessage.emptyCart();
+            return;
+        }
+        OrderMessage.alertStart(id);
         List<Runnable> productTasks = new ArrayList<>();
-        for (Product product : order.getProducts()) {
+        for (Product product : cart) {
             productTasks.add(new ProductPreparation(product));
         }
         ThreadManager threadManager = new ThreadManager();
         threadManager.startThreads(productTasks);
         threadManager.waitThreads();
-        OrderMessage.alertOrderEnd(id);
-        orderManager.removeOrder(id);
-    }
-
-    public void processAll() {
-        List<Integer> ids = orderManager.getAllOrderIds();
-        for (Integer id : ids) {
-            processOne(id);
-        }
+        OrderMessage.alertEnd(id);
     }
 }

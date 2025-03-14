@@ -1,38 +1,39 @@
 package message;
 
-import data.OrderDataHandler;
-import actors.product.classes.Product;
+import data.Data;
 
 import java.util.List;
 
 public class OrderMessage {
-    public static void alertOrderStart(int id) {
+    public static void alertStart(int id) {
         System.out.println("Processing order, ID: " + id);
     }
 
-    public static void alertOrderEnd(int id) {
+    public static void alertEnd(int id) {
         System.out.println("Order " + id + " completed.");
     }
 
-    public static void alertPreparingProduct(Product product) {
-        System.out.println("Preparing " + product.getName() + "...");
-    }
-
-    public static void alertReadyProduct(Product product) {
-        System.out.println(product.getName() + " is ready.");
-    }
-
-    public static void showOrder() {
+    public static void show() {
         System.out.println("=== Order List ===");
-        List<String> orders = OrderDataHandler.getAllOrders();
+        List<String> orders = Data.readFile(Data.getOrderFile());
         if (orders.isEmpty()) {
-            System.out.println("No orders found.");
+            System.out.println("No order found.");
         } else {
             for (String order : orders) {
                 System.out.println(order);
             }
         }
-        UserMessage.back();
+    }
+
+    public static void notFound(int id) {
+        System.out.println("Order " + id + " not found.");
+    }
+
+    public static void added(int id) {
+        System.out.println("Order " + id + " added successfully.");
+    }
+    public static void removed(int id) {
+        System.out.println("Order " + id + " removed successfully.");
     }
 }
 

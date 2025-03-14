@@ -1,4 +1,4 @@
-package actors.user.classses;
+package actors.user;
 
 public abstract class User {
     protected String username;
@@ -35,5 +35,10 @@ public abstract class User {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    @Override
+    public String toString() {
+        return username + "," + password + "," + admin;
     }
 }

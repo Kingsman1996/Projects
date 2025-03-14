@@ -1,13 +1,15 @@
 package actors.product;
 
 import actors.product.classes.*;
-import data.DataHandler;
-import data.ProductDataHandler;
+import data.Data;
+import data.ProductData;
 import message.ProductMessage;
 import validate.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static data.Data.*;
 
 public class ProductManager {
     private List<Product> productList;
@@ -15,12 +17,12 @@ public class ProductManager {
 
     public ProductManager() {
         productList = new ArrayList<>();
-        filePath = ProductDataHandler.getProductFile();
+        filePath = ProductData.getProductFile();
         loadFile();
     }
 
     public void loadFile() {
-        for (String line : ProductDataHandler.readProducts()) {
+        for (String line : readFile(filePath)) {
             String[] parts = line.split(",");
             String name = parts[0].trim();
             int price = Integer.parseInt(parts[1].trim());
@@ -38,10 +40,10 @@ public class ProductManager {
                 String size = parts[2].trim();
                 switch (name) {
                     case "Milk Tea":
-                        productList.add(new MilkTea(name,price,size));
+                        productList.add(new MilkTea(name, price, size));
                         break;
                     case "Pizza":
-                        productList.add(new Pizza(name,price,size));
+                        productList.add(new Pizza(name, price, size));
                         break;
                 }
             }
@@ -50,21 +52,21 @@ public class ProductManager {
 
     public void add(Product product) {
         productList.add(product);
-        DataHandler.appendToFile(filePath, product.toString());
-        ProductMessage.addedDone(product.getName());
+        ProductData.saveProduct(product);
+        ProductMessage.added(product.getName());
     }
 
     public void remove(String name) {
-        List<Product> toRemove = getProductByName(name);
-        productList.removeAll(toRemove);
+        List<Product> found = getProductByName(name);
+        productList.removeAll(found);
         saveChanges();
-        ProductMessage.deletedSuccess();
+        ProductMessage.deleted();
     }
 
     public List<Product> getProductByName(String searchName) {
         List<Product> found = new ArrayList<>();
         for (Product product : productList) {
-            if (product.getName().toLowerCase().contains(searchName.toLowerCase())) {
+            if (product.getName().equalsIgnoreCase(searchName)) {
                 found.add(product);
             }
         }
@@ -75,26 +77,24 @@ public class ProductManager {
         return productList;
     }
 
-    public void updateProductPrice(String searchName, String newPrice) {
-        if (!Validator.isValidProductPrice(newPrice)) {
-            return;
-        }
-        for (Product product : getProductByName(searchName)) {
-            product.setPrice(Integer.parseInt(newPrice));
+    public void fixPrice(String searchName, String newPrice) {
+        for (Product product : productList) {
+            if (product.getName().equals(searchName)) {
+                product.setPrice(Integer.parseInt(newPrice));
+            }
         }
         saveChanges();
-        ProductMessage.fixedSuccess();
     }
 
-    public List<String> productListToString() {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < productList.size(); i++) {
-            list.add(productList.get(i).toString());
+    public List<String> productListToString(List<Product> input) {
+        List<String> output = new ArrayList<>();
+        for (int i = 0; i < input.size(); i++) {
+            output.add(input.get(i).toString());
         }
-        return list;
+        return output;
     }
 
     public void saveChanges() {
-        DataHandler.writeFile(filePath, productListToString());
+        writeFile(filePath, productListToString(productList));
     }
 }

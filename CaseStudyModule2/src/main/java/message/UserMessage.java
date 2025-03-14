@@ -1,25 +1,52 @@
 package message;
 
-import actors.user.classses.User;
-import data.ProductDataHandler;
+import actors.product.classes.Product;
+import actors.user.User;
 
 import java.util.List;
 
 public class UserMessage {
     public static void systemTitle() {
         System.out.println("==== RESTAURANT MANAGEMENT SYSTEM ====");
+        System.out.println("Welcome, guest!");
+        System.out.println("Do you want to login or create a new account?");
+        System.out.println("1. Login");
+        System.out.println("2. Register");
+        exit();
+        enterChoice();
     }
 
-    public static void welcome(User user) {
-        System.out.println("Welcome, " + user.getUsername() + "!");
+    public static void enterUserName() {
+        System.out.println("Enter user name: ");
+    }
+    public static void userNameExisted(){
+        System.out.println("Username existed, try another one!");
+    }
+    public static void enterPassword() {
+        System.out.println("Enter password: ");
     }
 
-    public static void makeChoice() {
+    public static void inValidUserName() {
+        System.out.println("Invalid user name, try again");
+    }
+
+    public static void inValidPassword() {
+        System.out.println("Invalid password, try again");
+    }
+
+    public static void wrongUser() {
+        System.out.println("Wrong username or password");
+    }
+    public static void registerSuccess() {
+        System.out.println("Register successful");
+    }
+
+    public static void welcome(String username) {
+        System.out.println("Welcome, " + username + "!");
+    }
+
+    public static void enterChoice() {
         System.out.println("Enter your choice.");
-    }
-
-    public static void back() {
-        System.out.println("Press any key to return to the previous menu...");
     }
 
     public static void exit() {
@@ -34,7 +61,12 @@ public class UserMessage {
         System.out.println("Invalid price! Enter again.");
     }
 
+    public static void whatToDo() {
+        System.out.println("What would you like to do?");
+    }
+
     public static void adminChoices() {
+        whatToDo();
         System.out.println("1. View order list");
         System.out.println("2. View product list");
         System.out.println("3. Add product");
@@ -44,11 +76,12 @@ public class UserMessage {
     }
 
     public static void customerChoices() {
-        System.out.println("Enter your choice: ");
+        whatToDo();
         System.out.println("1. View menu");
         System.out.println("2. Add product to cart");
         System.out.println("3. Remove product from cart");
-        System.out.println("4. Confirm order");
+        System.out.println("4. Show cart");
+        System.out.println("5. Check out");
         exit();
     }
 
@@ -70,13 +103,7 @@ public class UserMessage {
         System.out.println("1. Small");
         System.out.println("2. Medium");
         System.out.println("3. Large");
-        exit();
-    }
-
-    public static void confirmDelete() {
-        System.out.println("Sure to delete this product?");
-        System.out.println("1. Yes");
-        System.out.println("2. No");
+        System.out.println("4. No size");
         exit();
     }
 
@@ -84,31 +111,40 @@ public class UserMessage {
         System.out.println("Your cart is empty.");
     }
 
-    public static void showCart() {
-        System.out.println("Your cart items:");
-        List<String> cartItems = ProductDataHandler.readCart();
-        for (int i = 0; i < cartItems.size(); i++) {
-            System.out.println((i + 1) + ". " + cartItems.get(i));
-        }
-    }
-
-    public static void confirmOrder() {
-        System.out.println("Enter your choice: ");
-        System.out.println("1. Confirm order");
-        System.out.println("2. Cancel order");
-    }
     public static void orderConfirmed() {
         System.out.println("Order confirmed! Thank you.");
     }
-    public static void deleteCartItem() {
-        System.out.println("Enter product line or 0 to exit: ");
-    }
 
-    public static void cartItemIsRemoved() {
+    public static void itemRemoved() {
         System.out.println("Item removed from cart.");
     }
 
-    public static void addProductToCart() {
-        System.out.println("Product added to your cart.");
+    public static void enterProductNumber() {
+        System.out.print("\nEnter the product number: ");
+    }
+
+    public static void addedToCart(Product product) {
+        System.out.println("Added to cart: " + product.getName());
+    }
+
+    public static void totalCartPrice(List<Product> products) {
+        int total = 0;
+        System.out.println("Your order:");
+        for (Product product : products) {
+            System.out.println("-> " + product.getName() + " - " + product.getPrice() + " VND");
+            total += product.getPrice();
+        }
+        System.out.println("Total amount: " + total + " VND");
+    }
+
+    public static void showCart(List<Product> cart) {
+        if (cart.isEmpty()) {
+            System.out.println("Your cart is empty.");
+            return;
+        }
+        System.out.println("YOUR CART:");
+        for (int i = 0; i < cart.size(); i++) {
+            System.out.println((i + 1) + ". " + cart.get(i));
+        }
     }
 }

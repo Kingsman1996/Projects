@@ -20,7 +20,9 @@ public class Pizza extends Food implements Sizeable {
 
     public Pizza(String name, int price, String size) {
         super(name, price);
-        this.size = size;
+        if (size.equals("Small") || size.equals("Large")) {
+            this.size = size;
+        }
     }
 
     @Override

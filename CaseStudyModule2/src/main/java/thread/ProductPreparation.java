@@ -1,8 +1,8 @@
 package thread;
 
-import message.OrderMessage;
 import actors.product.classes.Product;
 import actors.product.interfaces.Preparable;
+import message.ProductMessage;
 
 public class ProductPreparation implements Runnable {
     private Product product;
@@ -13,17 +13,17 @@ public class ProductPreparation implements Runnable {
 
     @Override
     public void run() {
-        OrderMessage.alertPreparingProduct(product);
+        ProductMessage.preparing(product);
         if (product instanceof Preparable) {
             try {
                 Preparable item = (Preparable) product;
                 Thread.sleep(item.getPrepareTime());
-                OrderMessage.alertReadyProduct(product);
+                ProductMessage.ready(product);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         } else {
-            OrderMessage.alertReadyProduct(product);
+            ProductMessage.ready(product);
         }
     }
 }

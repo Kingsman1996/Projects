@@ -1,53 +1,38 @@
 package message;
 
-import data.ProductDataHandler;
+import actors.product.classes.Product;
+import data.Data;
 
 public class ProductMessage {
-    public static void addedDone(String name) {
+    public static void added(String name) {
         System.out.println("Product " + name + " is added to menu.");
     }
 
-    public static void addedFailed() {
-        System.out.println("Failed to add product.");
+    public static void fixed() {
+        System.out.println("Product information is updated.");
     }
 
-    public static void fixedSuccess() {
-        System.out.println("Product information has been updated.");
-    }
-
-    public static void deletedSuccess() {
+    public static void deleted() {
         System.out.println("Product is deleted!");
     }
 
-    public static void showProductList() {
+    public static void showList() {
         System.out.println("===== PRODUCT LIST =====");
-        for (String product : ProductDataHandler.readProducts()) {
+        for (String product : Data.readFile(Data.getProductFile())) {
             System.out.println(product);
         }
         System.out.println();
-        UserMessage.back();
-    }
-
-    public static void showProductNames() {
-        System.out.println("=== Product Names ===");
-        System.out.println(ProductDataHandler.readProductName());
     }
 
     public static void isEmpty() {
         System.out.println("Product list is empty.");
     }
 
-    public static void notFound() {
-        System.out.println("Product not found.");
+    public static void preparing(Product product) {
+        System.out.println("Preparing " + product.getName() + "...");
     }
 
-    public static void invalidProductPrice() {
-        System.out.println("Invalid product price, enter again.");
-    }
-
-    public static void hasIceOrNot(){
-        System.out.println("With ice? ");
-        System.out.println("1. Yes");
-        System.out.println("2. No");
+    public static void ready(Product product) {
+        System.out.println(product.getName() + " is ready.");
     }
 }

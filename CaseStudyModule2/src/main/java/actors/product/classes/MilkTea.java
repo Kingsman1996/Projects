@@ -22,7 +22,9 @@ public class MilkTea extends Drink implements Sizeable, Preparable {
 
     public MilkTea(String name, int price, String size) {
         super(name, price);
-        this.size = size;
+        if (size.equals("Small") || size.equals("Large")) {
+            this.size = size;
+        }
     }
 
     @Override

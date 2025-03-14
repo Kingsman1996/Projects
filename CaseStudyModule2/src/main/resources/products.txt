@@ -1,3 +1,4 @@
-Milk Tea, 88888, size: Large
-Fried Rice, 70000
-Milk Tea, 88888, Small
+Fried Rice, 11111
+Milk Tea, 888888, Large
+Pizza, 666666, Small
+Milk Tea, 55555, Medium

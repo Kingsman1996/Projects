@@ -1,6 +1,3 @@
-Products=Pizza, 50000, size: Medium, Fried Rice, 40000
-Products=Sting, 20000, Milk Tea, 35000, with ice, size: Medium
-Products=Pizza, 50000, size: Medium, Fried Rice, 40000
-Products=Sting, 20000, Milk Tea, 35000, with ice, size: Medium
-Products=Pizza, 50000, size: Medium, Fried Rice, 40000
-Products=Sting, 20000, Milk Tea, 35000, with ice, size: Medium
+Milk Tea, 987654, Large
+Pizza, 852741, Small
+Fried Rice, 123456789
