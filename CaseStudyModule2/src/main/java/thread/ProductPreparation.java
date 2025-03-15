@@ -1,7 +1,7 @@
 package thread;
 
-import actors.product.classes.Product;
-import actors.product.interfaces.Preparable;
+import product.Product;
+import product.Preparable;
 import message.ProductMessage;
 
 public class ProductPreparation implements Runnable {
@@ -13,7 +13,6 @@ public class ProductPreparation implements Runnable {
 
     @Override
     public void run() {
-        ProductMessage.preparing(product);
         if (product instanceof Preparable) {
             try {
                 Preparable item = (Preparable) product;

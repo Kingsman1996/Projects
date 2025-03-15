@@ -1,4 +1,4 @@
-package actors.product.interfaces;
+package product;
 
 public interface Sizeable {
     String getSize();

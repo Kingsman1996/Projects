@@ -1,6 +1,6 @@
 package data;
 
-import actors.user.User;
+import user.User;
 
 public class UserData extends Data {
     public static void addUser(User user) {

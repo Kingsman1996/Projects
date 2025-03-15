@@ -1,25 +1,27 @@
-import actors.user.*;
-import data.Data;
 import message.UserMessage;
+import useraction.UserAction;
 import validate.Validator;
-
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         UserMessage.systemTitle();
         int choice = Validator.inputValidInt();
-        switch (choice) {
-            case 1:
-                UserAction.login();
-                break;
-            case 2:
-                UserAction.register();
-                break;
-            case 0:
-                break;
-            default:
-                UserMessage.invalidChoice();
+        while (true) {
+            switch (choice) {
+                case 1:
+                    UserAction.login();
+                    return;
+                case 2:
+                    UserAction.register();
+                    return;
+                case 0:
+                    return;
+                default:
+                    UserMessage.invalidChoice();
+                    choice = Validator.inputValidInt();
+            }
         }
+//        AdminAction.handle();
+//        CustomerAction.handle();
     }
 }

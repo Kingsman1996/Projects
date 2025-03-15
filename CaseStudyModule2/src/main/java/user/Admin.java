@@ -1,6 +1,6 @@
-package actors.user;
+package user;
 
-import actors.product.ProductManager;
+import product.ProductManager;
 
 public class Admin extends User {
     private ProductManager productManager;

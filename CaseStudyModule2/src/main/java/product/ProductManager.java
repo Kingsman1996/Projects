@@ -1,10 +1,8 @@
-package actors.product;
+package product;
 
-import actors.product.classes.*;
 import data.Data;
 import data.ProductData;
 import message.ProductMessage;
-import validate.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +11,10 @@ import static data.Data.*;
 
 public class ProductManager {
     private List<Product> productList;
-    private final String filePath;
+    private String filePath = Data.getProductFile();
 
     public ProductManager() {
         productList = new ArrayList<>();
-        filePath = ProductData.getProductFile();
         loadFile();
     }
 
@@ -25,14 +22,13 @@ public class ProductManager {
         for (String line : readFile(filePath)) {
             String[] parts = line.split(",");
             String name = parts[0].trim();
-            int price = Integer.parseInt(parts[1].trim());
             if (parts.length == 2) {
                 switch (name) {
                     case "Fried Rice":
-                        productList.add(new FriedRice(name, price));
+                        productList.add(new FriedRice());
                         break;
                     case "Sting":
-                        productList.add(new Sting(name, price));
+                        productList.add(new Sting());
                         break;
                 }
             }
@@ -40,10 +36,10 @@ public class ProductManager {
                 String size = parts[2].trim();
                 switch (name) {
                     case "Milk Tea":
-                        productList.add(new MilkTea(name, price, size));
+                        productList.add(new MilkTea(size));
                         break;
                     case "Pizza":
-                        productList.add(new Pizza(name, price, size));
+                        productList.add(new Pizza(size));
                         break;
                 }
             }
@@ -56,11 +52,28 @@ public class ProductManager {
         ProductMessage.added(product.getName());
     }
 
-    public void remove(String name) {
+    public void remove(String name, String size) {
         List<Product> found = getProductByName(name);
-        productList.removeAll(found);
+        if (found.isEmpty()) {
+            return;
+        }
+        boolean foundSize = false;
+        for (Product product : found) {
+            if (product instanceof Sizeable) {
+                if (((Sizeable) product).getSize().equals(size)) {
+                    foundSize = true;
+                    productList.remove(product);
+                    ProductMessage.deleted();
+                }
+            } else {
+                productList.remove(product);
+                ProductMessage.deleted();
+            }
+        }
         saveChanges();
-        ProductMessage.deleted();
+        if (!foundSize) {
+            ProductMessage.notFound();
+        }
     }
 
     public List<Product> getProductByName(String searchName) {
@@ -70,6 +83,9 @@ public class ProductManager {
                 found.add(product);
             }
         }
+        if (found.isEmpty()) {
+            ProductMessage.notFound();
+        }
         return found;
     }
 
@@ -77,16 +93,21 @@ public class ProductManager {
         return productList;
     }
 
-    public void fixPrice(String searchName, String newPrice) {
+    public void fixSize(String searchName, String newSize) {
         for (Product product : productList) {
             if (product.getName().equals(searchName)) {
-                product.setPrice(Integer.parseInt(newPrice));
+                ((Sizeable) product).setSize(newSize);
             }
         }
-        saveChanges();
+        if (!productList.isEmpty()) {
+            saveChanges();
+            ProductMessage.fixed();
+        }else {
+            ProductMessage.notFound();
+        }
     }
 
-    public List<String> productListToString(List<Product> input) {
+    public List<String> toStringList(List<Product> input) {
         List<String> output = new ArrayList<>();
         for (int i = 0; i < input.size(); i++) {
             output.add(input.get(i).toString());
@@ -95,6 +116,11 @@ public class ProductManager {
     }
 
     public void saveChanges() {
-        writeFile(filePath, productListToString(productList));
+        writeFile(filePath, toStringList(productList));
+    }
+
+    @Override
+    public String toString() {
+        return productList.toString();
     }
 }

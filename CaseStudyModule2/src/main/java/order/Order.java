@@ -1,6 +1,6 @@
-package actors.order;
+package order;
 
-import actors.product.classes.Product;
+import product.Product;
 
 import java.util.ArrayList;
 import java.util.List;

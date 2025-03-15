@@ -1,4 +1,4 @@
-Fried Rice, 11111
-Milk Tea, 888888, Large
-Pizza, 666666, Small
-Milk Tea, 55555, Medium
+Pizza, 85000, Large
+Fried Rice, 35000
+Milk Tea, 45000, Medium
+Pizza, 85000, Large

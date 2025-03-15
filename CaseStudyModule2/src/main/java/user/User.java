@@ -1,4 +1,4 @@
-package actors.user;
+package user;
 
 public abstract class User {
     protected String username;

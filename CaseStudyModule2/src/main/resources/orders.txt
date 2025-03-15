@@ -1,3 +1,0 @@
-Milk Tea, 987654, Large
-Pizza, 852741, Small
-Fried Rice, 123456789

@@ -1,7 +1,6 @@
-package actors.order;
+package order;
 
 import data.OrderData;
-import message.OrderMessage;
 
 import java.util.*;
 
@@ -17,14 +16,14 @@ public class OrderManager {
     public void add(Order order) {
         orders.put(orderId, order);
         OrderData.saveOrder(order);
-        OrderMessage.added(orderId);
+//        OrderMessage.added(orderId);
         orderId++;
     }
 
     public void remove(int id) {
         if (orders.containsKey(id)) {
             orders.remove(id);
-            OrderMessage.removed(id);
+//            OrderMessage.removed(id);
             OrderData.update(this);
         }
     }
@@ -42,7 +41,7 @@ public class OrderManager {
             }
         }
         if (order == null) {
-            OrderMessage.notFound(id);
+//            OrderMessage.notFound(id);
         }
         return order;
     }

@@ -1,9 +1,11 @@
 package message;
 
-import actors.product.classes.Product;
-import data.Data;
+import product.Product;
+
+import java.util.List;
 
 public class ProductMessage {
+
     public static void added(String name) {
         System.out.println("Product " + name + " is added to menu.");
     }
@@ -16,18 +18,19 @@ public class ProductMessage {
         System.out.println("Product is deleted!");
     }
 
-    public static void showList() {
+    public static void showList(List<String> list) {
         System.out.println("===== PRODUCT LIST =====");
-        for (String product : Data.readFile(Data.getProductFile())) {
+        for (String product : list) {
             System.out.println(product);
         }
-        System.out.println();
     }
 
     public static void isEmpty() {
-        System.out.println("Product list is empty.");
+        System.out.println("Product list is empty!");
     }
-
+    public static void notFound() {
+        System.out.println("Product not found!");
+    }
     public static void preparing(Product product) {
         System.out.println("Preparing " + product.getName() + "...");
     }

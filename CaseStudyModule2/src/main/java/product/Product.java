@@ -1,4 +1,4 @@
-package actors.product.classes;
+package product;
 
 public abstract class Product {
     protected String name;

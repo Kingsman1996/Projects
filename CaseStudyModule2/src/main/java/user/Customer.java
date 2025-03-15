@@ -1,6 +1,6 @@
-package actors.user;
+package user;
 
-import actors.order.Order;
+import order.Order;
 
 public class Customer extends User {
     private Order order;

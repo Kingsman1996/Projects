@@ -1,7 +1,7 @@
 package data;
 
-import actors.order.Order;
-import actors.order.OrderManager;
+import order.Order;
+import order.OrderManager;
 
 public class OrderData extends Data {
     public static void saveOrder(Order order) {
