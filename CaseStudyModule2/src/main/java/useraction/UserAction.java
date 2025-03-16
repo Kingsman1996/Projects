@@ -2,6 +2,8 @@ package useraction;
 
 import data.Data;
 import message.UserMessage;
+import user.Customer;
+import user.User;
 import validate.Validator;
 
 import java.util.List;
@@ -93,19 +95,11 @@ public class UserAction {
         return false;
     }
 
-    public static void action(String name) {
-        if (isAdmin(name)) {
+    public static void action(String username) {
+        if (isAdmin(username)) {
             AdminAction.action();
         } else {
             CustomerAction.action();
         }
-    }
-
-    public static void main(String[] args) {
-        register();
-//        login();
-//        inputUsername();
-//        inputPassword();
-
     }
 }

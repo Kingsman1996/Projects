@@ -9,13 +9,12 @@ import validate.Validator;
 import java.util.List;
 
 public class AdminAction extends UserAction {
-    private static final ProductManager productManager = new ProductManager();
-    private static List<String> productList = Data.readFile(Data.getProductFile());
+    private static ProductManager productManager = new ProductManager();
+    private static List<Product> productList = productManager.getAll();
 
     public static void action() {
         int action;
         while (true) {
-            productList = Data.readFile(Data.getProductFile());
             AdminMessage.choices();
             action = Validator.inputValidInt();
             switch (action) {
@@ -37,15 +36,19 @@ public class AdminAction extends UserAction {
                         case "Milk Tea":
                             size = inputSize();
                             if (name.equals("Milk Tea")) {
+                                productList.add(new MilkTea(size));
                                 ProductData.saveProduct(new MilkTea(size));
                             } else {
+                                productList.add(new Pizza(size));
                                 ProductData.saveProduct(new Pizza(size));
                             }
                             break;
                         case "Sting":
+                            productList.add(new Sting());
                             ProductData.saveProduct(new Sting());
                             break;
                         case "Fried Rice":
+                            productList.add(new FriedRice());
                             ProductData.saveProduct(new FriedRice());
                             break;
                     }
@@ -55,11 +58,14 @@ public class AdminAction extends UserAction {
                         ProductMessage.isEmpty();
                         break;
                     }
-                    name = inputFixName();
-                    if (!productManager.getProductByName(name).isEmpty()) {
-                        size = inputSize();
-                        productManager.fixSize(name, size);
+                    if (productManager.getProductByName("Pizza", productList).isEmpty()
+                            || productManager.getProductByName("Milk Tea", productList).isEmpty()) {
+                        break;
                     }
+                    name = inputFixName();
+                    size = inputSize();
+                    productManager.fixSize(name, productList, size);
+                    Data.writeFile(Data.getProductFile(), productManager.toStringList(productList));
                     break;
                 case 5:
                     if (productList.isEmpty()) {
@@ -67,14 +73,15 @@ public class AdminAction extends UserAction {
                         break;
                     }
                     name = inputAllName();
-                    if (!productManager.getProductByName(name).isEmpty()) {
+                    if (!productManager.getProductByName(name, productList).isEmpty()) {
                         size = "";
                         switch (name) {
                             case "Pizza":
                             case "Milk Tea":
                                 size = inputSize();
                         }
-                        productManager.remove(name, size);
+                        productManager.remove(name, productList, size);
+                        Data.writeFile(Data.getProductFile(), productManager.toStringList(productList));
                     }
                     break;
                 case 0:

@@ -8,7 +8,7 @@ import thread.ThreadManager;
 import java.util.*;
 
 public class OrderProcessor {
-    public static void processCart(int id, List<Product> cart) {
+    public static void process(List<Product> cart) {
         if (cart.isEmpty()) {
             CustomerMessage.emptyCart();
             return;

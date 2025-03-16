@@ -13,20 +13,19 @@ import validate.Validator;
 import java.util.List;
 
 public class CustomerAction extends UserAction {
-    private static final ProductManager productManager = new ProductManager();
+    private static List<Product> productList = new ProductManager().getAll();
     private static Order cart = new Order();
 
     public static void addToCart() {
-        ProductMessage.showList(Data.readFile(Data.getProductFile()));
+        ProductMessage.showList(productList);
         CustomerMessage.chooseProduct();
         int index = Validator.inputValidInt();
 
-        List<Product> products = productManager.getAll();
-        while (index < 1 || index > products.size()) {
+        while (index < 1 || index > productList.size()) {
             UserMessage.invalidChoice();
             index = Validator.inputValidInt();
         }
-        Product selectedProduct = products.get(index - 1);
+        Product selectedProduct = productList.get(index - 1);
         cart.add(selectedProduct);
         CustomerMessage.addedToCart(selectedProduct);
     }
@@ -43,7 +42,7 @@ public class CustomerAction extends UserAction {
             UserMessage.invalidChoice();
             index = Validator.inputValidInt();
         }
-        cart.getProducts().remove(index - 1);
+        cart.remove(cart.getProduct(index - 1));
         CustomerMessage.itemRemoved();
     }
 
@@ -53,12 +52,12 @@ public class CustomerAction extends UserAction {
             return;
         }
         CustomerMessage.totalPrice(cart.getProducts());
-        Data.writeFile(Data.getOrderFile(), productManager.toStringList(cart.getProducts()));
+        Data.writeFile(Data.getOrderFile(), new ProductManager().toStringList(cart.getProducts()));
         CustomerMessage.confirmed();
         for (Product product : cart.getProducts()) {
             ProductMessage.preparing(product);
         }
-        OrderProcessor.processCart(0, cart.getProducts());
+        OrderProcessor.process(cart.getProducts());
         cart = new Order();
         CustomerMessage.delivering();
     }
@@ -76,7 +75,7 @@ public class CustomerAction extends UserAction {
 
             switch (action) {
                 case 1:
-                    ProductMessage.showList(Data.readFile(Data.getProductFile()));
+                    ProductMessage.showList(productList);
                     break;
                 case 2:
                     addToCart();

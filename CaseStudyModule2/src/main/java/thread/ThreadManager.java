@@ -10,10 +10,6 @@ public class ThreadManager {
         this.threads = new ArrayList<>();
     }
 
-    public List<Thread> getThreads() {
-        return threads;
-    }
-
     public void startThreads(List<Runnable> list) {
         for (Runnable item : list) {
             Thread thread = new Thread(item);

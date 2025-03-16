@@ -1,3 +1,0 @@
-Milk Tea, 45000, Medium
-Pizza, 75000, Medium
-Fried Rice, 35000

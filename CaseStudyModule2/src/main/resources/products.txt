@@ -1,4 +1,3 @@
-Pizza, 85000, Large
 Fried Rice, 35000
-Milk Tea, 45000, Medium
+Sting, 15000
 Pizza, 85000, Large

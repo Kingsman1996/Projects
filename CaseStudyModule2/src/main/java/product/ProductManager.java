@@ -52,33 +52,29 @@ public class ProductManager {
         ProductMessage.added(product.getName());
     }
 
-    public void remove(String name, String size) {
-        List<Product> found = getProductByName(name);
-        if (found.isEmpty()) {
+    public void remove(String name, List<Product> products, String size) {
+        List<Product> nameMatch = getProductByName(name, products);
+        if (nameMatch.isEmpty()) {
             return;
         }
-        boolean foundSize = false;
-        for (Product product : found) {
-            if (product instanceof Sizeable) {
-                if (((Sizeable) product).getSize().equals(size)) {
-                    foundSize = true;
-                    productList.remove(product);
-                    ProductMessage.deleted();
-                }
-            } else {
-                productList.remove(product);
+        if (size.isEmpty()) {
+            products.remove(nameMatch.get(0));
+            ProductMessage.deleted();
+            return;
+        }
+        for (Product item : nameMatch) {
+            if (item instanceof Sizeable && ((Sizeable) item).getSize().equals(size)) {
+                products.remove(item);
                 ProductMessage.deleted();
+                return;
             }
         }
-        saveChanges();
-        if (!foundSize) {
-            ProductMessage.notFound();
-        }
+        ProductMessage.notFound();
     }
 
-    public List<Product> getProductByName(String searchName) {
+    public List<Product> getProductByName(String searchName, List<Product> input) {
         List<Product> found = new ArrayList<>();
-        for (Product product : productList) {
+        for (Product product : input) {
             if (product.getName().equalsIgnoreCase(searchName)) {
                 found.add(product);
             }
@@ -93,16 +89,16 @@ public class ProductManager {
         return productList;
     }
 
-    public void fixSize(String searchName, String newSize) {
-        for (Product product : productList) {
-            if (product.getName().equals(searchName)) {
+    public void fixSize(String searchName, List<Product> input, String newSize) {
+        boolean found = false;
+        for (Product product : input) {
+            if (product.getName().equals(searchName) && product instanceof Sizeable) {
                 ((Sizeable) product).setSize(newSize);
+                ProductMessage.fixed();
+                found = true;
             }
         }
-        if (!productList.isEmpty()) {
-            saveChanges();
-            ProductMessage.fixed();
-        }else {
+        if (!found) {
             ProductMessage.notFound();
         }
     }
@@ -115,8 +111,8 @@ public class ProductManager {
         return output;
     }
 
-    public void saveChanges() {
-        writeFile(filePath, toStringList(productList));
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
     }
 
     @Override
