@@ -5,9 +5,8 @@ import product.Product;
 import java.util.List;
 
 public class ProductMessage {
-
     public static void added(String name) {
-        System.out.println("Product " + name + " is added to menu.");
+        System.out.println(name + " is added to menu.");
     }
 
     public static void fixed() {
@@ -19,11 +18,11 @@ public class ProductMessage {
     }
 
     public static void showList(List<Product> list) {
-        System.out.println("===== PRODUCT LIST =====");
         if (list.isEmpty()) {
             isEmpty();
             return;
         }
+        System.out.println("===== PRODUCT LIST =====");
         for (Product product : list) {
             System.out.println(product.toString());
         }
@@ -31,10 +30,6 @@ public class ProductMessage {
 
     public static void isEmpty() {
         System.out.println("Product list is empty!");
-    }
-
-    public static void nothingToFix() {
-        System.out.println("No resizeable product found!");
     }
 
     public static void notFound() {

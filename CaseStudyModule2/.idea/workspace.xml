@@ -14,8 +14,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Class" />
         <option value="JUnit5 Test Class" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -143,7 +143,7 @@
       <workItem from="1741954546616" duration="12167000" />
       <workItem from="1742002349114" duration="23539000" />
       <workItem from="1742120675120" duration="8000" />
-      <workItem from="1742132191563" duration="9083000" />
+      <workItem from="1742132191563" duration="12470000" />
     </task>
     <servers />
   </component>

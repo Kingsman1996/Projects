@@ -19,7 +19,7 @@ public class ProductPreparation implements Runnable {
                 Thread.sleep(item.getPrepareTime());
                 ProductMessage.ready(product);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         } else {
             ProductMessage.ready(product);

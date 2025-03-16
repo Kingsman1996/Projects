@@ -4,7 +4,7 @@ public class UserMessage {
     public static void systemTitle() {
         System.out.println("==== RESTAURANT MANAGEMENT SYSTEM ====");
         System.out.println("Welcome, guest!");
-        System.out.println("Do you want to login or create a new account?");
+        whatToDo();
         System.out.println("1. Login");
         System.out.println("2. Register");
         exit();

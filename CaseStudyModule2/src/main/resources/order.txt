@@ -1,0 +1,2 @@
+Pizza, 85000, Large
+Milk Tea, 55000, Large

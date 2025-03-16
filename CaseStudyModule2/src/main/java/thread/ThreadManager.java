@@ -23,7 +23,7 @@ public class ThreadManager {
             try {
                 item.join();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
         threads.clear();

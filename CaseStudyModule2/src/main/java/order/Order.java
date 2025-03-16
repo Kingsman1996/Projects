@@ -23,6 +23,7 @@ public class Order {
     public List<Product> getProducts() {
         return products;
     }
+
     public Product getProduct(int index) {
         return products.get(index);
     }
