@@ -37,36 +37,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Debug&quot;,
-    &quot;Application.UserAction.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.OrderManagerTest.testPrepareProducts.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.OrderManagerTest.testProcessOrder.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.OrderManagerTest.testProcessProducts.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.OrderProcessorTest.processOrderTest.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.OrderTest.testToString.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.ProductManagerTest.add.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.ProductManagerTest.findIndex.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.ProductManagerTest.getProductByName.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.ProductThreadTest.runTest.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;deletionFromPopupRequiresConfirmation&quot;: &quot;false&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/ASUS/Desktop/MyProjects/CaseStudyModule2&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;File.Encoding&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Debug",
+    "Application.UserAction.executor": "Debug",
+    "JUnit.OrderManagerTest.testPrepareProducts.executor": "Debug",
+    "JUnit.OrderManagerTest.testProcessOrder.executor": "Debug",
+    "JUnit.OrderManagerTest.testProcessProducts.executor": "Debug",
+    "JUnit.OrderProcessorTest.processOrderTest.executor": "Debug",
+    "JUnit.OrderTest.testToString.executor": "Debug",
+    "JUnit.ProductManagerTest.add.executor": "Debug",
+    "JUnit.ProductManagerTest.findIndex.executor": "Debug",
+    "JUnit.ProductManagerTest.getProductByName.executor": "Debug",
+    "JUnit.ProductThreadTest.runTest.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "deletionFromPopupRequiresConfirmation": "false",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/ASUS/Desktop/MyProjects/Module2-Restaurant",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.general",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
@@ -155,6 +155,10 @@
       <workItem from="1742371457804" duration="51000" />
       <workItem from="1742371545184" duration="5000" />
       <workItem from="1742371955999" duration="43000" />
+      <workItem from="1743415008837" duration="26000" />
+      <workItem from="1743415461835" duration="30000" />
+      <workItem from="1743424667182" duration="793000" />
+      <workItem from="1743426103591" duration="23000" />
     </task>
     <servers />
   </component>
