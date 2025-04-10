@@ -39,7 +39,7 @@ public class AdminServlet extends HttpServlet {
                 response.sendRedirect("admin/addMovie.jsp");
                 break;
             case "updateMovie":
-                int movieId = Integer.parseInt(request.getParameter("id"));
+                int movieId = Integer.parseInt(request.getParameter("movieId"));
                 Movie foundMovie = movieDAO.getById(movieId);
                 request.setAttribute("movie", foundMovie);
                 request.getRequestDispatcher("/admin/updateMovie.jsp").forward(request, response);
@@ -59,8 +59,8 @@ public class AdminServlet extends HttpServlet {
             default:
                 request.setAttribute("movies", movieDAO.getAll());
                 request.setAttribute("playTimes", playTimeDAO.getAll());
-                List<TicketDetailDTO> dtoList = ticketDAO.getAllTicketDetails();
-                request.setAttribute("ticketDetails", dtoList);
+                List<TicketDetailDTO> tdList = ticketDAO.getAllTicketDetails();
+                request.setAttribute("ticketDetails", tdList);
                 request.getRequestDispatcher("/admin/dashboard.jsp").forward(request, response);
         }
     }
@@ -70,26 +70,26 @@ public class AdminServlet extends HttpServlet {
         String action = request.getParameter("action");
         switch (action) {
             case "addMovie":
-                String mvname = request.getParameter("mvname");
-                String mvtype = request.getParameter("mvtype");
-                int duration = Integer.parseInt(request.getParameter("duration"));
-                addMovie(mvname, mvtype, duration);
+                String movieName = request.getParameter("movieName");
+                String movieType = request.getParameter("movieType");
+                int movieDuration = Integer.parseInt(request.getParameter("movieDuration"));
+                addMovie(movieName, movieType, movieDuration);
                 request.setAttribute("message", "Thêm phim thành công!");
                 request.getRequestDispatcher("/admin/addMovie.jsp").forward(request, response);
                 break;
             case "updateMovie":
-                int movieId = Integer.parseInt(request.getParameter("id"));
-                mvname = request.getParameter("name");
-                mvtype = request.getParameter("type");
-                duration = Integer.parseInt(request.getParameter("duration"));
-                updateMovie(movieId, mvname, mvtype, duration);
+                int movieId = Integer.parseInt(request.getParameter("movieId"));
+                movieName = request.getParameter("movieName");
+                movieType = request.getParameter("movieType");
+                movieDuration = Integer.parseInt(request.getParameter("movieDuration"));
+                updateMovie(movieId, movieName, movieType, movieDuration);
                 Movie updatedMovie = movieDAO.getById(movieId);
                 request.setAttribute("movie", updatedMovie);
                 request.setAttribute("message", "Cập nhật phim thành công!");
                 request.getRequestDispatcher("/admin/updateMovie.jsp").forward(request, response);
                 break;
             case "deleteMovie":
-                movieId = Integer.parseInt(request.getParameter("id"));
+                movieId = Integer.parseInt(request.getParameter("movieId"));
                 if (!playTimeDAO.hasMovie(movieId)) {
                     movieDAO.delete(movieId);
                 } else {
@@ -101,18 +101,18 @@ public class AdminServlet extends HttpServlet {
                 break;
             case "addPlayTime":
                 movieId = Integer.parseInt(request.getParameter("movieId"));
-                String showDate = request.getParameter("showDate");
-                String showTime = request.getParameter("showTime");
-                addPlayTime(movieId, showDate, showTime);
+                String playDay = request.getParameter("playDay");
+                String hour = request.getParameter("hour");
+                addPlayTime(movieId, playDay, hour);
                 request.setAttribute("message", "Thêm lịch chiếu thành công!");
                 request.getRequestDispatcher("/admin/addPlayTime.jsp").forward(request, response);
                 break;
             case "updatePlayTime":
                 int playTimeId = Integer.parseInt(request.getParameter("playTimeId"));
                 int newMovieId = Integer.parseInt(request.getParameter("newMovieId"));
-                String newShowDate = request.getParameter("newShowDate");
-                String newShowTime = request.getParameter("newShowTime");
-                updatePlayTime(playTimeId, newMovieId, newShowDate, newShowTime);
+                String newPlayDay = request.getParameter("newPlayDay");
+                String newHour = request.getParameter("newHour");
+                updatePlayTime(playTimeId, newMovieId, newPlayDay, newHour);
                 Playtime updatedPlayTime = playTimeDAO.getById(playTimeId);
                 List<Movie> movies = movieDAO.getAll();
                 request.setAttribute("movies", movies);
@@ -150,20 +150,20 @@ public class AdminServlet extends HttpServlet {
         movieDAO.update(movie);
     }
 
-    public void addPlayTime(int movieId, String showDate, String showTime) {
+    public void addPlayTime(int movieId, String playDay, String hour) {
         Playtime playTime = new Playtime();
         playTime.setMovieId(movieId);
-        playTime.setDay(LocalDate.parse(showDate));
-        playTime.setTime(LocalTime.parse(showTime));
+        playTime.setPlayDay(LocalDate.parse(playDay));
+        playTime.setHour(LocalTime.parse(hour));
         playTimeDAO.add(playTime);
     }
 
-    public void updatePlayTime(int playTimeId, int movieId, String showDate, String showTime) {
+    public void updatePlayTime(int playTimeId, int movieId, String playDay, String hour) {
         Playtime playTime = new Playtime();
         playTime.setPlayTimeId(playTimeId);
         playTime.setMovieId(movieId);
-        playTime.setDay(LocalDate.parse(showDate));
-        playTime.setTime(LocalTime.parse(showTime));
+        playTime.setPlayDay(LocalDate.parse(playDay));
+        playTime.setHour(LocalTime.parse(hour));
         playTimeDAO.update(playTime);
     }
 }

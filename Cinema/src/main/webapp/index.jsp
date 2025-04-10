@@ -23,13 +23,6 @@
             width: 100%;
         }
 
-        .welcome-text {
-            font-size: 1.8rem;
-            font-weight: 700;
-            text-align: center;
-            color: #fff;
-        }
-
         .form-label {
             font-weight: 500;
             color: #fff;
@@ -66,21 +59,19 @@
     </style>
 </head>
 <body class="d-flex justify-content-center align-items-center vh-100">
-
 <div class="card">
     <c:if test="${not empty error}">
         <div class="alert alert-danger text-center alert-box">${error}</div>
     </c:if>
-    <p class="text-center text-white-50 mb-4">Đăng nhập để bắt đầu trải nghiệm</p>
-
+    <p class="text-center text-white-50 mb-4">Đăng nhập để truy cập vào CinemaKing</p>
     <form action="login" method="post">
         <div class="mb-3">
             <label for="username" class="form-label">Tên đăng nhập</label>
-            <input type="text" id="username" name="username" class="form-control form-control-lg rounded-pill" placeholder="Nhập tên đăng nhập" required />
+            <input type="text" id="username" name="username" class="form-control form-control-lg rounded-pill" required />
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Mật khẩu</label>
-            <input type="password" id="password" name="password" class="form-control form-control-lg rounded-pill" placeholder="Nhập mật khẩu" required />
+            <input type="password" id="password" name="password" class="form-control form-control-lg rounded-pill" required />
         </div>
         <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill mb-3">Đăng nhập</button>
         <div class="text-center text-white-50">
@@ -89,6 +80,5 @@
         <a href="register" class="btn btn-outline-danger btn-lg w-100 rounded-pill">Đăng ký ngay</a>
     </form>
 </div>
-
 </body>
 </html>

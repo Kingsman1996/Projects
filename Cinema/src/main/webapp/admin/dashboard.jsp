@@ -17,6 +17,12 @@
             font-size: 18px;
         }
 
+        .sidebar .nav-link.text-danger {
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+
         .sidebar .nav-link.active {
             background-color: #495057;
         }
@@ -25,7 +31,7 @@
 <body class="bg-dark text-white">
 <c:if test="${not empty sessionScope.failMessage}">
     <div class="alert alert-danger text-center">${sessionScope.failMessage}</div>
-    <c:remove var="failMessage" scope="session" />
+    <c:remove var="failMessage" scope="session"/>
 </c:if>
 
 <div class="container-fluid">
@@ -38,6 +44,7 @@
                 <a href="?tab=playtime" class="nav-link ${param.tab == 'playtime' ? 'active' : ''}">Quản lý lịch
                     chiếu</a>
                 <a href="?tab=ticket" class="nav-link ${param.tab == 'ticket' ? 'active' : ''}">Lịch sử đặt vé</a>
+                <a href="login" class="nav-link text-danger">Đăng xuất</a>
             </div>
         </div>
 
@@ -63,11 +70,11 @@
                                 <td>${movie.movieType}</td>
                                 <td>${movie.movieDuration} phút</td>
                                 <td>
-                                    <a href="${pageContext.request.contextPath}/admin?action=updateMovie&id=${movie.movieId}"
+                                    <a href="${pageContext.request.contextPath}/admin?action=updateMovie&movieId=${movie.movieId}"
                                        class="btn btn-sm btn-warning">Sửa</a>
                                     <form action="${pageContext.request.contextPath}/admin?action=deleteMovie"
                                           method="post" class="d-inline">
-                                        <input type="hidden" name="id" value="${movie.movieId}"/>
+                                        <input type="hidden" name="movieId" value="${movie.movieId}"/>
                                         <button class="btn btn-sm btn-danger"
                                                 onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa
                                         </button>
@@ -108,8 +115,8 @@
                                         </c:if>
                                     </c:forEach>
                                 </td>
-                                <td>${pt.day}</td>
-                                <td>${pt.time}</td>
+                                <td>${pt.playDay}</td>
+                                <td>${pt.hour}</td>
                                 <td>
                                     <a href="${pageContext.request.contextPath}/admin?action=updatePlayTime&playTimeId=${pt.playTimeId}
                                     " class="btn btn-sm btn-warning">Sửa</a>
@@ -126,8 +133,7 @@
                         <tr>
                             <td colspan="5" class="text-center">
                                 <a href="${pageContext.request.contextPath}/admin?action=addPlayTime"
-                                   class="btn btn-outline-light">Thêm
-                                    lịch chiếu mới</a>
+                                   class="btn btn-outline-light">Thêm lịch chiếu mới</a>
                             </td>
                         </tr>
                         </tbody>
@@ -156,8 +162,8 @@
                                         <td>${ticket.username}</td>
                                         <td>${ticket.movieName}</td>
                                         <td>${ticket.seatCode}</td>
-                                        <td>${ticket.day}</td>
-                                        <td>${ticket.time}</td>
+                                        <td>${ticket.playDay}</td>
+                                        <td>${ticket.hour}</td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

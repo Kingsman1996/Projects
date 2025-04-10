@@ -30,8 +30,8 @@
                         <td>${ticket.ticketId}</td>
                         <td>${ticket.movieName}</td>
                         <td>${ticket.seatCode}</td>
-                        <td>${ticket.day}</td>
-                        <td>${ticket.time}</td>
+                        <td>${ticket.playDay}</td>
+                        <td>${ticket.hour}</td>
                     </tr>
                 </c:forEach>
                 </tbody>

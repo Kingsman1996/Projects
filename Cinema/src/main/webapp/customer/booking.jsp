@@ -124,7 +124,7 @@
                     <select id="playTimes" name="playTimeId" class="form-control">
                         <c:forEach var="playTime" items="${playTimes}">
                             <option value="${playTime.playTimeId}">
-                                    ${playTime.day} - ${playTime.time}
+                                    ${playTime.playDay} - ${playTime.hour}
                             </option>
                         </c:forEach>
                     </select>

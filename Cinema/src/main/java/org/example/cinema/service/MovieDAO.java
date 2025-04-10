@@ -5,10 +5,7 @@ import org.example.cinema.model.Movie;
 import org.example.cinema.model.Playtime;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MovieDAO {
     private Connection connection;
@@ -19,11 +16,11 @@ public class MovieDAO {
 
     public void add(Movie movie) {
         String query = "INSERT INTO movie (moviename, movietype, movieduration) VALUES (?, ?, ?)";
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, movie.getMovieName());
-            pstmt.setString(2, movie.getMovieType());
-            pstmt.setInt(3, movie.getMovieDuration());
-            pstmt.executeUpdate();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, movie.getMovieName());
+            preparedStatement.setString(2, movie.getMovieType());
+            preparedStatement.setInt(3, movie.getMovieDuration());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -51,9 +48,9 @@ public class MovieDAO {
     public Movie getById(int id) {
         String query = "SELECT * FROM movie WHERE movieid = ?";
         Movie movie = null;
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setInt(1, id);
-            ResultSet rs = pst.executeQuery();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
                 movie = new Movie();
                 movie.setMovieId(rs.getInt("movieid"));
@@ -91,36 +88,29 @@ public class MovieDAO {
     }
 
     public List<MoviePlayTimeDTO> getThisWeek() {
-        return executeMovieQuery("CALL GetThisWeekMovie()");
+        return executeMovieQuery("CALL GetThisWeekMovie()", new PlayTimeDAO().getThisWeek());
     }
 
     public List<MoviePlayTimeDTO> getNextWeek() {
-        return executeMovieQuery("CALL GetNextWeekMovie()");
+        return executeMovieQuery("CALL GetNextWeekMovie()", new PlayTimeDAO().getNextWeek());
     }
 
-    private List<MoviePlayTimeDTO> executeMovieQuery(String sql) {
-        Map<Integer, MoviePlayTimeDTO> movieMap = new LinkedHashMap<>();
+    private List<MoviePlayTimeDTO> executeMovieQuery(String sql, List<Playtime> playtimeList) {
+        Map<Integer, MoviePlayTimeDTO> movieMap = new HashMap<>();
         try (CallableStatement cst = connection.prepareCall(sql);
              ResultSet rs = cst.executeQuery()) {
             while (rs.next()) {
+                MoviePlayTimeDTO movieDTO = new MoviePlayTimeDTO();
                 int movieId = rs.getInt("movieid");
-                MoviePlayTimeDTO movieDTO = movieMap.get(movieId);
-                if (movieDTO == null) {
-                    movieDTO = new MoviePlayTimeDTO();
-                    movieDTO.setMovieId(movieId);
-                    movieDTO.setMovieName(rs.getString("moviename"));
-                    movieDTO.setMovieType(rs.getString("movietype"));
-                    movieDTO.setMovieDuration(rs.getInt("movieduration"));
-                    movieDTO.setPlayTimes(new ArrayList<>());
-                    movieMap.put(movieId, movieDTO);
-                }
-                Playtime playtime = new Playtime();
-                playtime.setDay(rs.getDate("playday").toLocalDate());
-                playtime.setTime(rs.getTime("playtime").toLocalTime());
-                movieDTO.getPlayTimes().add(playtime);
+                movieDTO.setMovieId(movieId);
+                movieDTO.setMovieName(rs.getString("moviename"));
+                movieDTO.setMovieType(rs.getString("movietype"));
+                movieDTO.setMovieDuration(rs.getInt("movieduration"));
+                movieDTO.setPlayTimes(playtimeList);
+                movieMap.put(movieId, movieDTO);
             }
         } catch (SQLException e) {
-            System.out.println("Lỗi khi truy vấn phim: " + e.getMessage());
+            System.out.println("Lỗi khi truy vấn " + e.getMessage());
         }
         return new ArrayList<>(movieMap.values());
     }

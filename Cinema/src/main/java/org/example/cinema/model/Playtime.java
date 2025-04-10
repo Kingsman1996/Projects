@@ -6,8 +6,8 @@ import java.time.LocalTime;
 public class Playtime {
     private int playTimeId;
     private int movieId;
-    private LocalDate day;
-    private LocalTime time;
+    private LocalDate playDay;
+    private LocalTime hour;
 
     public Playtime() {
     }
@@ -20,20 +20,20 @@ public class Playtime {
         this.playTimeId = playTimeId;
     }
 
-    public LocalDate getDay() {
-        return day;
+    public LocalDate getPlayDay() {
+        return playDay;
     }
 
-    public void setDay(LocalDate day) {
-        this.day = day;
+    public void setPlayDay(LocalDate playDay) {
+        this.playDay = playDay;
     }
 
-    public LocalTime getTime() {
-        return time;
+    public LocalTime getHour() {
+        return hour;
     }
 
-    public void setTime(LocalTime time) {
-        this.time = time;
+    public void setHour(LocalTime hour) {
+        this.hour = hour;
     }
 
     public int getMovieId() {

@@ -30,13 +30,13 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="newShowDate" class="form-label">Ngày Chiếu:</label>
-                    <input type="date" id="newShowDate" name="newShowDate" class="form-control" required>
+                    <label for="newPLayDay" class="form-label">Ngày Chiếu:</label>
+                    <input type="date" id="newPLayDay" name="newPlayDay" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="newShowTime" class="form-label">Giờ Chiếu:</label>
-                    <input type="time" id="newShowTime" name="newShowTime" class="form-control" required>
+                    <label for="newHour" class="form-label">Giờ Chiếu:</label>
+                    <input type="time" id="newHour" name="newHour" class="form-control" required>
                 </div>
 
                 <div class="d-flex justify-content-between">

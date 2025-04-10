@@ -147,10 +147,13 @@
                             <h6 class="mt-3">Lịch chiếu:</h6>
                             <ul class="list-group list-group-flush">
                                 <c:forEach var="playTime" items="${movie.playTimes}">
-                                    <li class="list-group-item bg-dark text-white">
-                                        Ngày: ${playTime.day} - Giờ: ${playTime.time}
-                                    </li>
+                                    <c:if test="${playTime.movieId == movie.movieId}">
+                                        <li class="list-group-item bg-dark text-white">
+                                            Ngày: ${playTime.playDay} - Giờ: ${playTime.hour}
+                                        </li>
+                                    </c:if>
                                 </c:forEach>
+
                             </ul>
                             <a href="customer?action=booking&movieId=${movie.movieId}" class="btn btn-warning mt-3">Đặt
                                 vé</a>

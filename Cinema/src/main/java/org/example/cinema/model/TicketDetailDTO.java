@@ -7,8 +7,8 @@ public class TicketDetailDTO {
     private int ticketId;
     private String username;
     private String seatCode;
-    private LocalDate day;
-    private LocalTime time;
+    private LocalDate playDay;
+    private LocalTime hour;
     private String movieName;
 
     public TicketDetailDTO() {
@@ -38,20 +38,20 @@ public class TicketDetailDTO {
         this.seatCode = seatCode;
     }
 
-    public LocalDate getDay() {
-        return day;
+    public LocalDate getPlayDay() {
+        return playDay;
     }
 
-    public void setDay(LocalDate day) {
-        this.day = day;
+    public void setPlayDay(LocalDate playDay) {
+        this.playDay = playDay;
     }
 
-    public LocalTime getTime() {
-        return time;
+    public LocalTime getHour() {
+        return hour;
     }
 
-    public void setTime(LocalTime time) {
-        this.time = time;
+    public void setHour(LocalTime hour) {
+        this.hour = hour;
     }
 
     public String getMovieName() {

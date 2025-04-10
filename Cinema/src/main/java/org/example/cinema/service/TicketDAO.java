@@ -47,8 +47,8 @@ public class TicketDAO {
                     ticket.setTicketId(rs.getInt("ticketid"));
                     ticket.setUsername(rs.getString("username"));
                     ticket.setSeatCode(rs.getString("seatcode"));
-                    ticket.setDay(rs.getDate("playday").toLocalDate());
-                    ticket.setTime(rs.getTime("playtime").toLocalTime());
+                    ticket.setPlayDay(rs.getDate("playday").toLocalDate());
+                    ticket.setHour(rs.getTime("hour").toLocalTime());
                     ticket.setMovieName(rs.getString("moviename"));
                     ticketDetails.add(ticket);
                 }

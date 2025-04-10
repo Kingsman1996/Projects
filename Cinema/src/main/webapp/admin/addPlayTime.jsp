@@ -34,17 +34,17 @@
         </div>
 
         <div class="form-group">
-            <label for="showDate">Ngày Chiếu:</label>
-            <input type="date" id="showDate" name="showDate" class="form-control" required>
+            <label for="playDay">Ngày Chiếu:</label>
+            <input type="date" id="playDay" name="playDay" class="form-control" required>
         </div>
 
         <div class="form-group">
-            <label for="showTime">Giờ Chiếu:</label>
-            <input type="time" id="showTime" name="showTime" class="form-control" required>
+            <label for="hour">Giờ Chiếu:</label>
+            <input type="time" id="hour" name="hour" class="form-control" required>
         </div>
 
         <button type="submit" class="btn btn-success">Thêm Lịch Chiếu</button>
-        <a href="/admin" class="btn btn-secondary">Hủy</a>
+        <a href="admin" class="btn btn-secondary">Hủy</a>
     </form>
 </div>
 </body>
