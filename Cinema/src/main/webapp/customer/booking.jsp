@@ -43,8 +43,8 @@
         }
 
         .btn-warning {
-            background-color: #f1c40f !important;
-            border-color: #f1c40f !important;
+            background-color: #3498db !important;
+            border-color: #3498db !important;
             color: black;
         }
 
@@ -89,8 +89,8 @@
         }
 
         .btn-outline-primary {
-            border-color: #3498db;
-            color: #3498db;
+            border-color: whitesmoke;
+            color: whitesmoke;
         }
 
         .btn-outline-primary:hover {
@@ -102,6 +102,9 @@
 
 </head>
 <body class="container text-center mt-4">
+<c:if test="${not empty message}">
+    <div id="alert-box" class="alert alert-success">${message}</div>
+</c:if>
 
 <h1 class="mb-4">Sơ đồ ghế</h1>
 
@@ -146,7 +149,7 @@
 <form method="POST" class="mt-4">
     <input type="hidden" id="selectedSeatList" name="selectedSeatList" value="">
     <input type="hidden" name="playtimeId" value="${playtimeId}">
-    <button type="submit" class="btn btn-warning px-4 py-2" id="bookBtn" disabled>Đặt Vé</button>
+    <button type="submit" class="btn btn-warning px-4 py-2" id="bookBtn" disabled>Xác nhận</button>
 </form>
 
 <a href="customer" class="btn btn-outline-primary mt-3">Quay về</a>

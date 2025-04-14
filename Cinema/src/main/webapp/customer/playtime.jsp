@@ -98,10 +98,10 @@
                     <td>${playtime.day}</td>
                     <td>${playtime.hour}</td>
                     <td>
-                        <c:set var="playtimeDateTime" value="${playtime.day}T${playtime.hour}" />
+                        <c:set var="playtimeDateTime" value="${playtime.day} - ${playtime.hour}" />
                         <c:choose>
                             <c:when test="${playtimeDateTime > now}">
-                                <a href="customer?action=booking&playtimeId=${playtime.id}" class="btn-link">Chọn ghế</a>
+                                <a href="customer?action=booking&playtimeId=${playtime.id}" class="btn-link">Đặt vé ngay</a>
                             </c:when>
                             <c:otherwise>
                                 <span class="expired">Đã hết hạn</span>

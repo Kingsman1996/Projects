@@ -18,7 +18,7 @@ import java.util.List;
 @WebServlet("/customer")
 public class CustomerServlet extends HttpServlet {
     private final MovieDAO movieDAO = new MovieDAO();
-    private final PlayTimeDAO playtimeDAO = new PlayTimeDAO();
+    private final PlaytimeDAO playtimeDAO = new PlaytimeDAO();
     private final TicketDAO ticketDAO = new TicketDAO();
     private final SeatDAO seatDAO = new SeatDAO();
 
@@ -31,9 +31,7 @@ public class CustomerServlet extends HttpServlet {
         int playtimeId;
         List<Playtime> playtimeList;
         String movieName;
-        List<Movie> movieList;
 
-        List<Seat> seatList;
         List<Ticket> ticketList;
 
         String action = request.getParameter("action");
@@ -42,34 +40,22 @@ public class CustomerServlet extends HttpServlet {
         }
         switch (action) {
             case "incoming":
-                movieList = movieDAO.getNextWeek();
-                request.setAttribute("movieList", movieList);
+                request.setAttribute("movieList", movieDAO.getNextWeek());
                 request.getRequestDispatcher("/customer/view.jsp").forward(request, response);
                 break;
             case "checkPlaytime":
                 movieName = request.getParameter("movieName");
-                request.setAttribute("movieName", movieName);
                 playtimeList = playtimeDAO.getByMovieName(movieName);
-                request.setAttribute("now", LocalDateTime.now());
                 request.setAttribute("playtimeList", playtimeList);
+                request.setAttribute("now", LocalDateTime.now());
                 request.getRequestDispatcher("/customer/playtime.jsp").forward(request, response);
                 break;
             case "booking":
                 playtimeId = Integer.parseInt(request.getParameter("playtimeId"));
-                request.setAttribute("playtimeId", playtimeId);
-
                 ticketList = ticketDAO.getByPlaytime(playtimeId);
-                seatList = seatDAO.getAll();
-                List<Seat> bookedSeatList = new ArrayList<>();
-                for (Ticket ticket : ticketList) {
-                    for (Seat seat : seatList) {
-                        if (seat.getId() == ticket.getSeat().getId()) {
-                            bookedSeatList.add(seat);
-                        }
-                    }
-                }
-                request.setAttribute("seatList", seatList);
+                List<Seat> bookedSeatList = getSeatListFromTicketList(ticketList);
                 request.setAttribute("bookedSeatList", bookedSeatList);
+                setAllSeatToRequest(request);
                 request.getRequestDispatcher("/customer/booking.jsp").forward(request, response);
                 break;
             case "history":
@@ -78,8 +64,7 @@ public class CustomerServlet extends HttpServlet {
                 request.getRequestDispatcher("/customer/history.jsp").forward(request, response);
                 break;
             default:
-                movieList = movieDAO.getThisWeek();
-                request.setAttribute("movieList", movieList);
+                request.setAttribute("movieList", movieDAO.getThisWeek());
                 request.getRequestDispatcher("/customer/view.jsp").forward(request, response);
         }
     }
@@ -90,7 +75,6 @@ public class CustomerServlet extends HttpServlet {
         String action = request.getParameter("action");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        List<Seat> seatList;
         List<Ticket> ticketList;
 
         if (action.equals("booking")) {
@@ -112,21 +96,28 @@ public class CustomerServlet extends HttpServlet {
 
                 ticketDAO.insert(ticket);
             }
-            request.setAttribute("playtimeId", playtimeId);
             ticketList = ticketDAO.getByPlaytime(playtimeId);
-            seatList = seatDAO.getAll();
-            List<Seat> bookedSeatList = new ArrayList<>();
-            for (Ticket ticket : ticketList) {
-                for (Seat seat : seatList) {
-                    if (ticket.getSeat().getId() == seat.getId()) {
-                        bookedSeatList.add(seat);
-                    }
-                }
-            }
-            request.setAttribute("seatList", seatList);
+            setAllSeatToRequest(request);
+            List<Seat> bookedSeatList = getSeatListFromTicketList(ticketList);
             request.setAttribute("bookedSeatList", bookedSeatList);
             request.setAttribute("message", "Đặt vé thành công!");
             request.getRequestDispatcher("/customer/booking.jsp").forward(request, response);
         }
+    }
+
+    private void setAllSeatToRequest(HttpServletRequest request) {
+        request.setAttribute("seatList", seatDAO.getAll());
+    }
+
+    private List<Seat> getSeatListFromTicketList(List<Ticket> ticketList) {
+        List<Seat> bookedSeatList = new ArrayList<>();
+        for (Ticket ticket : ticketList) {
+            for (Seat seat : seatDAO.getAll()) {
+                if (ticket.getSeat().getId() == seat.getId()) {
+                    bookedSeatList.add(seat);
+                }
+            }
+        }
+        return bookedSeatList;
     }
 }

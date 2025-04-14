@@ -21,37 +21,41 @@ public class MovieDAO {
             "FROM playtimedetail\n" +
             "WHERE YEARWEEK(day, 1) = YEARWEEK(DATE_ADD(CURDATE(), INTERVAL 7 DAY), 1);\n";
 
-    public void add(Movie movie) {
+    public void insert(Movie movie) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL)) {
             preparedStatement.setString(1, movie.getName());
             preparedStatement.setString(2, movie.getType());
             preparedStatement.setInt(3, movie.getDuration());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Lỗi MovieDao insert " + e.getMessage());
         }
     }
 
     public List<Movie> getAll() {
         List<Movie> movieList = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement(GET_ALL_SQL);
-             ResultSet resultSet = stmt.executeQuery()) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_SQL);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
-                movieList.add(mapResultSet(resultSet));
+                movieList.add(convertResultSetWithId(resultSet));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Lỗi MovieDao getAll " + e.getMessage());
         }
         return movieList;
     }
 
-    private Movie mapResultSet(ResultSet resultSet) throws SQLException {
+    private Movie convertResultSetWithId(ResultSet resultSet) {
         Movie movie = new Movie();
-        movie.setId(resultSet.getInt("id"));
-        movie.setName(resultSet.getString("name"));
-        movie.setType(resultSet.getString("type"));
-        movie.setDuration(resultSet.getInt("duration"));
-        movie.setImageUrl(movie.getName().toLowerCase().replaceAll("\\s+", "").replace(":", "").replace("&", "") + ".jpg");
+        try {
+            movie.setId(resultSet.getInt("id"));
+            movie.setName(resultSet.getString("name"));
+            movie.setType(resultSet.getString("type"));
+            movie.setDuration(resultSet.getInt("duration"));
+            movie.convertNameToImageUrl();
+        } catch (SQLException e) {
+            System.out.println("Lỗi MovieDao convert " + e.getMessage());
+        }
         return movie;
     }
 
@@ -60,10 +64,10 @@ public class MovieDAO {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return mapResultSet(resultSet);
+                return convertResultSetWithId(resultSet);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Lỗi MovieDao getById " + e.getMessage());
         }
         return null;
     }
@@ -76,7 +80,7 @@ public class MovieDAO {
             preparedStatement.setInt(4, movie.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Lỗi MovieDao update " + e.getMessage());
         }
     }
 
@@ -85,7 +89,7 @@ public class MovieDAO {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Lỗi MovieDao delete " + e.getMessage());
         }
     }
 
@@ -98,7 +102,7 @@ public class MovieDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Lỗi MovieDao hasPlaytime " + e.getMessage());
         }
         return false;
     }
@@ -108,11 +112,7 @@ public class MovieDAO {
         try (PreparedStatement stmt = connection.prepareStatement(GET_THIS_WEEK_SQL);
              ResultSet resultSet = stmt.executeQuery()) {
             while (resultSet.next()) {
-                Movie movie = new Movie();
-                movie.setName(resultSet.getString("moviename"));
-                movie.setType(resultSet.getString("movietype"));
-                movie.setDuration(resultSet.getInt("movieduration"));
-                movie.setImageUrl(movie.getName().toLowerCase().replaceAll("\\s+", "").replace(":", "").replace("&", "") + ".jpg");
+                Movie movie = convertResultSetWithNoId(resultSet);
                 movieList.add(movie);
             }
         } catch (SQLException e) {
@@ -126,16 +126,24 @@ public class MovieDAO {
         try (PreparedStatement stmt = connection.prepareStatement(GET_NEXT_WEEK_SQL);
              ResultSet resultSet = stmt.executeQuery()) {
             while (resultSet.next()) {
-                Movie movie = new Movie();
-                movie.setName(resultSet.getString("moviename"));
-                movie.setType(resultSet.getString("movietype"));
-                movie.setDuration(resultSet.getInt("movieduration"));
-                movie.setImageUrl(movie.getName().toLowerCase().replaceAll("\\s+", "").replace(":", "").replace("&", "") + ".jpg");
-                movieList.add(movie);
+                movieList.add(convertResultSetWithNoId(resultSet));
             }
         } catch (SQLException e) {
             System.out.println("Lỗi MovieDAO GetNextWeek" + e.getMessage());
         }
         return movieList;
+    }
+
+    public static Movie convertResultSetWithNoId(ResultSet resultSet) {
+        Movie movie = new Movie();
+        try {
+            movie.setName(resultSet.getString("moviename"));
+            movie.setType(resultSet.getString("movietype"));
+            movie.setDuration(resultSet.getInt("movieduration"));
+            movie.convertNameToImageUrl();
+        } catch (SQLException e) {
+            System.out.println("Lỗi MovieDao convertWithNoId " + e.getMessage());
+        }
+        return movie;
     }
 }

@@ -62,8 +62,8 @@
 
         .nav-link.active {
             font-weight: bold;
-            color: #ffc107 !important;
-            border-bottom: 2px solid #ffc107;
+            color: #3498db !important;
+            border-bottom: 2px solid #3498db;
         }
 
         .navbar {
@@ -77,8 +77,8 @@
         }
 
         .nav-link:hover {
-            color: #ffc107 !important;
-            text-shadow: 0 0 5px #ffc107;
+            color: #3498db !important;
+            text-shadow: 0 0 5px #3498db;
         }
 
         .card {
@@ -108,10 +108,11 @@
             font-weight: 500;
             letter-spacing: 0.5px;
             transition: background-color 0.3s ease;
+            background-color: #3498db;
         }
 
         .btn-warning:hover {
-            background-color: #e0a800;
+            background-color: #3498db;
             color: white;
         }
 
@@ -129,7 +130,7 @@
         }
 
         #contact i {
-            color: #ffc107;
+            color: #3498db;
         }
 
         #contact a:hover {
@@ -142,7 +143,7 @@
 
         .bi:hover {
             transform: scale(1.2);
-            color: #ffc107 !important;
+            color: #3498db !important;
         }
     </style>
 </head>

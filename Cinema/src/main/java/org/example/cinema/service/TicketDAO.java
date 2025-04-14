@@ -16,63 +16,63 @@ public class TicketDAO {
 
     private final Connection connection = DBConnection.connect();
     private final UserDAO userDAO = new UserDAO();
-    private final PlayTimeDAO playtimeDAO = new PlayTimeDAO();
+    private final PlaytimeDAO playtimeDAO = new PlaytimeDAO();
 
     public List<Ticket> getByUser(int userId) {
         List<Ticket> ticketList = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement(GET_BY_USER_SQL)) {
-            stmt.setInt(1, userId);
-            try (ResultSet resultSet = stmt.executeQuery()) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_USER_SQL)) {
+            preparedStatement.setInt(1, userId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    ticketList.add(mapResultSet(resultSet));
+                    ticketList.add(convertResultSet(resultSet));
                 }
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Lỗi TicketDAO -> getByUser " + e.getMessage());
         }
         return ticketList;
     }
 
     public List<Ticket> getByPlaytime(int playtimeId) {
         List<Ticket> ticketList = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement(GET_BY_PLAYTIME_SQL)) {
-            stmt.setInt(1, playtimeId);
-            try (ResultSet resultSet = stmt.executeQuery()) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_PLAYTIME_SQL)) {
+            preparedStatement.setInt(1, playtimeId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    ticketList.add(mapResultSet(resultSet));
+                    ticketList.add(convertResultSet(resultSet));
                 }
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Lỗi TicketDAO -> getByPlaytime " + e.getMessage());
         }
         return ticketList;
     }
 
     public void insert(Ticket ticket) {
-        try (PreparedStatement stmt = connection.prepareStatement(INSERT_SQL)) {
-            stmt.setInt(1, ticket.getUser().getId());
-            stmt.setInt(2, ticket.getPlaytime().getId());
-            stmt.setInt(3, ticket.getSeat().getId());
-            stmt.executeUpdate();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL)) {
+            preparedStatement.setInt(1, ticket.getUser().getId());
+            preparedStatement.setInt(2, ticket.getPlaytime().getId());
+            preparedStatement.setInt(3, ticket.getSeat().getId());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Lỗi thêm vé" + e.getMessage());
+            System.out.println("Lỗi TicketDAO -> insert " + e.getMessage());
         }
     }
 
     public List<Ticket> getAll() {
         List<Ticket> ticketList = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement(GET_ALL_SQL)) {
-            ResultSet resultSet = stmt.executeQuery();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_SQL)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                ticketList.add(mapResultSet(resultSet));
+                ticketList.add(convertResultSet(resultSet));
             }
         } catch (SQLException e) {
-            System.out.println("Lỗi truy vấn vé" + e.getMessage());
+            System.out.println("Lỗi TicketDAO -> getAll " + e.getMessage());
         }
         return ticketList;
     }
 
-    private Ticket mapResultSet(ResultSet resultSet) {
+    private Ticket convertResultSet(ResultSet resultSet) {
         Ticket ticket = new Ticket();
         try {
             ticket.setId(resultSet.getInt("id"));
@@ -82,7 +82,7 @@ public class TicketDAO {
             ticket.setSeat(seat);
             ticket.setBookingTime(resultSet.getTimestamp("bookingtime").toLocalDateTime());
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Lỗi TicketDAO -> convertResultSet " + e.getMessage());
         }
         return ticket;
     }

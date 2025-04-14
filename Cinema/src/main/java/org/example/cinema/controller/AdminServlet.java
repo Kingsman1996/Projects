@@ -9,12 +9,11 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 @WebServlet("/admin")
 public class AdminServlet extends HttpServlet {
     private final MovieDAO movieDAO = new MovieDAO();
-    private final PlayTimeDAO playtimeDAO = new PlayTimeDAO();
+    private final PlaytimeDAO playtimeDAO = new PlaytimeDAO();
     private final TicketDAO ticketDAO = new TicketDAO();
     private final RoomDAO roomDAO = new RoomDAO();
 
@@ -25,19 +24,6 @@ public class AdminServlet extends HttpServlet {
             response.sendRedirect("index.jsp");
             return;
         }
-
-        int movieId;
-        Movie movie;
-        List<Movie> movieList;
-
-        int playtimeId;
-        Playtime playtime;
-        List<Playtime> playtimeList;
-
-        List<Room> roomList;
-
-        List<Ticket> ticketList;
-
         String action = request.getParameter("action");
         if (action == null) {
             action = "";
@@ -47,35 +33,24 @@ public class AdminServlet extends HttpServlet {
                 response.sendRedirect("admin/addMovie.jsp");
                 break;
             case "updateMovie":
-                movieId = Integer.parseInt(request.getParameter("id"));
-                movie = movieDAO.getById(movieId);
-                request.setAttribute("movie", movie);
+                setMovieToRequestByMovieId(request);
                 request.getRequestDispatcher("/admin/updateMovie.jsp").forward(request, response);
                 break;
             case "addPlaytime":
-                movieList = movieDAO.getAll();
-                roomList = roomDAO.getAll();
-                request.setAttribute("movieList", movieList);
-                request.setAttribute("roomList", roomList);
+                setMovieListToRequest(request);
+                setRoomListToRequest(request);
                 request.getRequestDispatcher("/admin/addPlaytime.jsp").forward(request, response);
                 break;
             case "updatePlaytime":
-                playtimeId = Integer.parseInt(request.getParameter("id"));
-                playtime = playtimeDAO.getById(playtimeId);
-                movieList = movieDAO.getAll();
-                roomList = roomDAO.getAll();
-                request.setAttribute("playtime", playtime);
-                request.setAttribute("movieList", movieList);
-                request.setAttribute("roomList", roomList);
+                setPlaytimeToRequestById(request);
+                setMovieListToRequest(request);
+                setRoomListToRequest(request);
                 request.getRequestDispatcher("/admin/updatePlayTime.jsp").forward(request, response);
                 break;
             default:
-                movieList = movieDAO.getAll();
-                request.setAttribute("movieList", movieList);
-                playtimeList = playtimeDAO.getAll();
-                request.setAttribute("playtimeList", playtimeList);
-                ticketList = ticketDAO.getAll();
-                request.setAttribute("ticketList", ticketList);
+                setMovieListToRequest(request);
+                setPlaytimeListToRequest(request);
+                setTicketListToRequest(request);
                 request.getRequestDispatcher("/admin/dashboard.jsp").forward(request, response);
         }
     }
@@ -86,15 +61,12 @@ public class AdminServlet extends HttpServlet {
         String movieName;
         String movieType;
         int movieDuration;
-        List<Movie> movieList;
 
         int playTimeId;
         String day;
         String hour;
-        Playtime playtime;
 
         int roomId;
-        List<Room> roomList;
 
         String action = request.getParameter("action");
         switch (action) {
@@ -107,18 +79,17 @@ public class AdminServlet extends HttpServlet {
                 request.getRequestDispatcher("/admin/addMovie.jsp").forward(request, response);
                 break;
             case "updateMovie":
-                movieId = Integer.parseInt(request.getParameter("id"));
+                movieId = Integer.parseInt(request.getParameter("movieId"));
                 movieName = request.getParameter("name");
                 movieType = request.getParameter("type");
                 movieDuration = Integer.parseInt(request.getParameter("duration"));
                 updateMovie(movieId, movieName, movieType, movieDuration);
-                Movie updatedMovie = movieDAO.getById(movieId);
-                request.setAttribute("movie", updatedMovie);
+                setMovieToRequestByMovieId(request);
                 request.setAttribute("message", "Cập nhật phim thành công!");
                 request.getRequestDispatcher("/admin/updateMovie.jsp").forward(request, response);
                 break;
             case "deleteMovie":
-                movieId = Integer.parseInt(request.getParameter("id"));
+                movieId = Integer.parseInt(request.getParameter("movieId"));
                 if (!movieDAO.hasPlaytime(movieId)) {
                     movieDAO.delete(movieId);
                 } else {
@@ -138,14 +109,12 @@ public class AdminServlet extends HttpServlet {
                 } else {
                     request.setAttribute("message", "Lịch chiếu trùng lặp, không thể thêm!");
                 }
-                movieList = movieDAO.getAll();
-                roomList = roomDAO.getAll();
-                request.setAttribute("movieList", movieList);
-                request.setAttribute("roomList", roomList);
+                setMovieListToRequest(request);
+                setRoomListToRequest(request);
                 request.getRequestDispatcher("/admin/addPlaytime.jsp").forward(request, response);
                 break;
             case "updatePlaytime":
-                playTimeId = Integer.parseInt(request.getParameter("id"));
+                playTimeId = Integer.parseInt(request.getParameter("playtimeId"));
                 movieId = Integer.parseInt(request.getParameter("movieId"));
                 roomId = Integer.parseInt(request.getParameter("roomId"));
                 day = request.getParameter("day");
@@ -155,16 +124,13 @@ public class AdminServlet extends HttpServlet {
                 } else {
                     request.setAttribute("error", "Lịch chiếu trùng lặp, cập nhật thất bại!");
                 }
-                playtime = playtimeDAO.getById(playTimeId);
-                movieList = movieDAO.getAll();
-                roomList = roomDAO.getAll();
-                request.setAttribute("playtime", playtime);
-                request.setAttribute("roomList", roomList);
-                request.setAttribute("movieList", movieList);
+                setPlaytimeToRequestById(request);
+                setMovieListToRequest(request);
+                setRoomListToRequest(request);
                 request.getRequestDispatcher("/admin/updatePlayTime.jsp").forward(request, response);
                 break;
             case "deletePlaytime":
-                playTimeId = Integer.parseInt(request.getParameter("id"));
+                playTimeId = Integer.parseInt(request.getParameter("playtimeId"));
                 if (playtimeDAO.isBooked(playTimeId)) {
                     String failMessage = "Không thể xóa lịch chiếu đã được đặt";
                     HttpSession session = request.getSession();
@@ -182,7 +148,7 @@ public class AdminServlet extends HttpServlet {
         movie.setName(name);
         movie.setType(type);
         movie.setDuration(duration);
-        movieDAO.add(movie);
+        movieDAO.insert(movie);
     }
 
     public void updateMovie(int id, String name, String type, int duration) {
@@ -196,14 +162,7 @@ public class AdminServlet extends HttpServlet {
 
     public boolean addPlaytime(int movieId, int roomId, String day, String hour) {
         Playtime playtime = new Playtime();
-        Movie movie = new Movie();
-        Room room = new Room();
-        movie.setId(movieId);
-        room.setId(roomId);
-        playtime.setMovie(movie);
-        playtime.setRoom(room);
-        playtime.setDay(LocalDate.parse(day));
-        playtime.setHour(LocalTime.parse(hour));
+        setupPlaytime(movieId, roomId, day, hour, playtime);
         if (playtimeDAO.isExisted(playtime)) {
             return false;
         }
@@ -214,19 +173,49 @@ public class AdminServlet extends HttpServlet {
     public boolean updatePlaytime(int playTimeId, int roomId, int movieId, String playDay, String hour) {
         Playtime playtime = new Playtime();
         playtime.setId(playTimeId);
+        setupPlaytime(movieId, roomId, playDay, hour, playtime);
+        if (playtimeDAO.isExisted(playtime)) {
+            return false;
+        }
+        playtimeDAO.update(playtime);
+        return true;
+    }
+
+    private static void setupPlaytime(int movieId, int roomId, String day, String hour, Playtime playtime) {
         Movie movie = new Movie();
         Room room = new Room();
         movie.setId(movieId);
         room.setId(roomId);
         playtime.setMovie(movie);
         playtime.setRoom(room);
-        playtime.setDay(LocalDate.parse(playDay));
+        playtime.setDay(LocalDate.parse(day));
         playtime.setHour(LocalTime.parse(hour));
-        if (playtimeDAO.isExisted(playtime)) {
-            return false;
-        }
-        playtimeDAO.update(playtime);
-        return true;
+    }
+
+    private void setTicketListToRequest(HttpServletRequest request) {
+        request.setAttribute("ticketList", ticketDAO.getAll());
+    }
+
+    private void setPlaytimeListToRequest(HttpServletRequest request) {
+        request.setAttribute("playtimeList", playtimeDAO.getAll());
+    }
+
+    private void setPlaytimeToRequestById(HttpServletRequest request) {
+        int playtimeId = Integer.parseInt(request.getParameter("playtimeId"));
+        request.setAttribute("playtime", playtimeDAO.getById(playtimeId));
+    }
+
+    private void setMovieToRequestByMovieId(HttpServletRequest request) {
+        int movieId = Integer.parseInt(request.getParameter("movieId"));
+        request.setAttribute("movie", movieDAO.getById(movieId));
+    }
+
+    private void setRoomListToRequest(HttpServletRequest request) {
+        request.setAttribute("roomList", roomDAO.getAll());
+    }
+
+    private void setMovieListToRequest(HttpServletRequest request) {
+        request.setAttribute("movieList", movieDAO.getAll());
     }
 }
 

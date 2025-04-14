@@ -18,7 +18,7 @@
     </c:if>
 
     <form action="admin?action=updateMovie" method="POST">
-        <input type="hidden" name="id" value="${movie.id}">
+        <input type="hidden" name="movieId" value="${movie.id}">
         <div class="form-group">
             <label>Tên Phim Cũ:</label>
             <input type="text" class="form-control" value="${movie.name}" disabled>

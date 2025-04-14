@@ -27,7 +27,7 @@ public class RegisterServlet extends HttpServlet {
             User user = new User();
             user.setUsername(inputUsername);
             user.setPassword(inputPassword);
-            userDAO.add(user);
+            userDAO.insert(user);
             request.setAttribute("success", "Đăng ký thành công!");
         }
         request.getRequestDispatcher("register.jsp").forward(request, response);

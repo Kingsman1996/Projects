@@ -12,13 +12,13 @@ public class UserDAO {
 
     private final Connection connection = DBConnection.connect();
 
-    public void add(User user) {
+    public void insert(User user) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL)) {
             preparedStatement.setString(1, user.getUsername());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Lỗi khi thêm user: " + e.getMessage());
+            System.out.println("Lỗi UserDAO -> insert " + e.getMessage());
         }
     }
 

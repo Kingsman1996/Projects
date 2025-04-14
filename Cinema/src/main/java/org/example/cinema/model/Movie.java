@@ -49,4 +49,7 @@ public class Movie {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+    public void convertNameToImageUrl() {
+        setImageUrl(name.toLowerCase().replaceAll("\\s+", "").replace(":", "").replace("&", "") + ".jpg");
+    }
 }

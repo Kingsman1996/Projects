@@ -17,9 +17,9 @@ public class DBConnection {
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
             }
         } catch (ClassNotFoundException e) {
-            System.err.println("JDBC Driver không được tìm thấy: " + e.getMessage());
+            System.out.println("Không thấy JDBC Driver : " + e.getMessage());
         } catch (SQLException e) {
-            System.err.println("Lỗi kết nối cơ sở dữ liệu: " + e.getMessage());
+            System.out.println("Lỗi kết nối cơ sở dữ liệu: " + e.getMessage());
         }
         return connection;
     }

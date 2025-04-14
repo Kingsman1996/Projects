@@ -24,7 +24,7 @@
         </div>
         <div class="card-body">
             <form method="POST">
-                <input type="hidden" name="id" value="${playtime.id}">
+                <input type="hidden" name="playtimeId" value="${playtime.id}">
                 <div class="mb-3">
                     <label for="movieId" class="form-label">Phim Mới:</label>
                     <select id="movieId" name="movieId" class="form-select" required>

@@ -70,11 +70,11 @@
                                 <td>${movie.type}</td>
                                 <td>${movie.duration} phút</td>
                                 <td>
-                                    <a href="${pageContext.request.contextPath}/admin?action=updateMovie&id=${movie.id}"
+                                    <a href="${pageContext.request.contextPath}/admin?action=updateMovie&movieId=${movie.id}"
                                        class="btn btn-sm btn-warning">Sửa</a>
                                     <form action="${pageContext.request.contextPath}/admin?action=deleteMovie"
                                           method="post" class="d-inline">
-                                        <input type="hidden" name="id" value="${movie.id}"/>
+                                        <input type="hidden" name="movieId" value="${movie.id}"/>
                                         <button class="btn btn-sm btn-danger"
                                                 onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa
                                         </button>
@@ -114,11 +114,11 @@
                                 <td>${playtime.day}</td>
                                 <td>${playtime.hour}</td>
                                 <td>
-                                    <a href="${pageContext.request.contextPath}/admin?action=updatePlaytime&id=${playtime.id}
+                                    <a href="${pageContext.request.contextPath}/admin?action=updatePlaytime&playtimeId=${playtime.id}
                                     " class="btn btn-sm btn-warning">Sửa</a>
                                     <form action="${pageContext.request.contextPath}/admin?action=deletePlaytime"
                                           method="POST" class="d-inline">
-                                        <input type="hidden" name="id" value="${playtime.id}"/>
+                                        <input type="hidden" name="playtimeId" value="${playtime.id}"/>
                                         <button class="btn btn-sm btn-danger"
                                                 onclick="return confirm('Xóa lịch chiếu này?')">Xóa
                                         </button>
