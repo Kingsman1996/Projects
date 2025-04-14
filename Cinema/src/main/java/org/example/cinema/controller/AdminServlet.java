@@ -107,7 +107,7 @@ public class AdminServlet extends HttpServlet {
                 if (addPlaytime(movieId, roomId, day, hour)) {
                     request.setAttribute("message", "Thêm lịch chiếu thành công!");
                 } else {
-                    request.setAttribute("message", "Lịch chiếu trùng lặp, không thể thêm!");
+                    request.setAttribute("error", "Lịch chiếu trùng lặp, không thể thêm!");
                 }
                 setMovieListToRequest(request);
                 setRoomListToRequest(request);

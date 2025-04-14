@@ -11,6 +11,9 @@
 <c:if test="${not empty message}">
     <div id="alert-box" class="alert alert-success">${message}</div>
 </c:if>
+<c:if test="${not empty error}">
+    <div id="alert-box" class="alert alert-danger">${error}</div>
+</c:if>
 <div class="container mt-4">
     <h2 class="mb-4">Thêm Lịch Chiếu</h2>
     <form method="POST">

@@ -97,6 +97,10 @@
             background-color: #3498db;
             color: white;
         }
+
+        #alert-box {
+            position: fixed;
+        }
     </style>
 
 
