@@ -4,28 +4,44 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Playtime {
-    private int playTimeId;
-    private int movieId;
-    private LocalDate playDay;
+    private int id;
+    private Movie movie;
+    private Room room;
+    private LocalDate day;
     private LocalTime hour;
 
-    public Playtime() {
+    public Playtime() {}
+
+    public int getId() {
+        return id;
     }
 
-    public int getPlayTimeId() {
-        return playTimeId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setPlayTimeId(int playTimeId) {
-        this.playTimeId = playTimeId;
+    public Movie getMovie() {
+        return movie;
     }
 
-    public LocalDate getPlayDay() {
-        return playDay;
+    public void setMovie(Movie movie) {
+        this.movie = movie;
     }
 
-    public void setPlayDay(LocalDate playDay) {
-        this.playDay = playDay;
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public LocalDate getDay() {
+        return day;
+    }
+
+    public void setDay(LocalDate day) {
+        this.day = day;
     }
 
     public LocalTime getHour() {
@@ -34,13 +50,5 @@ public class Playtime {
 
     public void setHour(LocalTime hour) {
         this.hour = hour;
-    }
-
-    public int getMovieId() {
-        return movieId;
-    }
-
-    public void setMovieId(int movieId) {
-        this.movieId = movieId;
     }
 }

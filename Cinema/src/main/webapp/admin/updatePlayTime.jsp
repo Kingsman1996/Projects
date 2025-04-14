@@ -10,6 +10,11 @@
             ${message}
     </div>
 </c:if>
+<c:if test="${not empty error}">
+    <div class="alert alert-danger">
+            ${error}
+    </div>
+</c:if>
 <body class="bg-light">
 
 <div class="container mt-5">
@@ -19,24 +24,37 @@
         </div>
         <div class="card-body">
             <form method="POST">
-                <input type="hidden" name="playTimeId" value="${playTime.playTimeId}">
+                <input type="hidden" name="id" value="${playtime.id}">
                 <div class="mb-3">
-                    <label for="newMovieId" class="form-label">Phim Mới:</label>
-                    <select id="newMovieId" name="newMovieId" class="form-select" required>
+                    <label for="movieId" class="form-label">Phim Mới:</label>
+                    <select id="movieId" name="movieId" class="form-select" required>
                         <option value="" disabled selected>-- Chọn phim --</option>
-                        <c:forEach var="movie" items="${movies}">
-                            <option value="${movie.movieId}">${movie.movieName}</option>
+                        <c:forEach var="movie" items="${movieList}">
+                            <option value="${movie.id}" ${movie.id == playtime.movie.id ? 'selected' : ''}>
+                                    ${movie.name}
+                            </option>
                         </c:forEach>
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="newPLayDay" class="form-label">Ngày Chiếu:</label>
-                    <input type="date" id="newPLayDay" name="newPlayDay" class="form-control" required>
+                    <label for="roomId" class="form-label">Phim Mới:</label>
+                    <select id="roomId" name="roomId" class="form-select" required>
+                        <option value="" disabled selected>-- Chọn phòng chiếu --</option>
+                        <c:forEach var="room" items="${roomList}">
+                            <option value="${room.id}" ${room.id == playtime.room.id ? 'selected' : ''}>
+                                    ${room.name}
+                            </option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="day" class="form-label">Ngày Chiếu:</label>
+                    <input type="date" id="day" name="day" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="newHour" class="form-label">Giờ Chiếu:</label>
-                    <input type="time" id="newHour" name="newHour" class="form-control" required>
+                    <label for="hour" class="form-label">Giờ Chiếu:</label>
+                    <input type="time" id="hour" name="hour" class="form-control" required>
                 </div>
 
                 <div class="d-flex justify-content-between">

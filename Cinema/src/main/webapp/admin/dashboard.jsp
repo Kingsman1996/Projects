@@ -44,7 +44,7 @@
                 <a href="?tab=playtime" class="nav-link ${param.tab == 'playtime' ? 'active' : ''}">Quản lý lịch
                     chiếu</a>
                 <a href="?tab=ticket" class="nav-link ${param.tab == 'ticket' ? 'active' : ''}">Lịch sử đặt vé</a>
-                <a href="login" class="nav-link text-danger">Đăng xuất</a>
+                <a href="logout" class="nav-link text-danger">Đăng xuất</a>
             </div>
         </div>
 
@@ -63,18 +63,18 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach var="movie" items="${movies}">
+                        <c:forEach var="movie" items="${movieList}">
                             <tr>
-                                <td>${movie.movieId}</td>
-                                <td>${movie.movieName}</td>
-                                <td>${movie.movieType}</td>
-                                <td>${movie.movieDuration} phút</td>
+                                <td>${movie.id}</td>
+                                <td>${movie.name}</td>
+                                <td>${movie.type}</td>
+                                <td>${movie.duration} phút</td>
                                 <td>
-                                    <a href="${pageContext.request.contextPath}/admin?action=updateMovie&movieId=${movie.movieId}"
+                                    <a href="${pageContext.request.contextPath}/admin?action=updateMovie&id=${movie.id}"
                                        class="btn btn-sm btn-warning">Sửa</a>
                                     <form action="${pageContext.request.contextPath}/admin?action=deleteMovie"
                                           method="post" class="d-inline">
-                                        <input type="hidden" name="movieId" value="${movie.movieId}"/>
+                                        <input type="hidden" name="id" value="${movie.id}"/>
                                         <button class="btn btn-sm btn-danger"
                                                 onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa
                                         </button>
@@ -98,31 +98,27 @@
                         <thead class="table-light text-dark">
                         <tr>
                             <th>ID</th>
-                            <th>Tên Phim</th>
+                            <th>Tên phim</th>
+                            <th>Phòng chiếu</th>
                             <th>Ngày chiếu</th>
                             <th>Giờ chiếu</th>
                             <th>Điều chỉnh</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach var="pt" items="${playTimes}">
+                        <c:forEach var="playtime" items="${playtimeList}">
                             <tr>
-                                <td>${pt.playTimeId}</td>
+                                <td>${playtime.id}</td>
+                                <td>${playtime.movie.name}</td>
+                                <td>${playtime.room.name} </td>
+                                <td>${playtime.day}</td>
+                                <td>${playtime.hour}</td>
                                 <td>
-                                    <c:forEach var="movie" items="${movies}">
-                                        <c:if test="${movie.movieId == pt.movieId}">
-                                            ${movie.movieName}
-                                        </c:if>
-                                    </c:forEach>
-                                </td>
-                                <td>${pt.playDay}</td>
-                                <td>${pt.hour}</td>
-                                <td>
-                                    <a href="${pageContext.request.contextPath}/admin?action=updatePlayTime&playTimeId=${pt.playTimeId}
+                                    <a href="${pageContext.request.contextPath}/admin?action=updatePlaytime&id=${playtime.id}
                                     " class="btn btn-sm btn-warning">Sửa</a>
-                                    <form action="${pageContext.request.contextPath}/admin?action=deletePlayTime"
-                                          method="post" class="d-inline">
-                                        <input type="hidden" name="playTimeId" value="${pt.playTimeId}"/>
+                                    <form action="${pageContext.request.contextPath}/admin?action=deletePlaytime"
+                                          method="POST" class="d-inline">
+                                        <input type="hidden" name="id" value="${playtime.id}"/>
                                         <button class="btn btn-sm btn-danger"
                                                 onclick="return confirm('Xóa lịch chiếu này?')">Xóa
                                         </button>
@@ -132,7 +128,7 @@
                         </c:forEach>
                         <tr>
                             <td colspan="5" class="text-center">
-                                <a href="${pageContext.request.contextPath}/admin?action=addPlayTime"
+                                <a href="${pageContext.request.contextPath}/admin?action=addPlaytime"
                                    class="btn btn-outline-light">Thêm lịch chiếu mới</a>
                             </td>
                         </tr>
@@ -143,27 +139,31 @@
                 <c:when test="${param.tab == 'ticket'}">
                     <h2 class="text-center mb-4">Lịch sử đặt vé</h2>
                     <c:choose>
-                        <c:when test="${not empty ticketDetails}">
+                        <c:when test="${not empty ticketList}">
                             <table class="table table-dark table-bordered table-hover text-center align-middle">
                                 <thead class="table-light text-dark">
                                 <tr>
-                                    <th>ID vé</th>
-                                    <th>Khách hàng</th>
-                                    <th>Tên phim</th>
-                                    <th>Mã ghế</th>
-                                    <th>Ngày chiếu</th>
-                                    <th>Giờ chiếu</th>
+                                    <th>ID Vé</th>
+                                    <th>Người Dùng</th>
+                                    <th>Phim</th>
+                                    <th>Phòng</th>
+                                    <th>Ngày Chiếu</th>
+                                    <th>Giờ Chiếu</th>
+                                    <th>Ghế</th>
+                                    <th>Thời Gian Đặt</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="ticket" items="${ticketDetails}">
+                                <c:forEach var="ticket" items="${ticketList}">
                                     <tr>
-                                        <td>${ticket.ticketId}</td>
-                                        <td>${ticket.username}</td>
-                                        <td>${ticket.movieName}</td>
-                                        <td>${ticket.seatCode}</td>
-                                        <td>${ticket.playDay}</td>
-                                        <td>${ticket.hour}</td>
+                                        <td>${ticket.id}</td>
+                                        <td>${ticket.user.username}</td>
+                                        <td>${ticket.playtime.movie.name}</td>
+                                        <td>${ticket.playtime.room.name}</td>
+                                        <td>${ticket.playtime.day}</td>
+                                        <td>${ticket.playtime.hour}</td>
+                                        <td>${ticket.seat.name}</td>
+                                        <td>${ticket.bookingTime}</td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

@@ -1,43 +1,52 @@
 package org.example.cinema.model;
 
 public class Movie {
-    private int movieId;
-    private String movieName;
-    private String movieType;
-    private int movieDuration;
+    private int id;
+    private String name;
+    private String type;
+    private int duration;
+    private String imageUrl;
 
     public Movie() {
     }
 
-    public int getMovieId() {
-        return movieId;
+    public int getId() {
+        return id;
     }
 
-    public void setMovieId(int movieId) {
-        this.movieId = movieId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getMovieName() {
-        return movieName;
+    public String getName() {
+        return name;
     }
 
-    public void setMovieName(String movieName) {
-        this.movieName = movieName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getMovieType() {
-        return movieType;
+    public String getType() {
+        return type;
     }
 
-    public void setMovieType(String movieType) {
-        this.movieType = movieType;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public int getMovieDuration() {
-        return movieDuration;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setMovieDuration(int movieDuration) {
-        this.movieDuration = movieDuration;
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

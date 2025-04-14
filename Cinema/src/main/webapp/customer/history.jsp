@@ -13,25 +13,29 @@
     <h2 class="text-center mb-4">Lịch sử đặt vé của bạn</h2>
 
     <c:choose>
-        <c:when test="${not empty ticketDetails}">
+        <c:when test="${not empty ticketList}">
             <table class="table table-dark table-bordered table-hover text-center align-middle">
                 <thead class="table-light text-dark">
                 <tr>
                     <th>ID vé</th>
                     <th>Tên phim</th>
+                    <th>Phòng chiếu</th>
                     <th>Mã ghế</th>
                     <th>Ngày chiếu</th>
                     <th>Giờ chiếu</th>
+                    <th>Thời gian đặt vé</th>
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="ticket" items="${ticketDetails}">
+                <c:forEach var="ticket" items="${ticketList}">
                     <tr>
-                        <td>${ticket.ticketId}</td>
-                        <td>${ticket.movieName}</td>
-                        <td>${ticket.seatCode}</td>
-                        <td>${ticket.playDay}</td>
-                        <td>${ticket.hour}</td>
+                        <td>${ticket.id}</td>
+                        <td>${ticket.playtime.movie.name}</td>
+                        <td>${ticket.playtime.room.name}</td>
+                        <td>${ticket.seat.name}</td>
+                        <td>${ticket.playtime.day}</td>
+                        <td>${ticket.playtime.hour}</td>
+                        <td>${ticket.bookingTime}</td>
                     </tr>
                 </c:forEach>
                 </tbody>

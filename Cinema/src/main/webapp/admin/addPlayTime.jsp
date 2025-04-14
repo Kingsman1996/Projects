@@ -9,33 +9,31 @@
 </head>
 <body>
 <c:if test="${not empty message}">
-    <div class="alert alert-success">${message}</div>
-    <c:remove var="message" scope="session"/>
+    <div id="alert-box" class="alert alert-success">${message}</div>
 </c:if>
-
 <div class="container mt-4">
     <h2 class="mb-4">Thêm Lịch Chiếu</h2>
-
-    <c:if test="${not empty message}">
-        <div id="alert-box" class="alert alert-success">${message}</div>
-        <script>
-            setTimeout(() => document.getElementById("alert-box").style.display = 'none', 3000);
-        </script>
-    </c:if>
-
     <form method="POST">
         <div class="form-group">
             <label for="movieId">Chọn Phim:</label>
             <select id="movieId" name="movieId" class="form-control" required>
-                <c:forEach var="movie" items="${movies}">
-                    <option value="${movie.movieId}">${movie.movieName}</option>
+                <c:forEach var="movie" items="${movieList}">
+                    <option value="${movie.id}">${movie.name}</option>
+                </c:forEach>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="roomId">Chọn phòng chiếu:</label>
+            <select id="roomId" name="roomId" class="form-control" required>
+                <c:forEach var="room" items="${roomList}">
+                    <option value="${room.id}">${room.name}</option>
                 </c:forEach>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="playDay">Ngày Chiếu:</label>
-            <input type="date" id="playDay" name="playDay" class="form-control" required>
+            <label for="day">Ngày Chiếu:</label>
+            <input type="date" id="day" name="day" class="form-control" required>
         </div>
 
         <div class="form-group">
@@ -47,5 +45,8 @@
         <a href="admin" class="btn btn-secondary">Hủy</a>
     </form>
 </div>
+<script>
+    setTimeout(() => document.getElementById("alert-box").style.display = 'none', 3000);
+</script>
 </body>
 </html>

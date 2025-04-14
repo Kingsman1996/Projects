@@ -1,25 +1,31 @@
 package org.example.cinema.service;
 
-import org.example.cinema.model.MoviePlayTimeDTO;
 import org.example.cinema.model.Movie;
-import org.example.cinema.model.Playtime;
 
 import java.sql.*;
 import java.util.*;
 
 public class MovieDAO {
-    private Connection connection;
-
-    public MovieDAO() {
-        this.connection = DBConnection.connect();
-    }
+    private final Connection connection = DBConnection.connect();
+    public static final String INSERT_SQL = "INSERT INTO movie (name, type, duration) VALUES (?, ?, ?)";
+    public static final String UPDATE_SQL = "UPDATE movie SET name = ?, type = ?, duration = ? WHERE id = ?";
+    public static final String DELETE_SQL = "DELETE FROM movie WHERE id = ?";
+    public static final String GET_ALL_SQL = "SELECT * FROM movie ORDER BY id";
+    public static final String GET_BY_ID_SQL = "SELECT * FROM movie WHERE id = ?";
+    public static final String HAS_PLAYTIME_SQL = "SELECT COUNT(*) FROM playtime WHERE movieid = ?";
+    public static final String GET_THIS_WEEK_SQL = "SELECT moviename, movietype, movieduration \n" +
+            "FROM playtimedetail \n" +
+            "WHERE YEARWEEK(day, 1) = YEARWEEK(CURDATE(), 1)\n" +
+            "GROUP BY moviename, movietype, movieduration;\n";
+    public static final String GET_NEXT_WEEK_SQL = "SELECT DISTINCT moviename, movietype, movieduration\n" +
+            "FROM playtimedetail\n" +
+            "WHERE YEARWEEK(day, 1) = YEARWEEK(DATE_ADD(CURDATE(), INTERVAL 7 DAY), 1);\n";
 
     public void add(Movie movie) {
-        String query = "INSERT INTO movie (moviename, movietype, movieduration) VALUES (?, ?, ?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, movie.getMovieName());
-            preparedStatement.setString(2, movie.getMovieType());
-            preparedStatement.setInt(3, movie.getMovieDuration());
+        try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL)) {
+            preparedStatement.setString(1, movie.getName());
+            preparedStatement.setString(2, movie.getType());
+            preparedStatement.setInt(3, movie.getDuration());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -27,91 +33,109 @@ public class MovieDAO {
     }
 
     public List<Movie> getAll() {
-        List<Movie> movies = new ArrayList<>();
-        String query = "SELECT * FROM movie";
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()) {
-                Movie movie = new Movie();
-                movie.setMovieId(rs.getInt("movieid"));
-                movie.setMovieName(rs.getString("moviename"));
-                movie.setMovieType(rs.getString("movietype"));
-                movie.setMovieDuration(rs.getInt("movieduration"));
-                movies.add(movie);
+        List<Movie> movieList = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(GET_ALL_SQL);
+             ResultSet resultSet = stmt.executeQuery()) {
+            while (resultSet.next()) {
+                movieList.add(mapResultSet(resultSet));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return movies;
+        return movieList;
     }
 
-    public Movie getById(int id) {
-        String query = "SELECT * FROM movie WHERE movieid = ?";
-        Movie movie = null;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, id);
-            ResultSet rs = preparedStatement.executeQuery();
-            if (rs.next()) {
-                movie = new Movie();
-                movie.setMovieId(rs.getInt("movieid"));
-                movie.setMovieName(rs.getString("moviename"));
-                movie.setMovieType(rs.getString("movietype"));
-                movie.setMovieDuration(rs.getInt("movieduration"));
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+    private Movie mapResultSet(ResultSet resultSet) throws SQLException {
+        Movie movie = new Movie();
+        movie.setId(resultSet.getInt("id"));
+        movie.setName(resultSet.getString("name"));
+        movie.setType(resultSet.getString("type"));
+        movie.setDuration(resultSet.getInt("duration"));
+        movie.setImageUrl(movie.getName().toLowerCase().replaceAll("\\s+", "").replace(":", "").replace("&", "") + ".jpg");
         return movie;
     }
 
+    public Movie getById(int id) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID_SQL)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return mapResultSet(resultSet);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
     public void update(Movie movie) {
-        String query = "UPDATE movie SET moviename = ?, movietype = ?, movieduration = ? WHERE movieid = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, movie.getMovieName());
-            pstmt.setString(2, movie.getMovieType());
-            pstmt.setInt(3, movie.getMovieDuration());
-            pstmt.setInt(4, movie.getMovieId());
-            pstmt.executeUpdate();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
+            preparedStatement.setString(1, movie.getName());
+            preparedStatement.setString(2, movie.getType());
+            preparedStatement.setInt(3, movie.getDuration());
+            preparedStatement.setInt(4, movie.getId());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
     public void delete(int id) {
-        String sql = "DELETE FROM movie WHERE movieid = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL)) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public List<MoviePlayTimeDTO> getThisWeek() {
-        return executeMovieQuery("CALL GetThisWeekMovie()", new PlayTimeDAO().getThisWeek());
-    }
-
-    public List<MoviePlayTimeDTO> getNextWeek() {
-        return executeMovieQuery("CALL GetNextWeekMovie()", new PlayTimeDAO().getNextWeek());
-    }
-
-    private List<MoviePlayTimeDTO> executeMovieQuery(String sql, List<Playtime> playtimeList) {
-        Map<Integer, MoviePlayTimeDTO> movieMap = new HashMap<>();
-        try (CallableStatement cst = connection.prepareCall(sql);
-             ResultSet rs = cst.executeQuery()) {
-            while (rs.next()) {
-                MoviePlayTimeDTO movieDTO = new MoviePlayTimeDTO();
-                int movieId = rs.getInt("movieid");
-                movieDTO.setMovieId(movieId);
-                movieDTO.setMovieName(rs.getString("moviename"));
-                movieDTO.setMovieType(rs.getString("movietype"));
-                movieDTO.setMovieDuration(rs.getInt("movieduration"));
-                movieDTO.setPlayTimes(playtimeList);
-                movieMap.put(movieId, movieDTO);
+    public boolean hasPlaytime(int movieId) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(HAS_PLAYTIME_SQL)) {
+            preparedStatement.setInt(1, movieId);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
             }
         } catch (SQLException e) {
-            System.out.println("Lỗi khi truy vấn " + e.getMessage());
+            System.out.println(e.getMessage());
         }
-        return new ArrayList<>(movieMap.values());
+        return false;
+    }
+
+    public List<Movie> getThisWeek() {
+        List<Movie> movieList = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(GET_THIS_WEEK_SQL);
+             ResultSet resultSet = stmt.executeQuery()) {
+            while (resultSet.next()) {
+                Movie movie = new Movie();
+                movie.setName(resultSet.getString("moviename"));
+                movie.setType(resultSet.getString("movietype"));
+                movie.setDuration(resultSet.getInt("movieduration"));
+                movie.setImageUrl(movie.getName().toLowerCase().replaceAll("\\s+", "").replace(":", "").replace("&", "") + ".jpg");
+                movieList.add(movie);
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi MovieDAO GetThisWeek" + e.getMessage());
+        }
+        return movieList;
+    }
+
+    public List<Movie> getNextWeek() {
+        List<Movie> movieList = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(GET_NEXT_WEEK_SQL);
+             ResultSet resultSet = stmt.executeQuery()) {
+            while (resultSet.next()) {
+                Movie movie = new Movie();
+                movie.setName(resultSet.getString("moviename"));
+                movie.setType(resultSet.getString("movietype"));
+                movie.setDuration(resultSet.getInt("movieduration"));
+                movie.setImageUrl(movie.getName().toLowerCase().replaceAll("\\s+", "").replace(":", "").replace("&", "") + ".jpg");
+                movieList.add(movie);
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi MovieDAO GetNextWeek" + e.getMessage());
+        }
+        return movieList;
     }
 }

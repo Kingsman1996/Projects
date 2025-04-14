@@ -2,10 +2,7 @@ package org.example.cinema.controller;
 
 
 import org.example.cinema.model.*;
-import org.example.cinema.service.MovieDAO;
-import org.example.cinema.service.PlayTimeDAO;
-import org.example.cinema.service.SeatDAO;
-import org.example.cinema.service.TicketDAO;
+import org.example.cinema.service.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,58 +11,75 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/customer")
 public class CustomerServlet extends HttpServlet {
-    private MovieDAO movieDAO;
-    private PlayTimeDAO playTimeDAO;
-    private SeatDAO seatDAO;
-    private TicketDAO ticketDAO;
+    private final MovieDAO movieDAO = new MovieDAO();
+    private final PlayTimeDAO playtimeDAO = new PlayTimeDAO();
+    private final TicketDAO ticketDAO = new TicketDAO();
+    private final SeatDAO seatDAO = new SeatDAO();
 
-    @Override
-    public void init() {
-        movieDAO = new MovieDAO();
-        playTimeDAO = new PlayTimeDAO();
-        seatDAO = new SeatDAO();
-        ticketDAO = new TicketDAO();
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
 
+        int playtimeId;
+        List<Playtime> playtimeList;
+        String movieName;
+        List<Movie> movieList;
+
+        List<Seat> seatList;
+        List<Ticket> ticketList;
+
+        String action = request.getParameter("action");
         if (action == null) {
             action = "";
         }
         switch (action) {
             case "incoming":
-                List<MoviePlayTimeDTO> mptList = movieDAO.getNextWeek();
-                setImageUrl(mptList);
-                request.setAttribute("movies", mptList);
+                movieList = movieDAO.getNextWeek();
+                request.setAttribute("movieList", movieList);
                 request.getRequestDispatcher("/customer/view.jsp").forward(request, response);
                 break;
+            case "checkPlaytime":
+                movieName = request.getParameter("movieName");
+                request.setAttribute("movieName", movieName);
+                playtimeList = playtimeDAO.getByMovieName(movieName);
+                request.setAttribute("now", LocalDateTime.now());
+                request.setAttribute("playtimeList", playtimeList);
+                request.getRequestDispatcher("/customer/playtime.jsp").forward(request, response);
+                break;
             case "booking":
-                int movieId = Integer.parseInt(request.getParameter("movieId"));
-                Movie movie = movieDAO.getById(movieId);
-                List<Playtime> playTimes = playTimeDAO.getByMovieId(movieId);
-                List<Seat> seatList = seatDAO.getAll();
+                playtimeId = Integer.parseInt(request.getParameter("playtimeId"));
+                request.setAttribute("playtimeId", playtimeId);
+
+                ticketList = ticketDAO.getByPlaytime(playtimeId);
+                seatList = seatDAO.getAll();
+                List<Seat> bookedSeatList = new ArrayList<>();
+                for (Ticket ticket : ticketList) {
+                    for (Seat seat : seatList) {
+                        if (seat.getId() == ticket.getSeat().getId()) {
+                            bookedSeatList.add(seat);
+                        }
+                    }
+                }
                 request.setAttribute("seatList", seatList);
-                request.setAttribute("movie", movie);
-                request.setAttribute("playTimes", playTimes);
+                request.setAttribute("bookedSeatList", bookedSeatList);
                 request.getRequestDispatcher("/customer/booking.jsp").forward(request, response);
                 break;
             case "history":
-                List<TicketDetailDTO> ticketDetails = ticketDAO.getTicketDetailsByUsername(user.getUserName());
-                request.setAttribute("ticketDetails", ticketDetails);
+                ticketList = ticketDAO.getByUser(user.getId());
+                request.setAttribute("ticketList", ticketList);
                 request.getRequestDispatcher("/customer/history.jsp").forward(request, response);
                 break;
             default:
-                mptList = movieDAO.getThisWeek();
-                setImageUrl(mptList);
-                request.setAttribute("movies", mptList);
+                movieList = movieDAO.getThisWeek();
+                request.setAttribute("movieList", movieList);
                 request.getRequestDispatcher("/customer/view.jsp").forward(request, response);
         }
     }
@@ -76,41 +90,43 @@ public class CustomerServlet extends HttpServlet {
         String action = request.getParameter("action");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
+        List<Seat> seatList;
+        List<Ticket> ticketList;
+
         if (action.equals("booking")) {
-            String selectedSeats = request.getParameter("selectedSeats");
-            String selectedSeatIds = request.getParameter("selectedSeatIds");
-            int playTimeId = Integer.parseInt(request.getParameter("playTimeId"));
-            int movieId = Integer.parseInt(request.getParameter("movieId"));
-            for (String item : selectedSeats.split(",")) {
-                seatDAO.update(item, "booked");
-            }
-            for (String item : selectedSeatIds.split(",")) {
+            String selectedSeatList = request.getParameter("selectedSeatList");
+            int playtimeId = Integer.parseInt(request.getParameter("playtimeId"));
+            String[] seatIdList = selectedSeatList.split(",");
+            for (String seatId : seatIdList) {
                 Ticket ticket = new Ticket();
-                ticket.setUserId(user.getUserId());
-                ticket.setPlaytimeId(playTimeId);
-                ticket.setSeatId(Integer.parseInt(item));
-                ticketDAO.add(ticket);
+
+                Seat seat = new Seat();
+                seat.setId(Integer.parseInt(seatId));
+                ticket.setSeat(seat);
+
+                ticket.setUser(user);
+
+                Playtime playtime = new Playtime();
+                playtime.setId(playtimeId);
+                ticket.setPlaytime(playtime);
+
+                ticketDAO.insert(ticket);
             }
-            Movie foundMovie = movieDAO.getById(movieId);
-            List<Playtime> playTimes = playTimeDAO.getByMovieId(movieId);
-            List<Seat> seatList = seatDAO.getAll();
+            request.setAttribute("playtimeId", playtimeId);
+            ticketList = ticketDAO.getByPlaytime(playtimeId);
+            seatList = seatDAO.getAll();
+            List<Seat> bookedSeatList = new ArrayList<>();
+            for (Ticket ticket : ticketList) {
+                for (Seat seat : seatList) {
+                    if (ticket.getSeat().getId() == seat.getId()) {
+                        bookedSeatList.add(seat);
+                    }
+                }
+            }
             request.setAttribute("seatList", seatList);
-            request.setAttribute("movie", foundMovie);
-            request.setAttribute("movieTimes", playTimes);
+            request.setAttribute("bookedSeatList", bookedSeatList);
             request.setAttribute("message", "Đặt vé thành công!");
             request.getRequestDispatcher("/customer/booking.jsp").forward(request, response);
-        }
-    }
-
-    private static void setImageUrl(List<MoviePlayTimeDTO> mptList) {
-        for (MoviePlayTimeDTO item : mptList) {
-            String imageName = item.getMovieName()
-                    .toLowerCase()
-                    .replaceAll("\\s+", "")
-                    .replace(":", "")
-                    .replace("&", "")
-                    + ".jpg";
-            item.setImageUrl(imageName);
         }
     }
 }

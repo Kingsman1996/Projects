@@ -10,7 +10,7 @@ import java.io.IOException;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
-    private UserDAO userDAO = new UserDAO();
+    private final UserDAO userDAO = new UserDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -19,25 +19,26 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String inputUserName = request.getParameter("username");
-        String inputPassword = request.getParameter("password");
-        User foundUser = userDAO.getUser(inputUserName);
-        if (foundUser == null) {
-            request.setAttribute("error", "Tên đăng nhập không đúng!");
+        String inputUserName = request.getParameter("inputUsername");
+        String inputPassword = request.getParameter("inputPassword");
+        if (!userDAO.isExist(inputUserName)) {
+            request.setAttribute("error", "Sai tên đăng nhập!");
             request.getRequestDispatcher("index.jsp").forward(request, response);
             return;
         }
-        String storedPassword = foundUser.getUserPassword();
+        User foundUser = userDAO.getByUsername(inputUserName);
+        String storedPassword = foundUser.getPassword();
         if (!verifyPassword(inputPassword, storedPassword)) {
-            request.setAttribute("error", "Mật khẩu không đúng!");
+            request.setAttribute("error", "Sai mật khẩu!");
             request.getRequestDispatcher("index.jsp").forward(request, response);
             return;
         }
         HttpSession session = request.getSession();
         session.setAttribute("user", foundUser);
-        String redirectPath = foundUser.getUserRole().equals("admin") ? "admin" : "customer";
+        String redirectPath = foundUser.isAdmin() ? "admin" : "customer";
         response.sendRedirect(redirectPath);
     }
+
     private boolean verifyPassword(String inputPassword, String storedPassword) {
         return storedPassword.equals(inputPassword);
     }

@@ -16,18 +16,18 @@
 <div class="container mt-4">
     <h1 class="text-center mb-4">Thêm Phim Mới</h1>
     <div class="card p-4 shadow">
-        <form action="${pageContext.request.contextPath}/admin?action=addMovie" method="POST">
+        <form action="${pageContext.request.contextPath}/admin?action=addMovie" method="POST" accept-charset="UTF-8">
             <div class="mb-3">
-                <label for="movieName" class="form-label">Tên phim</label>
-                <input type="text" class="form-control" id="movieName" name="movieName" required>
+                <label for="name" class="form-label">Tên phim</label>
+                <input type="text" class="form-control" id="name" name="name" required>
             </div>
             <div class="mb-3">
-                <label for="movieType" class="form-label">Thể loại</label>
-                <input type="text" class="form-control" id="movieType" name="movieType" required>
+                <label for="type" class="form-label">Thể loại</label>
+                <input type="text" class="form-control" id="type" name="type" required>
             </div>
             <div class="mb-3">
-                <label for="movieDuration" class="form-label">Thời lượng (phút)</label>
-                <input type="number" class="form-control" id="movieDuration" name="movieDuration" required>
+                <label for="duration" class="form-label">Thời lượng (phút)</label>
+                <input type="number" class="form-control" id="duration" name="duration" required>
             </div>
             <div class="d-flex justify-content-between">
                 <a href="${pageContext.request.contextPath}/admin" class="btn btn-secondary">Quay lại</a>
@@ -36,6 +36,5 @@
         </form>
     </div>
 </div>
-
 </body>
 </html>

@@ -1,10 +1,10 @@
 package org.example.cinema.model;
 
-public class Seat {
+public class Room {
     private int id;
     private String name;
 
-    public Seat() {
+    public Room() {
     }
 
     public int getId() {

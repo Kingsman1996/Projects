@@ -2,44 +2,48 @@ package org.example.cinema.service;
 
 import org.example.cinema.model.Seat;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SeatDAO {
-    private Connection connection;
-
-    public SeatDAO() {
-        connection = DBConnection.connect();
-    }
+    private final Connection connection = DBConnection.connect();
+    public static final String GET_ALL_SQL = "SELECT * FROM seat";
+    public static final String GET_BY_ID_SQL = "SELECT * FROM seat WHERE id = ?";
 
     public List<Seat> getAll() {
-        List<Seat> seatList = new ArrayList<>();
-        String sql = "SELECT * FROM seat";
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
+        List<Seat> seatList = new ArrayList<Seat>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_SQL)) {
+            preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.getResultSet();
+            while (resultSet.next()) {
                 Seat seat = new Seat();
-                seat.setId(rs.getInt("seatid"));
-                seat.setSeatCode(rs.getString("seatcode"));
-                seat.setStatus(rs.getString("seatstatus"));
+                seat.setId(resultSet.getInt("id"));
+                seat.setName(resultSet.getString("name"));
                 seatList.add(seat);
             }
         } catch (SQLException e) {
-            System.out.println("Lỗi khi lấy danh sách ghế: " + e.getMessage());
+            System.out.println("Lỗi SeatDAO" + e.getMessage());
         }
         return seatList;
     }
 
-    public boolean update(String seatCode, String newStatus) {
-        String sql = "UPDATE seat SET seatstatus = ? WHERE seatcode = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, newStatus);
-            stmt.setString(2, seatCode);
-            return stmt.executeUpdate() > 0;
+    public Seat getById(int id) {
+        Seat seat = null;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID_SQL)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                seat = new Seat();
+                seat.setId(resultSet.getInt("id"));
+                seat.setName(resultSet.getString("name"));
+            }
         } catch (SQLException e) {
-            System.out.println("Lỗi khi cập nhật trạng thái ghế: " + e.getMessage());
-            return false;
+            System.out.println("Lỗi SeatDAO" + e.getMessage());
         }
+        return seat;
     }
 }

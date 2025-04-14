@@ -13,19 +13,12 @@
 
         .card {
             background: rgba(255, 255, 255, 0.1);
-
             backdrop-filter: blur(15px);
             border: none;
             border-radius: 1.5rem;
-            padding: 2rem;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             max-width: 400px;
             width: 100%;
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: #fff;
         }
 
         .form-control {
@@ -37,46 +30,25 @@
         .form-control::placeholder {
             color: #ccc;
         }
-
-        .alert-box {
-            margin-bottom: 15px;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-        }
-
-        .btn-outline-danger {
-            border-color: #ff4d4d;
-            color: #ff4d4d;
-        }
-
-        .btn-outline-danger:hover {
-            background-color: #ff4d4d;
-            color: #fff;
-        }
     </style>
 </head>
 <body class="d-flex justify-content-center align-items-center vh-100">
-<div class="card">
+<div class="card p-4">
     <c:if test="${not empty error}">
-        <div class="alert alert-danger text-center alert-box">${error}</div>
+        <div class="alert alert-danger text-center mb-3">${error}</div>
     </c:if>
     <p class="text-center text-white-50 mb-4">Đăng nhập để truy cập vào CinemaKing</p>
-    <form action="login" method="post">
+    <form action="login" method="POST">
         <div class="mb-3">
-            <label for="username" class="form-label">Tên đăng nhập</label>
-            <input type="text" id="username" name="username" class="form-control form-control-lg rounded-pill" required />
+            <label for="username" class="form-label text-white fw-medium">Tên đăng nhập</label>
+            <input type="text" id="username" name="inputUsername" class="form-control form-control-lg rounded-pill" required />
         </div>
         <div class="mb-3">
-            <label for="password" class="form-label">Mật khẩu</label>
-            <input type="password" id="password" name="password" class="form-control form-control-lg rounded-pill" required />
+            <label for="password" class="form-label text-white fw-medium">Mật khẩu</label>
+            <input type="password" id="password" name="inputPassword" class="form-control form-control-lg rounded-pill" required />
         </div>
         <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill mb-3">Đăng nhập</button>
-        <div class="text-center text-white-50">
-            <p>Chưa có tài khoản?</p>
-        </div>
+        <p class="text-center text-white-50 mb-3">Chưa có tài khoản?</p>
         <a href="register" class="btn btn-outline-danger btn-lg w-100 rounded-pill">Đăng ký ngay</a>
     </form>
 </div>

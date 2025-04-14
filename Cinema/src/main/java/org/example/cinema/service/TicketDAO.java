@@ -1,7 +1,7 @@
 package org.example.cinema.service;
 
 
-import org.example.cinema.model.TicketDetailDTO;
+import org.example.cinema.model.Seat;
 import org.example.cinema.model.Ticket;
 
 import java.sql.*;
@@ -9,53 +9,81 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TicketDAO {
-    private Connection connection;
+    public static final String GET_ALL_SQL = "SELECT * FROM ticket";
+    public static final String GET_BY_USER_SQL = "SELECT * FROM ticket WHERE userid = ?";
+    public static final String GET_BY_PLAYTIME_SQL = "SELECT * FROM ticket WHERE playtimeid = ?";
+    public static final String INSERT_SQL = "INSERT INTO ticket (userid, playtimeid, seatid) VALUES (?, ?, ?)";
 
-    public TicketDAO() {
-        this.connection = DBConnection.connect();
-    }
+    private final Connection connection = DBConnection.connect();
+    private final UserDAO userDAO = new UserDAO();
+    private final PlayTimeDAO playtimeDAO = new PlayTimeDAO();
 
-    public void add(Ticket ticket) {
-        String sql = "INSERT INTO ticket (userid, seatid, playtimeid) VALUES (?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, ticket.getUserId());
-            stmt.setInt(2, ticket.getSeatId());
-            stmt.setInt(3, ticket.getPlaytimeId());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Lỗi khi thêm vé: " + e.getMessage());
-        }
-    }
-
-    public List<TicketDetailDTO> getAllTicketDetails() {
-        return executeTicketQuery("{CALL GetAllTicketDetail()}", null);
-    }
-
-    public List<TicketDetailDTO> getTicketDetailsByUsername(String username) {
-        return executeTicketQuery("{CALL GetTicketDetailByUsername(?)}", username);
-    }
-
-    private List<TicketDetailDTO> executeTicketQuery(String sql, String username) {
-        List<TicketDetailDTO> ticketDetails = new ArrayList<>();
-        try (CallableStatement stmt = connection.prepareCall(sql)) {
-            if (username != null) {
-                stmt.setString(1, username);
-            }
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    TicketDetailDTO ticket = new TicketDetailDTO();
-                    ticket.setTicketId(rs.getInt("ticketid"));
-                    ticket.setUsername(rs.getString("username"));
-                    ticket.setSeatCode(rs.getString("seatcode"));
-                    ticket.setPlayDay(rs.getDate("playday").toLocalDate());
-                    ticket.setHour(rs.getTime("hour").toLocalTime());
-                    ticket.setMovieName(rs.getString("moviename"));
-                    ticketDetails.add(ticket);
+    public List<Ticket> getByUser(int userId) {
+        List<Ticket> ticketList = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(GET_BY_USER_SQL)) {
+            stmt.setInt(1, userId);
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                while (resultSet.next()) {
+                    ticketList.add(mapResultSet(resultSet));
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Lỗi khi truy vấn vé: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
-        return ticketDetails;
+        return ticketList;
+    }
+
+    public List<Ticket> getByPlaytime(int playtimeId) {
+        List<Ticket> ticketList = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(GET_BY_PLAYTIME_SQL)) {
+            stmt.setInt(1, playtimeId);
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                while (resultSet.next()) {
+                    ticketList.add(mapResultSet(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return ticketList;
+    }
+
+    public void insert(Ticket ticket) {
+        try (PreparedStatement stmt = connection.prepareStatement(INSERT_SQL)) {
+            stmt.setInt(1, ticket.getUser().getId());
+            stmt.setInt(2, ticket.getPlaytime().getId());
+            stmt.setInt(3, ticket.getSeat().getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Lỗi thêm vé" + e.getMessage());
+        }
+    }
+
+    public List<Ticket> getAll() {
+        List<Ticket> ticketList = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(GET_ALL_SQL)) {
+            ResultSet resultSet = stmt.executeQuery();
+            while (resultSet.next()) {
+                ticketList.add(mapResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi truy vấn vé" + e.getMessage());
+        }
+        return ticketList;
+    }
+
+    private Ticket mapResultSet(ResultSet resultSet) {
+        Ticket ticket = new Ticket();
+        try {
+            ticket.setId(resultSet.getInt("id"));
+            ticket.setUser(userDAO.getById(resultSet.getInt("userid")));
+            ticket.setPlaytime(playtimeDAO.getById(resultSet.getInt("playtimeid")));
+            Seat seat = new SeatDAO().getById(resultSet.getInt("seatid"));
+            ticket.setSeat(seat);
+            ticket.setBookingTime(resultSet.getTimestamp("bookingtime").toLocalDateTime());
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return ticket;
     }
 }

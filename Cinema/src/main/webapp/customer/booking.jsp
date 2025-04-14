@@ -1,183 +1,172 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html lang="vi">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Select Seats - Cinema</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Chọn Ghế</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #eef1f5;
-            font-family: 'Segoe UI', sans-serif;
+            background-color: #1e1e2f;
+            color: #f0f0f0;
+            font-family: "Segoe UI", sans-serif;
         }
 
-        h2 {
-            font-weight: bold;
-            color: #343a40;
+        h1 {
+            color: #ffffff;
         }
 
-        .booked {
-            background-color: #dc3545;
-            color: white;
-            border: 1px solid #b02a37;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .available {
-            background-color: #28a745;
-            color: white;
-            border: 1px solid #1c7430;
-            cursor: pointer;
-        }
-
-        .selected {
-            background-color: #ffc107 !important;
-            color: white;
-            border: 1px solid #e0a800;
-            transform: scale(1.1);
-            cursor: pointer;
-        }
-
-        .seat {
-            width: 42px;
-            height: 42px;
-            margin: 3px;
-            text-align: center;
-            line-height: 42px;
-            font-weight: bold;
-            font-size: 13px;
-            border-radius: 8px;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        .seat:hover {
-            filter: brightness(1.1);
-        }
-
-        .seat-container {
+        .seat-map {
             display: grid;
-            grid-template-columns: repeat(8, 1fr);
-            gap: 8px;
+            grid-template-columns: repeat(8, 50px);
+            gap: 10px;
             justify-content: center;
-            margin: 0 auto;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
 
-        .layout-wrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-top: 30px;
-        }
-
-        .left-sidebar, .right-sidebar {
-            width: 20%;
-        }
-
-        .main-content {
-            width: 60%;
-            text-align: center;
-        }
-
-        .form-group label {
+        .seat-btn {
+            width: 50px;
+            height: 50px;
             font-weight: bold;
-            color: #495057;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(255, 255, 255, 0.08);
+            transition: background-color 0.3s ease;
+            color: white;
         }
 
-        .btn-lg {
+        .btn-success {
+            background-color: #4CAF50 !important;
+            border-color: #4CAF50 !important;
+            color: white;
+        }
+
+        .btn-warning {
+            background-color: #f1c40f !important;
+            border-color: #f1c40f !important;
+            color: black;
+        }
+
+        .btn-secondary {
+            background-color: #7f8c8d !important;
+            border-color: #7f8c8d !important;
+            color: white;
+        }
+
+        .screen {
             width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            background-color: #2c3e50;
+            height: 25px;
+            border-radius: 5px;
+            position: relative;
+            font-weight: bold;
+            color: #ecf0f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 1px;
         }
 
-        .left-sidebar .form-group {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        .legend {
+            margin-top: 20px;
+        }
+
+        .legend .btn {
+            pointer-events: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+        }
+
+        .legend span {
+            margin-left: 6px;
+            margin-right: 20px;
+            font-size: 14px;
+            color: #f0f0f0;
+        }
+
+        .btn-outline-primary {
+            border-color: #3498db;
+            color: #3498db;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #3498db;
+            color: white;
         }
     </style>
+
+
 </head>
-<body>
-<c:if test="${not empty message}">
-    <div class="alert alert-info text-center">${message}</div>
-</c:if>
+<body class="container text-center mt-4">
 
-<div class="container mt-4">
-    <h2 class="text-center mb-4">Chọn ghế</h2>
+<h1 class="mb-4">Sơ đồ ghế</h1>
 
-    <form method="POST" id="bookingForm">
+<div class="screen">Màn hình</div>
 
-        <input type="hidden" name="movieId" value="${movieId}">
-        <input type="hidden" name="selectedSeats" id="selectedSeatsInput">
-        <input type="hidden" name="selectedSeatIds" id="selectedSeatIdsInput">
+<div class="seat-map mt-4">
+    <c:set var="seatIndex" value="0"/>
+    <c:forEach var="seat" items="${seatList}">
+        <c:set var="isBooked" value="false"/>
+        <c:forEach var="bSeat" items="${bookedSeatList}">
+            <c:if test="${bSeat.id == seat.id}">
+                <c:set var="isBooked" value="true"/>
+            </c:if>
+        </c:forEach>
 
-        <div class="layout-wrapper">
-            <div class="left-sidebar">
-                <div class="form-group">
-                    <label for="playTimes">Chọn giờ chiếu:</label>
-                    <select id="playTimes" name="playTimeId" class="form-control">
-                        <c:forEach var="playTime" items="${playTimes}">
-                            <option value="${playTime.playTimeId}">
-                                    ${playTime.playDay} - ${playTime.hour}
-                            </option>
-                        </c:forEach>
-                    </select>
-                </div>
-            </div>
-            <div class="main-content">
-                <div class="seat-container">
-                    <c:forEach var="seat" items="${seatList}">
-                        <div id="seat-${seat.seatCode}"
-                             class="seat ${seat.status == 'available' ? 'available' : 'booked'}"
-                             data-id="${seat.id}"
-                             data-code="${seat.seatCode}">
-                                ${seat.seatCode}
-                        </div>
-                    </c:forEach>
-                </div>
-            </div>
-            <div class="right-sidebar d-flex flex-column align-items-stretch">
-                <button type="submit" class="btn btn-primary btn-lg mb-3" id="submitBtn">Đặt vé</button>
-                <a href="customer" class="btn btn-secondary btn-lg">Hủy</a>
-            </div>
-        </div>
-    </form>
+        <c:choose>
+            <c:when test="${isBooked}">
+                <button class="btn btn-secondary seat-btn" disabled>${seat.name}</button>
+            </c:when>
+            <c:otherwise>
+                <button class="btn btn-success seat-btn seat-btn-active" data-seat-id="${seat.id}"
+                        onclick="toggleSeat(this)">${seat.name}</button>
+            </c:otherwise>
+        </c:choose>
+
+        <c:set var="seatIndex" value="${seatIndex + 1}"/>
+    </c:forEach>
 </div>
+
+<div class="legend d-flex justify-content-center align-items-center gap-3 flex-wrap">
+    <div>
+        <button class="btn btn-success"></button>
+        <span>Ghế trống</span></div>
+    <div>
+        <button class="btn btn-warning"></button>
+        <span>Đã chọn</span></div>
+    <div>
+        <button class="btn btn-secondary"></button>
+        <span>Đã đặt</span></div>
+</div>
+
+<form method="POST" class="mt-4">
+    <input type="hidden" id="selectedSeatList" name="selectedSeatList" value="">
+    <input type="hidden" name="playtimeId" value="${playtimeId}">
+    <button type="submit" class="btn btn-warning px-4 py-2" id="bookBtn" disabled>Đặt Vé</button>
+</form>
+
+<a href="customer" class="btn btn-outline-primary mt-3">Quay về</a>
+
 <script>
-    let selectedSeats = [];
-    let selectedSeatIds = [];
-
-    document.querySelectorAll('.seat.available').forEach(seat => {
-        seat.addEventListener('click', function () {
-            const seatCode = this.dataset.code;
-            const seatId = this.dataset.id;
-
-            if (this.classList.contains('selected')) {
-                this.classList.remove('selected');
-                selectedSeats = selectedSeats.filter(code => code !== seatCode);
-                selectedSeatIds = selectedSeatIds.filter(id => id !== seatId);
-            } else {
-                this.classList.add('selected');
-                selectedSeats.push(seatCode);
-                selectedSeatIds.push(seatId);
-            }
-
-            document.getElementById("selectedSeatsInput").value = selectedSeats.join(",");
-            document.getElementById("selectedSeatIdsInput").value = selectedSeatIds.join(",");
-        });
-    });
-    document.querySelector("form").addEventListener("submit", function (e) {
-        if (selectedSeats.length === 0) {
-            e.preventDefault();
-            alert("Chưa chọn ghế!");
+    function toggleSeat(seatElement) {
+        if (!seatElement.disabled) {
+            seatElement.classList.toggle("btn-warning");
+            seatElement.classList.toggle("btn-success");
+            updateSelectedSeats();
         }
-    });
+    }
+
+    function updateSelectedSeats() {
+        let selectedSeats = document.querySelectorAll(".btn-warning.seat-btn");
+        let seatInput = document.getElementById("selectedSeatList");
+        let seatIds = Array.from(selectedSeats).map(seat => seat.getAttribute("data-seat-id"));
+        seatInput.value = seatIds.join(",");
+        document.getElementById("bookBtn").disabled = selectedSeats.length === 0;
+    }
 </script>
 
 </body>

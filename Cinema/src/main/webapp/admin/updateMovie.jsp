@@ -18,34 +18,30 @@
     </c:if>
 
     <form action="admin?action=updateMovie" method="POST">
-        <input type="hidden" name="movieId" value="${movie.movieId}">
-        <div class="form-group">
-            <label>ID Phim:</label>
-            <input type="text" class="form-control" value="${movie.movieId}" disabled>
-        </div>
+        <input type="hidden" name="id" value="${movie.id}">
         <div class="form-group">
             <label>Tên Phim Cũ:</label>
-            <input type="text" class="form-control" value="${movie.movieName}" disabled>
+            <input type="text" class="form-control" value="${movie.name}" disabled>
         </div>
         <div class="form-group">
             <label>Tên Phim Mới:</label>
-            <input type="text" class="form-control" name="movieName" required>
+            <input type="text" class="form-control" name="name" required>
         </div>
         <div class="form-group">
             <label>Thể Loại Cũ:</label>
-            <input type="text" class="form-control" value="${movie.movieType}" disabled>
+            <input type="text" class="form-control" value="${movie.type}" disabled>
         </div>
         <div class="form-group">
             <label>Thể Loại Mới:</label>
-            <input type="text" class="form-control" name="movieType" required>
+            <input type="text" class="form-control" name="type" required>
         </div>
         <div class="form-group">
             <label>Thời Lượng Cũ (phút):</label>
-            <input type="text" class="form-control" value="${movie.movieDuration}" disabled>
+            <input type="text" class="form-control" value="${movie.duration}" disabled>
         </div>
         <div class="form-group">
             <label>Thời Lượng Mới (phút):</label>
-            <input type="number" class="form-control" name="movieDuration" required>
+            <input type="number" class="form-control" name="duration" required>
         </div>
         <button type="submit" class="btn btn-primary">Cập nhật</button>
         <a href="admin" class="btn btn-secondary">Hủy</a>

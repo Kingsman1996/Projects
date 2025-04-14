@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KingCinema</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         html {
@@ -14,39 +15,49 @@
         }
 
         body {
-            height: 100vh;
             background-color: #121212;
-            display: flex;
-            flex-direction: column;
             color: white;
             max-width: 90%;
             margin: auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Poppins', sans-serif;
         }
 
         main {
             flex: 1;
             background: #181818;
-            padding: 20px;
-            border-radius: 8px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
         }
 
         .header {
             background: #1a1a1a;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
         }
 
-        .header {
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .header .logo img {
+        .logo img {
             height: 50px;
         }
 
-        .navbar {
-            background: #222;
+        .username {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+            text-decoration: none;
         }
 
         .nav-link.active {
@@ -55,63 +66,100 @@
             border-bottom: 2px solid #ffc107;
         }
 
+        .navbar {
+            border-radius: 0 0 10px 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-link {
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #ffc107 !important;
+            text-shadow: 0 0 5px #ffc107;
+        }
+
         .card {
-            background: #242424;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            background: #1f1f1f;
+            border: none;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .card-title {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .card-text {
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-
-        .list-group-item {
-            font-size: 14px;
-            padding: 6px;
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 20px rgba(255, 193, 7, 0.15);
         }
 
         .card-img {
-            object-fit: fill;
-            width: 100%;
-            height: 600px;
+            border-radius: 12px 12px 0 0;
+            object-fit: cover;
+            height: 500px;
         }
 
-        .card-body {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 15px;
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
         }
 
-        .list-group {
-            margin-top: 10px;
+        .btn-warning {
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            color: white;
         }
 
         footer {
-            text-align: center;
-            padding: 10px 0;
+            background: #101010;
             border-top: 2px solid #333;
+            margin-top: 20px;
+            padding: 20px 0;
+        }
+
+        #contact {
+            background: #1b1b1b;
+            padding: 40px 0;
+            border-top: 1px solid #333;
+        }
+
+        #contact i {
+            color: #ffc107;
+        }
+
+        #contact a:hover {
+            text-decoration: underline;
+        }
+
+        .bi {
+            transition: transform 0.3s ease;
+        }
+
+        .bi:hover {
+            transform: scale(1.2);
+            color: #ffc107 !important;
         }
     </style>
 </head>
 <body>
 
-<header class="header d-flex align-items-center">
-    <div class="logo">
-        <a href="customer"><img src="${pageContext.request.contextPath}/images/cinema.jpg" alt="KingCinema"></a>
+<header class="header py-2">
+    <div class="container d-flex align-items-center justify-content-between">
+        <div class="logo">
+            <a href="customer"><img src="${pageContext.request.contextPath}/images/cinema.jpg" alt="KingCinema"></a>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <span class="username">Xin chào, ${user.username}</span>
+            <a href="logout" class="logout-btn btn btn-danger">Đăng xuất</a>
+        </div>
     </div>
 </header>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -132,31 +180,22 @@
         </div>
     </div>
 </nav>
+
 <main class="main">
     <div class="container mt-4">
         <div class="row">
-            <c:forEach var="movie" items="${movies}">
+            <c:forEach var="movie" items="${movieList}">
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <div class="card bg-dark text-white mb-4">
                         <img src="${pageContext.request.contextPath}/images/${movie.imageUrl}" class="card-img"
-                             alt="${movie.movieName}">
-                        <div class="card-body">
-                            <h5 class="card-title">${movie.movieName}</h5>
-                            <p class="card-text"><strong>Thể loại:</strong> ${movie.movieType}</p>
-                            <p class="card-text"><strong>Thời lượng:</strong> ${movie.movieDuration} phút</p>
-                            <h6 class="mt-3">Lịch chiếu:</h6>
-                            <ul class="list-group list-group-flush">
-                                <c:forEach var="playTime" items="${movie.playTimes}">
-                                    <c:if test="${playTime.movieId == movie.movieId}">
-                                        <li class="list-group-item bg-dark text-white">
-                                            Ngày: ${playTime.playDay} - Giờ: ${playTime.hour}
-                                        </li>
-                                    </c:if>
-                                </c:forEach>
-
-                            </ul>
-                            <a href="customer?action=booking&movieId=${movie.movieId}" class="btn btn-warning mt-3">Đặt
-                                vé</a>
+                             alt="">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">${movie.name}</h5>
+                            <p class="card-text"><strong>Thể loại:</strong> ${movie.type}</p>
+                            <p class="card-text"><strong>Thời lượng:</strong> ${movie.duration} phút</p>
+                            <a href="customer?action=checkPlaytime&movieName=${movie.name}"
+                               class="btn btn-warning mt-3">
+                                Xem lịch chiếu</a>
                         </div>
                     </div>
                 </div>
@@ -164,34 +203,30 @@
         </div>
     </div>
 </main>
-<section id="contact" class="py-4" style="background-color: #1e1e1e;">
+
+<section id="contact" class="py-4 bg-dark">
     <div class="container text-white text-center">
         <h4>Thông tin liên hệ</h4>
         <p><i class="bi bi-geo-alt-fill"></i> Số 23, Lô TT01, KĐT Mon City, Mỹ Đình 2, Q. Nam Từ Liêm</p>
         <p>
             <i class="bi bi-envelope-fill"></i>
-            <a href="mailto:support@kingcinema.vn" style="color: white; text-decoration: none;">
-                Email: support@kingcinema.vn
-            </a>
+            <a href="mailto:support@kingcinema.vn" class="text-white text-decoration-none">Email:
+                support@kingcinema.vn</a>
         </p>
-
-        <p><i class="bi bi-telephone-fill"></i>Hotline: 0909 123 456</p>
+        <p><i class="bi bi-telephone-fill"></i> Hotline: 0909 123 456</p>
         <div class="mt-3">
-            <a href="https://www.facebook.com/kingcinema" target="_blank" class="text-white me-3 fs-4">
-                <i class="bi bi-facebook"></i>
-            </a>
-            <a href="https://www.instagram.com/kingcinema" target="_blank" class="text-white me-3 fs-4">
-                <i class="bi bi-instagram"></i>
-            </a>
-            <a href="https://www.twitter.com/kingcinema" target="_blank" class="text-white fs-4">
-                <i class="bi bi-twitter"></i>
-            </a>
+            <a href="https://www.facebook.com/kingcinema" target="_blank" class="text-white me-3 fs-4"><i
+                    class="bi bi-facebook"></i></a>
+            <a href="https://www.instagram.com/kingcinema" target="_blank" class="text-white me-3 fs-4"><i
+                    class="bi bi-instagram"></i></a>
+            <a href="https://www.twitter.com/kingcinema" target="_blank" class="text-white fs-4"><i
+                    class="bi bi-twitter"></i></a>
         </div>
     </div>
 </section>
 
-<footer class="text-center py-3" style="background-color: #111; border-top: 2px solid #333;">
-    <p class="mb-0 text-white">&copy; 2025 KingCinema. All rights reserved.</p>
+<footer class="text-center py-3 bg-black">
+    <p class="mb-0 text-white">© 2025 KingCinema. All rights reserved.</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -216,6 +251,5 @@
         }
     });
 </script>
-
 </body>
 </html>
