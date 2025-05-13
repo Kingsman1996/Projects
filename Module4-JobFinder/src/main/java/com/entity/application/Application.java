@@ -1,15 +1,17 @@
-package com.model.application;
+package com.entity.application;
 
-import com.model.post.Post;
-import com.model.user.User;
-import lombok.Data;
+import com.entity.post.Post;
+import com.entity.user.UserInfo;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Application {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +19,7 @@ public class Application {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private User candidate;
+    private UserInfo userInfo;
 
     @ManyToOne
     @JoinColumn(nullable = false)

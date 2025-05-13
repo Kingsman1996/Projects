@@ -43,8 +43,9 @@
       <list>
         <option value="Enum" />
         <option value="Interface" />
-        <option value="Class" />
         <option value="HTML File" />
+        <option value="Exception" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -60,7 +61,7 @@
     <option name="CUSTOM_FILTER" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -74,12 +75,13 @@
   &quot;keyToString&quot;: {
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;Gradle.Build CaseStudy.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build Module4-JobFinder.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;Tomcat Server.Tomcat 9.0.1021.executor&quot;: &quot;Run&quot;,
-    &quot;Tomcat Server.Tomcat 9.0.104.executor&quot;: &quot;Run&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/ASUS/Desktop/CODEGYM/Module4/Week4/CaseStudy&quot;,
+    &quot;Tomcat Server.Tomcat 9.0.104.executor&quot;: &quot;Debug&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/ASUS/Desktop/MyProjects/Module4-JobFinder&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -98,16 +100,16 @@
       <recent name="C:\Users\ASUS\Desktop\CODEGYM\Module4\Week4\CaseStudy\src\main\webapp\WEB-INF\customer" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\ASUS\Desktop\MyProjects\Module4-JobFinder\src\main\webapp\WEB-INF\auth" />
       <recent name="C:\Users\ASUS\Desktop\CODEGYM\Module4\Week4\CaseStudy\src\main\webapp\WEB-INF\post" />
       <recent name="C:\Users\ASUS\Desktop\CODEGYM\Module4\Week4\CaseStudy\src\main\webapp\WEB-INF\candidate" />
       <recent name="C:\Users\ASUS\Desktop\CODEGYM\Module4\Week4\CaseStudy\src\main\webapp\WEB-INF\jobpost" />
       <recent name="C:\Users\ASUS\Desktop\CODEGYM\Module4\Week4\CaseStudy\src\main\webapp\WEB-INF\resume" />
-      <recent name="C:\Users\ASUS\Desktop\CODEGYM\Module4\Week4\CaseStudy\src\main\webapp\WEB-INF\application" />
     </key>
   </component>
   <component name="RunManager">
     <configuration name="Tomcat 9.0.104" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 9.0.104" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
-      <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/users/login" />
+      <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/auth/login" />
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
         <artifact name="Gradle : com : thuchanh1-1.0-SNAPSHOT.war">
@@ -124,9 +126,27 @@
       <predefined_log_file id="Tomcat Manager" />
       <predefined_log_file id="Tomcat Host Manager" />
       <predefined_log_file id="Tomcat Localhost Access" />
+      <RunnerSettings RunnerId="AppServerDebuggerRunner">
+        <option name="DEBUG_PORT" value="49924" />
+      </RunnerSettings>
       <RunnerSettings RunnerId="Debug">
         <option name="DEBUG_PORT" value="50179" />
       </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="AppServerDebuggerRunner">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
       <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
         <option name="USE_ENV_VARIABLES" value="true" />
         <STARTUP>
@@ -198,8 +218,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.23774.435" />
-        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-IU-251.23774.435" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129" />
+        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
       </set>
     </attachedChunks>
   </component>
@@ -237,6 +257,13 @@
       <workItem from="1746598489961" duration="11041000" />
       <workItem from="1746623060236" duration="6478000" />
       <workItem from="1746667938051" duration="81000" />
+      <workItem from="1746675126770" duration="172000" />
+      <workItem from="1746675315477" duration="70000" />
+      <workItem from="1746675432337" duration="44000" />
+      <workItem from="1746678298769" duration="807000" />
+      <workItem from="1747104653348" duration="6231000" />
+      <workItem from="1747117925102" duration="12199000" />
+      <workItem from="1747130259268" duration="85000" />
     </task>
     <servers />
   </component>

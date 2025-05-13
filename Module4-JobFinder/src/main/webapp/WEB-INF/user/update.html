@@ -9,40 +9,49 @@
             background-color: #000000;
             color: #f5f5f5;
         }
+
         .card {
             background-color: #1a1a1a;
             border: none;
         }
+
         .card-title {
             color: #bb6bd9;
         }
+
         .form-label {
             color: #e0e0e0;
         }
+
         .form-control {
             background-color: #2b2b2b;
             color: #ffffff;
             border: 1px solid #555;
         }
+
         .form-control:focus {
             background-color: #2b2b2b;
             color: #ffffff;
             border-color: #9b59b6;
             box-shadow: 0 0 0 0.2rem rgba(155, 89, 182, 0.25);
         }
+
         .btn-primary {
             background-color: #9b59b6;
             border-color: #9b59b6;
         }
+
         .btn-primary:hover {
             background-color: #884ea0;
             border-color: #884ea0;
         }
+
         a {
             color: #ffffff;
             font-weight: 500;
             font-size: 0.95rem;
         }
+
         a:hover {
             color: #d1b3ff;
             text-decoration: underline;
@@ -50,12 +59,19 @@
     </style>
 </head>
 <body>
+<div th:if="${success}" class="text-success text-center mb-2">
+    <p th:text="${success}"></p>
+</div>
 
+<div th:if="${errors}" class="text-danger text-center mb-2">
+    <p th:text="${errors}"></p>
+</div>
 <div class="container mt-5">
     <div class="card shadow p-4 rounded">
         <h3 class="card-title text-center mb-4">Cập nhật thông tin người dùng</h3>
 
         <form th:object="${userUpdateForm}" method="post">
+
             <div class="mb-3">
                 <label for="password" class="form-label">Mật khẩu mới</label>
                 <input type="password" id="password" th:field="*{password}" class="form-control"/>

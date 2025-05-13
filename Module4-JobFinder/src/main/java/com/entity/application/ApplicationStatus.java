@@ -1,4 +1,4 @@
-package com.model.application;
+package com.entity.application;
 
 public enum ApplicationStatus {
     SUBMITTED,

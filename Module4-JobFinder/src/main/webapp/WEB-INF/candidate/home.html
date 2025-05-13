@@ -12,15 +12,15 @@
         }
 
         .navbar {
-            background-color: #007bff;
+            background-color: #9b59b6;
         }
 
         .navbar-brand, .nav-link {
-            color: #fff !important;
+            color: #ffffff !important;
         }
 
         .hero-section {
-            background-color: #007bff;
+            background-color: #9b59b6;
             color: white;
             padding: 50px 0;
             text-align: center;
@@ -37,24 +37,38 @@
 
         .card {
             border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .card-title {
+            color: #9b59b6;
         }
 
         .footer {
-            background-color: #007bff;
+            background-color: #9b59b6;
             color: white;
             padding: 20px;
             text-align: center;
         }
 
-        .btn-custom {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 20px;
-            border: none;
+        .btn-primary {
+            background-color: #9b59b6;
+            border-color: #9b59b6;
         }
 
-        .btn-custom:hover {
-            background-color: #218838;
+        .btn-primary:hover {
+            background-color: #884ea0;
+            border-color: #884ea0;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
         }
     </style>
 </head>
@@ -70,24 +84,24 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/users/login}">Đăng nhập</a>
+                    <a class="nav-link active" th:href="@{/auth/login}">Đăng nhập</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/users/register}">Đăng ký</a>
+                    <a class="nav-link" th:href="@{/auth/register}">Đăng ký</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" th:if="${session.currentUser == null}"
+                    <a href="#" th:if="${session.authInfo == null}"
                        class="btn btn-secondary nav-link"
                        onclick="showLoginAlert()">
                         Hồ sơ cá nhân
                     </a>
-                    <a th:if="${session.currentUser != null}" th:href="@{/users/profile}"
+                    <a th:if="${session.authInfo != null}" th:href="@{/users/profile}"
                        class="btn btn-primary nav-link">
                         Hồ sơ cá nhân
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/users/logout}">Đăng xuất</a>
+                    <a class="nav-link" th:href="@{/auth/logout}">Đăng xuất</a>
                 </li>
             </ul>
         </div>
@@ -100,19 +114,19 @@
 </section>
 
 <section class="container my-5">
-    <h2 class="text-center mb-4">Tin nổi bật</h2>
+    <h2 class="text-center mb-4" style="color: #9b59b6;">Tin nổi bật</h2>
     <div class="row">
         <div class="col-md-4" th:each="post : ${postList}">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title" th:text="${post.title}"></h5>
                     <a href="#"
-                       th:if="${session.currentUser == null}"
+                       th:if="${session.authInfo == null}"
                        class="btn btn-secondary"
                        onclick="showLoginAlert()">Xem chi tiết
                     </a>
                     <a th:href="@{/posts/{id}/detail(id=${post.id})}"
-                       th:if="${session.currentUser != null}"
+                       th:if="${session.authInfo != null}"
                        class="btn btn-primary">Xem chi tiết
                     </a>
                 </div>

@@ -1,8 +1,8 @@
 package com.controller;
 
-import com.model.user.User;
-import com.model.user.UserInfo;
+import com.entity.user.UserInfo;
 import com.service.UserInfoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,21 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpSession;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/recruiters")
 public class RecruiterController {
     private final UserInfoService userInfoService;
 
-    @Autowired
-    public RecruiterController(UserInfoService userInfoService) {
-        this.userInfoService = userInfoService;
-    }
-
-    @GetMapping("/home")
+    @GetMapping
     public String showHome(Model model, HttpSession session) {
-        UserInfo userInfo = (UserInfo) session.getAttribute("currentUserInfo");
+        UserInfo userInfo = (UserInfo) session.getAttribute("userInfo");
         String firstName = userInfo.getFirstName();
         String lastName = userInfo.getLastName();
-        model.addAttribute("fullName", firstName+" "+lastName);
+        model.addAttribute("fullName", firstName + " " + lastName);
         return "recruiter/home";
     }
 }

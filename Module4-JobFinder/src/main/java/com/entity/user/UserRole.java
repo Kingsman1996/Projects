@@ -1,4 +1,4 @@
-package com.model.user;
+package com.entity.user;
 
 public enum UserRole {
     RECRUITER, CANDIDATE, ADMIN

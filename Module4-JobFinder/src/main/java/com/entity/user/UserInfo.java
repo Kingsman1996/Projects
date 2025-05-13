@@ -1,11 +1,13 @@
-package com.model.user;
+package com.entity.user;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class UserInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +25,6 @@ public class UserInfo {
     private String address;
 
     @OneToOne
-    @JoinColumn(name = "user_id", unique = true)
-    private User user;
+    @JoinColumn(unique = true)
+    private AuthInfo authInfo;
 }

@@ -1,12 +1,12 @@
 package com.controller;
 
-import com.model.application.Application;
-import com.model.post.Post;
-import com.model.post.PostStatus;
-import com.model.user.UserInfo;
-import com.model.user.User;
+import com.entity.application.Application;
+import com.entity.post.Post;
+import com.entity.post.PostStatus;
+import com.entity.user.AuthInfo;
+import com.entity.user.UserInfo;
 import com.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,36 +14,16 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
     private final ApplicationService applicationService;
     private final UserInfoService userInfoService;
-    private final UserService userService;
-
-    @Autowired
-    public PostController(PostService postService,
-                          ApplicationService applicationService,
-                          UserInfoService userInfoService,
-                          UserService userService) {
-        this.postService = postService;
-        this.applicationService = applicationService;
-        this.userInfoService = userInfoService;
-        this.userService = userService;
-    }
-
-    @ModelAttribute("userInfo")
-    public UserInfo getUserInfo(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        return userInfoService.findByUser(user);
-    }
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {
@@ -56,47 +36,53 @@ public class PostController {
     public String create(@ModelAttribute Post post,
                          RedirectAttributes redirectAttributes,
                          HttpSession session) {
-        User recruiter = (User) session.getAttribute("currentUser");
-        post.setRecruiter(recruiter);
+        UserInfo recruiterInfo = (UserInfo) session.getAttribute("userInfo");
+        post.setUserInfo(recruiterInfo);
         postService.save(post);
         redirectAttributes.addFlashAttribute("success", "Đăng bài thành công");
         return "redirect:/posts/create";
     }
 
     @GetMapping("/{id}/edit")
-    public String showUpdateForm(@PathVariable Long id, Model model) {
+    public String showUpdateForm(@PathVariable Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         Post existingPost = postService.findById(id);
-        model.addAttribute("post", existingPost);
-        return "post/edit";
+        AuthInfo currentAuthInfo = (AuthInfo) session.getAttribute("authInfo");
+        UserInfo ownerInfo = userInfoService.findById(existingPost.getUserInfo().getId());
+        if (currentAuthInfo.getUsername().equals(ownerInfo.getAuthInfo().getUsername())) {
+            model.addAttribute("post", existingPost);
+            return "post/edit";
+        }
+        redirectAttributes.addFlashAttribute("error", "Không thể chỉnh sửa bài đăng của người khác");
+        return "redirect:/posts/{id}/edit";
     }
 
-    @PostMapping("/{id}/edit")
-    public String update(@ModelAttribute Post post, HttpSession session, RedirectAttributes redirectAttributes) {
+    @PostMapping("/edit")
+    public String update(@ModelAttribute Post post, RedirectAttributes redirectAttributes) {
         postService.save(post);
         redirectAttributes.addFlashAttribute("success", "Sửa bài thành công");
         return "redirect:/posts/{id}/edit";
     }
 
     @GetMapping("/{id}/delete")
-    public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        postService.deleteById(id);
-        redirectAttributes.addFlashAttribute("success", "Xóa bài thành công");
-        return "redirect:/recruiters/home";
+    public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes, HttpSession session) {
+        Post existingPost = postService.findById(id);
+        AuthInfo currentAuthInfo = (AuthInfo) session.getAttribute("authInfo");
+        UserInfo ownerInfo = userInfoService.findById(existingPost.getUserInfo().getId());
+        if (currentAuthInfo.getUsername().equals(ownerInfo.getAuthInfo().getUsername())) {
+            postService.deleteById(id);
+            redirectAttributes.addFlashAttribute("success", "Xóa bài thành công");
+            return "redirect:/recruiters";
+        }
+        redirectAttributes.addFlashAttribute("error", "Không thể xóa bài của người khác");
+        return "redirect:/posts/{id}/delete";
     }
 
     @GetMapping("/{id}/detail")
     public String showDetail(@PathVariable Long id, Model model) {
         Post post = postService.findById(id);
-        post.setApplications(applicationService.findByPost(post));
         model.addAttribute("post", post);
-        User recruiter = userService.findById(post.getRecruiter().getId());
-        UserInfo recruiterInfo = userInfoService.findByUser(recruiter);
-        model.addAttribute("recruiterInfo", recruiterInfo);
-        Map<LocalDate, UserInfo> applicationDetails = new HashMap<>();
-        for (Application application : post.getApplications()) {
-            applicationDetails.put(application.getAppliedAt(), userInfoService.findByApplicationId(application.getId()));
-        }
-        model.addAttribute("applicationDetails", applicationDetails);
+        List<Application> applicationList = applicationService.findByPost(post);
+        model.addAttribute("applicationList", applicationList);
         return "post/detail";
     }
 
@@ -136,19 +122,17 @@ public class PostController {
 
     @GetMapping("/{id}/apply")
     public String showApplyForm(@PathVariable Long id, Model model) {
-        model.addAttribute("userInfo", new UserInfo());
         model.addAttribute("postId", id);
         return "post/apply";
     }
 
-
-    @PostMapping("/{id}/apply")
-    public String applyForPost(@PathVariable Long id,
+    @PostMapping("/{postId}/apply")
+    public String applyForPost(@PathVariable Long postId,
                                @RequestParam("cvFile") MultipartFile cvFile,
                                HttpSession session,
                                RedirectAttributes redirectAttributes) {
-        User candidate = (User) session.getAttribute("currentUser");
-        postService.applyForPost(id, candidate, cvFile);
+        UserInfo candidateInfo = (UserInfo) session.getAttribute("userInfo");
+        applicationService.save(postId, candidateInfo, cvFile);
         redirectAttributes.addFlashAttribute("success", "Gửi thành công");
         return "redirect:/posts/{id}/detail";
     }

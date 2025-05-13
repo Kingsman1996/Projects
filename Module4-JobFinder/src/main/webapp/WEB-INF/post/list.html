@@ -9,7 +9,7 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">Danh sách tin tuyển dụng</h2>
 
-    <div th:if="${session.currentUser.role.toString() == 'RECRUITER'}" class="text-end mb-3">
+    <div th:if="${session.authInfo.role.toString() == 'RECRUITER'}" class="text-end mb-3">
         <a th:href="@{/posts/create}" class="btn btn-primary">Thêm tin mới</a>
     </div>
 
@@ -39,7 +39,7 @@
                 <td>
                     <a th:href="@{/posts/{id}/detail(id=${post.id})}" class="btn btn-info btn-sm">Xem chi tiết</a>
                 </td>
-                <td th:if="${session.currentUser.role.toString() == 'ADMIN'}">
+                <td th:if="${session.authInfo.role.toString() == 'ADMIN'}">
                     <a th:if="${post.status.toString() == 'PENDING'}" th:href="@{/posts/{id}/approve(id=${post.id})}" class="btn btn-success btn-sm">Duyệt</a>
                     <a th:if="${post.status.toString() == 'PENDING'}" th:href="@{/posts/{id}/reject(id=${post.id})}" class="btn btn-danger btn-sm">Từ chối</a>
                 </td>
@@ -48,9 +48,9 @@
         </table>
 
         <div class="d-flex justify-content-between">
-            <a th:if="${session.currentUser.role.toString() == 'ADMIN'}" th:href="@{/app/admin}" class="btn btn-secondary">Về trang chủ Admin</a>
-            <a th:if="${session.currentUser.role.toString() == 'RECRUITER'}" th:href="@{/recruiters/home}" class="btn btn-secondary">Về trang chủ Nhà tuyển dụng</a>
-            <a th:if="${session.currentUser.role.toString() == 'CANDIDATE'}" th:href="@{/candidates/home}" class="btn btn-secondary">Về trang chủ Ứng viên</a>
+            <a th:if="${session.authInfo.role.toString() == 'ADMIN'}" th:href="@{/admin}" class="btn btn-secondary">Về trang chủ Admin</a>
+            <a th:if="${session.authInfo.role.toString() == 'RECRUITER'}" th:href="@{/recruiters}" class="btn btn-secondary">Về trang chủ Nhà tuyển dụng</a>
+            <a th:if="${session.authInfo.role.toString() == 'CANDIDATE'}" th:href="@{/candidates}" class="btn btn-secondary">Về trang chủ Ứng viên</a>
         </div>
     </div>
 </div>

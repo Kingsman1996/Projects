@@ -1,4 +1,4 @@
-package com.model.post;
+package com.entity.post;
 
 public enum PostStatus {
     PENDING,

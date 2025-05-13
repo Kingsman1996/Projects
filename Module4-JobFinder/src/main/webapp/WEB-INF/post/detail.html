@@ -18,15 +18,15 @@
             <th>Tiêu đề</th>
             <th>Mô tả</th>
             <th>Ngày đăng</th>
-            <th>Người đăng</th>
-            <th th:if="${session.currentUser.role.toString() != 'CANDIDATE'}">Trạng thái</th>
+            <th>Tác giả</th>
+            <th th:if="${session.authInfo.role.toString() != 'CANDIDATE'}">Trạng thái</th>
         </tr>
         <tr>
             <td th:text="${post.title}"></td>
             <td th:text="${post.description}"></td>
             <td th:text="${post.postedDate}"></td>
-            <td th:text="${recruiterInfo.firstName} + ' ' + ${recruiterInfo.lastName}"></td>
-            <td th:if="${session.currentUser.role.toString() != 'CANDIDATE'}">
+            <td th:text="${post.recruiter.firstName} + ' ' + ${post.recruiter.lastName}"></td>
+            <td th:if="${session.authInfo.role.toString() != 'CANDIDATE'}">
                 <span th:switch="${post.status.toString()}">
                     <span th:case="'PENDING'" class="text-warning">Chờ duyệt</span>
                     <span th:case="'APPROVED'" class="text-success">Đã duyệt</span>
@@ -36,7 +36,7 @@
         </tr>
     </table>
 
-    <div th:if="${session.currentUser.role.toString() == 'RECRUITER'}">
+    <div th:if="${session.authInfo.role.toString() == 'RECRUITER'}">
         <h3 class="mt-4">Danh sách ứng viên</h3>
         <table class="table table-bordered table-hover">
             <thead class="table-light">
@@ -48,32 +48,34 @@
                 <th>Số điện thoại</th>
                 <th>Địa chỉ</th>
                 <th>Ngày ứng tuyển</th>
+                <th>File CV</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="entry, iterStat : ${applicationDetails}">
+            <tr th:each="app, iterStat : ${applicationList}">
                 <td th:text="${iterStat.index + 1}"></td>
-                <td th:text="${entry.value.firstName}"></td>
-                <td th:text="${entry.value.lastName}"></td>
-                <td th:text="${entry.value.email}"></td>
-                <td th:text="${entry.value.phone}"></td>
-                <td th:text="${entry.value.address}"></td>
-                <td th:text="${entry.key}"></td>
+                <td th:text="${app.candidateInfo.firstName}"></td>
+                <td th:text="${app.candidateInfo.lastName}"></td>
+                <td th:text="${app.candidateInfo.email}"></td>
+                <td th:text="${app.candidateInfo.phone}"></td>
+                <td th:text="${app.candidateInfo.address}"></td>
+                <td th:text="${app.cvLink}"></td>
+                <td></td>
             </tr>
             </tbody>
         </table>
     </div>
 
-    <div th:if="${session.currentUser.role.toString() == 'CANDIDATE'}">
+    <div th:if="${session.authInfo.role.toString() == 'CANDIDATE'}">
         <div class="d-grid gap-2 col-6 mx-auto">
             <a th:href="@{/posts/{id}/apply(id=${post.id})}" class="btn btn-primary btn-lg">Ứng tuyển ngay</a>
-            <a th:href="@{/candidates/home}" class="btn btn-secondary btn-lg">Về trang chủ</a>
+            <a th:href="@{/candidates}" class="btn btn-secondary btn-lg">Về trang chủ</a>
         </div>
     </div>
 
     <div class="text-center mt-4">
-        <a th:if="${session.currentUser.role.toString() == 'RECRUITER'}" th:href="@{/recruiters/home}" class="btn btn-secondary btn-lg">Về trang chủ</a>
-        <a th:if="${session.currentUser.role.toString() == 'ADMIN'}" th:href="@{/app/admin}" class="btn btn-secondary btn-lg">Về trang chủ</a>
+        <a th:if="${session.authInfo.role.toString() == 'RECRUITER'}" th:href="@{/posts/list}" class="btn btn-secondary btn-lg">Quay lại</a>
+        <a th:if="${session.authInfo.role.toString() == 'ADMIN'}" th:href="@{/admin}" class="btn btn-secondary btn-lg">Về trang chủ</a>
     </div>
 </div>
 </body>

@@ -10,9 +10,11 @@
             color: #f5f5f5;
         }
         .card {
-            background-color: #1a1a1a;
+            background-color: #2c2c2c;
+            color: #ffffff;
             border: none;
         }
+
         .card-title {
             color: #bb6bd9;
         }
@@ -40,22 +42,22 @@
     <div class="card shadow p-4 rounded">
         <h3 class="card-title text-center mb-4">Thông tin cá nhân</h3>
 
-        <p><strong>Tài khoản:</strong> <span th:text="${session.currentUser.username}"></span></p>
-        <p><strong>Họ:</strong> <span th:text="${session.currentUserInfo.firstName}"></span></p>
-        <p><strong>Tên:</strong> <span th:text="${session.currentUserInfo.lastName}"></span></p>
-        <p><strong>Email:</strong> <span th:text="${session.currentUserInfo.email}"></span></p>
-        <p><strong>Số điện thoại:</strong> <span th:text="${session.currentUserInfo.phone}"></span></p>
-        <p><strong>Địa chỉ:</strong> <span th:text="${session.currentUserInfo.address}"></span></p>
+        <p><strong>Tài khoản:</strong> <span th:text="${session.authInfo.username}"></span></p>
+        <p><strong>Họ:</strong> <span th:text="${session.userInfo.firstName}"></span></p>
+        <p><strong>Tên:</strong> <span th:text="${session.userInfo.lastName}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${session.userInfo.email}"></span></p>
+        <p><strong>Số điện thoại:</strong> <span th:text="${session.userInfo.phone}"></span></p>
+        <p><strong>Địa chỉ:</strong> <span th:text="${session.userInfo.address}"></span></p>
 
         <div class="d-flex gap-2 mt-4">
             <a th:href="@{/users/update}" class="btn btn-primary">Cập nhật thông tin</a>
 
-            <a th:if="${session.currentUser.role.toString() == 'CANDIDATE'}"
-               th:href="@{/candidates/home}" class="btn btn-primary">
+            <a th:if="${session.authInfo.role.toString() == 'CANDIDATE'}"
+               th:href="@{/candidates}" class="btn btn-primary">
                 Về trang chủ
             </a>
-            <a th:if="${session.currentUser.role.toString() == 'RECRUITER'}"
-               th:href="@{/recruiters/home}" class="btn btn-primary">
+            <a th:if="${session.authInfo.role.toString() == 'RECRUITER'}"
+               th:href="@{/recruiters}" class="btn btn-primary">
                 Về trang chủ
             </a>
         </div>

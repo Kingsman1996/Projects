@@ -1,39 +1,44 @@
 package com.service;
 
-import com.model.user.UserInfo;
-import com.model.user.User;
+import com.dto.UserUpdateForm;
+import com.entity.user.AuthInfo;
+import com.entity.user.UserInfo;
+import com.repo.AuthInfoRepository;
 import com.repo.UserInfoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserInfoService {
     private final UserInfoRepository userInfoRepository;
+    private final AuthInfoRepository authInfoRepository;
 
-    @Autowired
-    public UserInfoService(UserInfoRepository userInfoRepository) {
-        this.userInfoRepository = userInfoRepository;
+    public UserInfo findById(Long id) {
+        Optional<UserInfo> userInfo = userInfoRepository.findById(id);
+        return userInfo.orElse(null);
+    };
+
+    public UserInfo findByAuthInfo(AuthInfo authInfo) {
+        Optional<UserInfo> optionalUserInfo = userInfoRepository.findByAuthInfo(authInfo);
+        return optionalUserInfo.orElse(null);
     }
 
-    public UserInfo findByUser(User user) {
-        return userInfoRepository.findByUser(user).orElse(null);
-    }
-
-    public void save(UserInfo newInfo) {
-        Optional<UserInfo> optionalContactInfo = userInfoRepository.findByUser(newInfo.getUser());
-        if (optionalContactInfo.isPresent()) {
-            UserInfo currentInfo = optionalContactInfo.get();
-            currentInfo.setFirstName(newInfo.getFirstName());
-            currentInfo.setLastName(newInfo.getLastName());
-            currentInfo.setEmail(newInfo.getEmail());
-            currentInfo.setPhone(newInfo.getPhone());
-            currentInfo.setAddress(newInfo.getAddress());
-            userInfoRepository.save(currentInfo);
+    public void update(UserUpdateForm userUpdateForm) {
+        AuthInfo foundAuthInfo = authInfoRepository.findByUsername(userUpdateForm.getUsername()).orElse(null);
+        if (foundAuthInfo != null) {
+            Optional<UserInfo> optionalUserInfo = userInfoRepository.findByAuthInfo(foundAuthInfo);
+            if (optionalUserInfo.isPresent()) {
+                UserInfo currentInfo = optionalUserInfo.get();
+                currentInfo.setFirstName(userUpdateForm.getFirstName());
+                currentInfo.setLastName(userUpdateForm.getLastName());
+                currentInfo.setEmail(userUpdateForm.getEmail());
+                currentInfo.setPhone(userUpdateForm.getPhone());
+                currentInfo.setAddress(userUpdateForm.getAddress());
+                userInfoRepository.save(currentInfo);
+            }
         }
-    }
-    public UserInfo findByApplicationId(Long applicationId) {
-        return userInfoRepository.findUserInfoByApplicationId(applicationId);
     }
 }
