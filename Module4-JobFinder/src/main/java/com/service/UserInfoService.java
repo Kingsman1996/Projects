@@ -1,9 +1,10 @@
 package com.service;
 
-import com.dto.UserUpdateForm;
-import com.entity.user.AuthInfo;
-import com.entity.user.UserInfo;
-import com.repo.AuthInfoRepository;
+import com.dto.EditUserInfoForm;
+import com.entity.AuthInfo;
+import com.entity.UserInfo;
+import com.exception.DuplicateEmailExeption;
+import com.exception.DuplicatePhoneException;
 import com.repo.UserInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,31 +15,38 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserInfoService {
     private final UserInfoRepository userInfoRepository;
-    private final AuthInfoRepository authInfoRepository;
-
-    public UserInfo findById(Long id) {
-        Optional<UserInfo> userInfo = userInfoRepository.findById(id);
-        return userInfo.orElse(null);
-    };
 
     public UserInfo findByAuthInfo(AuthInfo authInfo) {
         Optional<UserInfo> optionalUserInfo = userInfoRepository.findByAuthInfo(authInfo);
         return optionalUserInfo.orElse(null);
     }
 
-    public void update(UserUpdateForm userUpdateForm) {
-        AuthInfo foundAuthInfo = authInfoRepository.findByUsername(userUpdateForm.getUsername()).orElse(null);
-        if (foundAuthInfo != null) {
-            Optional<UserInfo> optionalUserInfo = userInfoRepository.findByAuthInfo(foundAuthInfo);
-            if (optionalUserInfo.isPresent()) {
-                UserInfo currentInfo = optionalUserInfo.get();
-                currentInfo.setFirstName(userUpdateForm.getFirstName());
-                currentInfo.setLastName(userUpdateForm.getLastName());
-                currentInfo.setEmail(userUpdateForm.getEmail());
-                currentInfo.setPhone(userUpdateForm.getPhone());
-                currentInfo.setAddress(userUpdateForm.getAddress());
-                userInfoRepository.save(currentInfo);
-            }
+    public UserInfo update(UserInfo userInfo, EditUserInfoForm editUserInfoForm) {
+        if (existsByEmail(editUserInfoForm.getEmail())) {
+            throw new DuplicateEmailExeption("Email đã tồn tại");
         }
+        if (existsByPhone(editUserInfoForm.getPhone())) {
+            throw new DuplicatePhoneException("Số điện thoại đã tồn tại");
+        }
+        userInfo.setFirstName(editUserInfoForm.getFirstName());
+        userInfo.setLastName(editUserInfoForm.getLastName());
+        userInfo.setEmail(editUserInfoForm.getEmail());
+        userInfo.setPhone(editUserInfoForm.getPhone());
+        userInfo.setAddress(editUserInfoForm.getAddress());
+        userInfoRepository.save(userInfo);
+        return userInfo;
+    }
+
+    public UserInfo findById(Long id) {
+        Optional<UserInfo> optionalUserInfo = userInfoRepository.findById(id);
+        return optionalUserInfo.orElse(null);
+    }
+
+    boolean existsByPhone(String phone) {
+        return userInfoRepository.existsByPhone(phone);
+    }
+
+    boolean existsByEmail(String email) {
+        return userInfoRepository.existsByEmail(email);
     }
 }

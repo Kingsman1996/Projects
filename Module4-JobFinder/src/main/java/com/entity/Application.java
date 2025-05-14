@@ -1,7 +1,5 @@
-package com.entity.application;
+package com.entity;
 
-import com.entity.post.Post;
-import com.entity.user.UserInfo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,9 +24,6 @@ public class Application {
     private Post post;
 
     private String cvLink;
-
-    @Enumerated(EnumType.STRING)
-    private ApplicationStatus status;
 
     private LocalDate appliedAt;
 }

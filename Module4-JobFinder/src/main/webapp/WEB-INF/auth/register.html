@@ -69,11 +69,11 @@
                         <p th:text="${success}"></p>
                     </div>
 
-                    <div th:if="${errors}" class="text-danger text-center mb-2">
-                        <p th:text="${errors}"></p>
+                    <div th:if="${error}" class="text-danger text-center mb-2">
+                        <p th:text="${error}"></p>
                     </div>
 
-                    <form method="post" th:object="${registerRequest}">
+                    <form method="post" th:object="${registerForm}">
                         <div class="mb-3">
                             <label for="username" class="form-label">Tên đăng nhập</label>
                             <input type="text" id="username" th:field="*{username}" class="form-control" required>

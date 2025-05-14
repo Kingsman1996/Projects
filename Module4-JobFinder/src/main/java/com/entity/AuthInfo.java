@@ -1,5 +1,6 @@
-package com.entity.user;
+package com.entity;
 
+import com.enums.Role;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,5 +21,5 @@ public class AuthInfo {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserRole role;
+    private Role role;
 }

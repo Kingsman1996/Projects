@@ -1,15 +1,18 @@
 package com.service;
 
-import com.dto.LoginRequest;
-import com.dto.RegisterRequest;
-import com.dto.UserUpdateForm;
-import com.entity.user.*;
+import com.dto.EditPasswordForm;
+import com.dto.LoginForm;
+import com.dto.RegisterForm;
+import com.entity.AuthInfo;
+import com.entity.UserInfo;
+import com.enums.Role;
+import com.exception.InvalidPasswordException;
 import com.exception.UsernameExistException;
+import com.exception.UsernameNotFoundException;
 import com.repo.UserInfoRepository;
 import com.repo.AuthInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,64 +23,53 @@ public class AuthInfoService {
     private final AuthInfoRepository authInfoRepository;
     private final UserInfoRepository userInfoRepository;
 
-    public AuthInfo findById(Long id) {
-        return authInfoRepository.findById(id).orElse(null);
-    }
-
-    public AuthInfo findByUsername(String username) {
-        return authInfoRepository.findByUsername(username).orElse(null);
-    }
-
-    public List<AuthInfo> findByRole(UserRole role) {
+    public List<AuthInfo> findByRole(Role role) {
         return authInfoRepository.findByRole(role);
     }
 
-    public long count() {
-        return authInfoRepository.count();
+    public List<AuthInfo> findByRoleNot(Role role) {
+        return authInfoRepository.findByRoleNot(role);
     }
 
-    public long countByRole(UserRole role) {
+    public long countByRoleNot(Role role) {
+        return authInfoRepository.countByRoleNot(role);
+    }
+
+    public long countByRole(Role role) {
         return authInfoRepository.countByRole(role);
     }
 
-    @Transactional
-    public void register(RegisterRequest registerRequest) {
-        if (existsByUsername(registerRequest.getUsername())) {
+    public void register(RegisterForm registerForm) {
+        if (existsByUsername(registerForm.getUsername())) {
             throw new UsernameExistException("Tài khoản đã tồn tại");
         }
         AuthInfo authInfo = new AuthInfo();
-        authInfo.setUsername(registerRequest.getUsername());
-        authInfo.setPassword(registerRequest.getPassword());
-        authInfo.setRole(registerRequest.getRole());
+        authInfo.setUsername(registerForm.getUsername());
+        authInfo.setPassword(registerForm.getPassword());
+        authInfo.setRole(registerForm.getRole());
         authInfoRepository.save(authInfo);
-        UserInfo userInfo = userInfoRepository.findByAuthInfo(authInfo).orElse(null);
-        if (userInfo == null) {
-            userInfo = new UserInfo();
-            userInfo.setAuthInfo(authInfo);
-            userInfoRepository.save(userInfo);
-        }
+        UserInfo userInfo = new UserInfo();
+        userInfo.setAuthInfo(authInfo);
+        userInfoRepository.save(userInfo);
     }
 
-    public boolean checkLogin(LoginRequest loginRequest) {
-        String inputUsername = loginRequest.getUsername();
-        if (!existsByUsername(inputUsername)) {
-            return false;
+    public AuthInfo login(LoginForm loginForm) {
+        String inputUsername = loginForm.getUsername();
+        Optional<AuthInfo> optionalAuthInfo = authInfoRepository.findByUsername(inputUsername);
+        if (!optionalAuthInfo.isPresent()) {
+            throw new UsernameNotFoundException("Sai tài khoản");
         }
-        Optional<AuthInfo> optionalAuthenticationInfo = authInfoRepository.findByUsername(inputUsername);
-        if (!optionalAuthenticationInfo.isPresent()) {
-            return false;
+        AuthInfo authInfo = optionalAuthInfo.get();
+        if (!authInfo.getPassword().equals(loginForm.getPassword())) {
+            throw new InvalidPasswordException("Sai mật khẩu");
         }
-        AuthInfo authInfo = optionalAuthenticationInfo.get();
-        return authInfo.getPassword().equals(loginRequest.getPassword());
+        return authInfo;
     }
 
-    public void changePassword(UserUpdateForm userUpdateForm) {
-        Optional<AuthInfo> optionalAuthenticationInfo = authInfoRepository.findByUsername(userUpdateForm.getUsername());
-        if (optionalAuthenticationInfo.isPresent()) {
-            AuthInfo foundAuthInfo = optionalAuthenticationInfo.get();
-            foundAuthInfo.setPassword(userUpdateForm.getPassword());
-            authInfoRepository.save(foundAuthInfo);
-        }
+    public AuthInfo editPassword(AuthInfo authInfo, EditPasswordForm editPasswordForm) {
+        authInfo.setPassword(editPasswordForm.getNewPassword());
+        authInfoRepository.save(authInfo);
+        return authInfo;
     }
 
     private boolean existsByUsername(String username) {

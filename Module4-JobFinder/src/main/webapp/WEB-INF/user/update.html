@@ -63,20 +63,14 @@
     <p th:text="${success}"></p>
 </div>
 
-<div th:if="${errors}" class="text-danger text-center mb-2">
-    <p th:text="${errors}"></p>
+<div th:if="${error}" class="text-danger text-center mb-2">
+    <p th:text="${error}"></p>
 </div>
 <div class="container mt-5">
     <div class="card shadow p-4 rounded">
         <h3 class="card-title text-center mb-4">Cập nhật thông tin người dùng</h3>
 
-        <form th:object="${userUpdateForm}" method="post">
-
-            <div class="mb-3">
-                <label for="password" class="form-label">Mật khẩu mới</label>
-                <input type="password" id="password" th:field="*{password}" class="form-control"/>
-            </div>
-
+        <form th:object="${editUserInfoForm}" method="post">
             <div class="mb-3">
                 <label for="firstName" class="form-label">Họ mới</label>
                 <input type="text" id="firstName" th:field="*{firstName}" class="form-control"/>

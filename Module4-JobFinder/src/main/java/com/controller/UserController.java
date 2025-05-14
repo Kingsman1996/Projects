@@ -1,8 +1,11 @@
 package com.controller;
 
-import com.entity.user.AuthInfo;
-import com.entity.user.UserRole;
-import com.dto.UserUpdateForm;
+import com.dto.EditUserInfoForm;
+import com.entity.AuthInfo;
+import com.enums.Role;
+import com.entity.UserInfo;
+import com.exception.DuplicateEmailExeption;
+import com.exception.DuplicatePhoneException;
 import com.service.UserInfoService;
 import com.service.AuthInfoService;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +30,8 @@ public class UserController {
 
     @GetMapping("/update")
     public String showUpdateForm(Model model) {
-        UserUpdateForm userUpdateForm = new UserUpdateForm();
-        model.addAttribute("userUpdateForm", userUpdateForm);
+        EditUserInfoForm editUserInfoForm = new EditUserInfoForm();
+        model.addAttribute("editUserInfoForm", editUserInfoForm);
         return "user/update";
     }
 
@@ -38,33 +41,36 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public String updateUser(@Valid @ModelAttribute UserUpdateForm updatedForm, BindingResult bindingResult,
-                             Model model, RedirectAttributes redirectAttributes, HttpSession session) {
-        System.out.println(session.getAttribute("authInfo"));
-        System.out.println(session.getAttribute("userInfo"));
+    public String updateUser(@Valid @ModelAttribute EditUserInfoForm editUserInfoForm,
+                             BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes,
+                             HttpSession session, Model model) {
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("errors",
-                    Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-            return "redirect:/users/update";
+            model.addAttribute("editUserInfoForm", editUserInfoForm);
+            model.addAttribute("error", Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+            return "user/update";
         }
-        AuthInfo currentAuthInfo = (AuthInfo) session.getAttribute("authInfo");
-        updatedForm.setUsername(currentAuthInfo.getUsername());
-        authInfoService.changePassword(updatedForm);
-        userInfoService.update(updatedForm);
-        AuthInfo newAuthInfo = authInfoService.findByUsername(updatedForm.getUsername());
-
-        session.setAttribute("authInfo", newAuthInfo);
-        session.setAttribute("userInfo", userInfoService.findByAuthInfo(newAuthInfo));
-
-        model.addAttribute("authInfo", newAuthInfo);
-        model.addAttribute("userInfo", userInfoService.findByAuthInfo(newAuthInfo));
-        return "redirect:/users/profile";
+        UserInfo currentUserInfo = (UserInfo) session.getAttribute("userInfo");
+        try {
+            session.setAttribute("userInfo", userInfoService.update(currentUserInfo, editUserInfoForm));
+            redirectAttributes.addFlashAttribute("success", "Cập nhật thông tin thành công");
+            return "redirect:/users/profile";
+        } catch (DuplicateEmailExeption | DuplicatePhoneException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("editUserInfoForm", editUserInfoForm);
+            return "user/update";
+        }
     }
 
     @GetMapping("/list")
     public String listUsersByRole(@RequestParam("role") String userRole, Model model) {
-        UserRole userRoleEnum = UserRole.valueOf(userRole);
-        List<AuthInfo> authInfoList = authInfoService.findByRole(userRoleEnum);
+        List<AuthInfo> authInfoList;
+        if (userRole == null || userRole.isEmpty()) {
+            authInfoList = authInfoService.findByRoleNot(Role.ADMIN);
+        } else {
+            Role roleEnum = Role.valueOf(userRole);
+            authInfoList = authInfoService.findByRole(roleEnum);
+        }
         model.addAttribute("authInfoList", authInfoList);
         return "user/list";
     }

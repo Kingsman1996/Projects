@@ -45,10 +45,11 @@
     <h2 class="text-center mb-4">Xin chào, <span th:text="${fullName}"></span>!</h2>
 
     <div class="d-grid gap-3 col-6 mx-auto">
-        <a th:href="@{/posts/list(status)}" class="btn btn-primary btn-lg">Quản lý tin tuyển dụng</a>
+        <a th:href="@{/posts/my-post}" class="btn btn-primary btn-lg">Quản lý bài đăng</a>
         <a th:href="@{/users/profile}" class="btn btn-secondary btn-lg">Quản lý tài khoản</a>
         <a th:href="@{/auth/logout}" class="btn btn-danger btn-lg">Đăng xuất</a>
     </div>
+
 </div>
 </body>
 </html>

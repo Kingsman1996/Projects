@@ -1,13 +1,16 @@
 package com.repo;
 
-import com.entity.post.Post;
-import com.entity.post.PostStatus;
+import com.entity.Post;
+import com.enums.Status;
+import com.entity.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    List<Post> findByStatus(PostStatus status);
+    List<Post> findByStatus(Status status);
 
-    long countByStatus(PostStatus status);
+    List<Post> findByUserInfo(UserInfo userInfo);
+
+    long countByStatus(Status status);
 }

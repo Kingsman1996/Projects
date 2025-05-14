@@ -1,7 +1,7 @@
 package com.controller;
 
-import com.entity.post.PostStatus;
-import com.entity.user.UserRole;
+import com.enums.Status;
+import com.enums.Role;
 import com.service.PostService;
 import com.service.AuthInfoService;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +19,13 @@ public class AdminController {
 
     @GetMapping
     public String showHome(Model model) {
-        model.addAttribute("userCount", authInfoService.count() - 1);
-        model.addAttribute("candidateCount", authInfoService.countByRole(UserRole.CANDIDATE));
-        model.addAttribute("recruiterCount", authInfoService.countByRole(UserRole.RECRUITER));
+        model.addAttribute("userCount", authInfoService.countByRoleNot(Role.ADMIN));
+        model.addAttribute("candidateCount", authInfoService.countByRole(Role.CANDIDATE));
+        model.addAttribute("recruiterCount", authInfoService.countByRole(Role.RECRUITER));
         model.addAttribute("postCount", postService.countAll());
-        model.addAttribute("pendingCount", postService.countByStatus(PostStatus.PENDING));
-        model.addAttribute("approvedCount", postService.countByStatus(PostStatus.APPROVED));
-        model.addAttribute("rejectedCount", postService.countByStatus(PostStatus.REJECTED));
+        model.addAttribute("pendingCount", postService.countByStatus(Status.PENDING));
+        model.addAttribute("approvedCount", postService.countByStatus(Status.APPROVED));
+        model.addAttribute("rejectedCount", postService.countByStatus(Status.REJECTED));
         return "admin/home";
     }
 }

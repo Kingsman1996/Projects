@@ -37,6 +37,9 @@
     </style>
 </head>
 <body>
+<div th:if="${success}" style="color:green;">
+    <p th:text="${success}"></p>
+</div>
 
 <div class="container mt-5">
     <div class="card shadow p-4 rounded">
@@ -50,7 +53,8 @@
         <p><strong>Địa chỉ:</strong> <span th:text="${session.userInfo.address}"></span></p>
 
         <div class="d-flex gap-2 mt-4">
-            <a th:href="@{/users/update}" class="btn btn-primary">Cập nhật thông tin</a>
+            <a th:href="@{/auth/update}" class="btn btn-primary">Đổi mật khẩu</a>
+            <a th:href="@{/users/update}" class="btn btn-primary">Đổi thông tin khác</a>
 
             <a th:if="${session.authInfo.role.toString() == 'CANDIDATE'}"
                th:href="@{/candidates}" class="btn btn-primary">

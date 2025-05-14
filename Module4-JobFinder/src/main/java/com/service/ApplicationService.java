@@ -1,14 +1,16 @@
 package com.service;
 
-import com.entity.application.Application;
-import com.entity.application.ApplicationStatus;
-import com.entity.post.Post;
-import com.entity.user.UserInfo;
+import com.entity.Application;
+import com.entity.Post;
+import com.entity.UserInfo;
 import com.repo.ApplicationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,13 +24,17 @@ public class ApplicationService {
         return applicationRepository.findByPost(post);
     }
 
-    public void save(Long postId, UserInfo candidateInfo, MultipartFile file) {
+    public void save(Long id, HttpSession session, MultipartFile cvFile) throws IOException {
         Application application = new Application();
-        application.setPost(postService.findById(postId));
+        application.setPost(postService.findById(id));
+        UserInfo candidateInfo = (UserInfo) session.getAttribute("userInfo");
         application.setUserInfo(candidateInfo);
-        application.setStatus(ApplicationStatus.SUBMITTED);
         application.setAppliedAt(LocalDate.now());
-        application.setCvLink(file.getOriginalFilename());
+        String fileName = cvFile.getOriginalFilename();
+        String uploadDir = "uploads/cv/";
+        File dest = new File(uploadDir + fileName);
+        cvFile.transferTo(dest);
+        application.setCvLink(fileName);
         applicationRepository.save(application);
     }
 }

@@ -1,6 +1,6 @@
-package com.entity.post;
+package com.entity;
 
-import com.entity.user.UserInfo;
+import com.enums.Status;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +19,7 @@ public class Post {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private PostStatus status;
+    private Status status;
 
     private LocalDate postedDate;
 

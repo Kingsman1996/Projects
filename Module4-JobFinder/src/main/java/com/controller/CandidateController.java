@@ -1,9 +1,8 @@
 package com.controller;
 
-import com.entity.post.PostStatus;
+import com.enums.Status;
 import com.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +16,7 @@ public class CandidateController {
 
     @GetMapping
     public String showHome(Model model) {
-        model.addAttribute("postList", postService.findByStatus(PostStatus.APPROVED));
+        model.addAttribute("postList", postService.findByStatus(Status.APPROVED));
         return "candidate/home";
     }
 }
