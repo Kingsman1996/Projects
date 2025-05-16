@@ -45,7 +45,7 @@
     <div class="card shadow p-4 rounded">
         <h3 class="card-title text-center mb-4">Thông tin cá nhân</h3>
 
-        <p><strong>Tài khoản:</strong> <span th:text="${session.authInfo.username}"></span></p>
+        <p><strong>Tài khoản:</strong> <span th:text="${session.auth.username}"></span></p>
         <p><strong>Họ:</strong> <span th:text="${session.userInfo.firstName}"></span></p>
         <p><strong>Tên:</strong> <span th:text="${session.userInfo.lastName}"></span></p>
         <p><strong>Email:</strong> <span th:text="${session.userInfo.email}"></span></p>
@@ -53,14 +53,14 @@
         <p><strong>Địa chỉ:</strong> <span th:text="${session.userInfo.address}"></span></p>
 
         <div class="d-flex gap-2 mt-4">
-            <a th:href="@{/auth/update}" class="btn btn-primary">Đổi mật khẩu</a>
+            <a th:href="@{/auth/edit-password}" class="btn btn-primary">Đổi mật khẩu</a>
             <a th:href="@{/users/update}" class="btn btn-primary">Đổi thông tin khác</a>
 
-            <a th:if="${session.authInfo.role.toString() == 'CANDIDATE'}"
+            <a th:if="${session.auth.role.toString() == 'CANDIDATE'}"
                th:href="@{/candidates}" class="btn btn-primary">
                 Về trang chủ
             </a>
-            <a th:if="${session.authInfo.role.toString() == 'RECRUITER'}"
+            <a th:if="${session.auth.role.toString() == 'RECRUITER'}"
                th:href="@{/recruiters}" class="btn btn-primary">
                 Về trang chủ
             </a>

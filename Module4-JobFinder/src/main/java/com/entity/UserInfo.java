@@ -26,5 +26,5 @@ public class UserInfo {
 
     @OneToOne
     @JoinColumn(unique = true)
-    private AuthInfo authInfo;
+    private Auth auth;
 }

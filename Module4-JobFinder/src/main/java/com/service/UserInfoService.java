@@ -1,10 +1,9 @@
 package com.service;
 
 import com.dto.EditUserInfoForm;
-import com.entity.AuthInfo;
+import com.entity.Auth;
 import com.entity.UserInfo;
-import com.exception.DuplicateEmailExeption;
-import com.exception.DuplicatePhoneException;
+import com.exception.DuplicateDataException;
 import com.repo.UserInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,17 +15,17 @@ import java.util.Optional;
 public class UserInfoService {
     private final UserInfoRepository userInfoRepository;
 
-    public UserInfo findByAuthInfo(AuthInfo authInfo) {
-        Optional<UserInfo> optionalUserInfo = userInfoRepository.findByAuthInfo(authInfo);
+    public UserInfo findByAuthInfo(Auth auth) {
+        Optional<UserInfo> optionalUserInfo = userInfoRepository.findByAuth(auth);
         return optionalUserInfo.orElse(null);
     }
 
     public UserInfo update(UserInfo userInfo, EditUserInfoForm editUserInfoForm) {
-        if (existsByEmail(editUserInfoForm.getEmail())) {
-            throw new DuplicateEmailExeption("Email đã tồn tại");
+        if (existsByEmail(editUserInfoForm.getEmail(), userInfo.getId())) {
+            throw new DuplicateDataException("Email đã tồn tại", editUserInfoForm);
         }
-        if (existsByPhone(editUserInfoForm.getPhone())) {
-            throw new DuplicatePhoneException("Số điện thoại đã tồn tại");
+        if (existsByPhone(editUserInfoForm.getPhone(), userInfo.getId())) {
+            throw new DuplicateDataException("Số điện thoại đã tồn tại", editUserInfoForm);
         }
         userInfo.setFirstName(editUserInfoForm.getFirstName());
         userInfo.setLastName(editUserInfoForm.getLastName());
@@ -37,16 +36,11 @@ public class UserInfoService {
         return userInfo;
     }
 
-    public UserInfo findById(Long id) {
-        Optional<UserInfo> optionalUserInfo = userInfoRepository.findById(id);
-        return optionalUserInfo.orElse(null);
+    boolean existsByPhone(String phone, Long id) {
+        return userInfoRepository.existsByPhoneAndIdNot(phone, id);
     }
 
-    boolean existsByPhone(String phone) {
-        return userInfoRepository.existsByPhone(phone);
-    }
-
-    boolean existsByEmail(String email) {
-        return userInfoRepository.existsByEmail(email);
+    boolean existsByEmail(String email, Long id) {
+        return userInfoRepository.existsByEmailAndIdNot(email, id);
     }
 }

@@ -9,7 +9,6 @@ import com.repo.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +19,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final ApplicationRepository applicationRepository;
 
-    public void save(Post post, HttpSession session) {
-        UserInfo recruiterInfo = (UserInfo) session.getAttribute("userInfo");
-        post.setUserInfo(recruiterInfo);
+
+    public void save(Post post) {
         post.setStatus(Status.PENDING);
         post.setPostedDate(LocalDate.now());
         postRepository.save(post);

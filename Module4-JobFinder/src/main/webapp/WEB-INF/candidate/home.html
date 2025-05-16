@@ -90,12 +90,12 @@
                     <a class="nav-link" th:href="@{/auth/register}">Đăng ký</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" th:if="${session.authInfo == null}"
+                    <a href="#" th:if="${session.auth == null}"
                        class="btn btn-secondary nav-link"
                        onclick="showLoginAlert()">
                         Hồ sơ cá nhân
                     </a>
-                    <a th:if="${session.authInfo != null}" th:href="@{/users/profile}"
+                    <a th:if="${session.auth != null}" th:href="@{/users/profile}"
                        class="btn btn-primary nav-link">
                         Hồ sơ cá nhân
                     </a>
@@ -121,12 +121,12 @@
                 <div class="card-body">
                     <h5 class="card-title" th:text="${post.title}"></h5>
                     <a href="#"
-                       th:if="${session.authInfo == null}"
+                       th:if="${session.auth == null}"
                        class="btn btn-secondary"
                        onclick="showLoginAlert()">Xem chi tiết
                     </a>
                     <a th:href="@{/posts/{id}/detail(id=${post.id})}"
-                       th:if="${session.authInfo != null}"
+                       th:if="${session.auth != null}"
                        class="btn btn-primary">Xem chi tiết
                     </a>
                 </div>

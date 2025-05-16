@@ -64,7 +64,7 @@
             <th>Mô tả</th>
             <th>Ngày đăng</th>
             <th>Tác giả</th>
-            <th th:if="${session.authInfo.role.toString() != 'CANDIDATE'}">Trạng thái</th>
+            <th th:if="${session.auth.role.toString() != 'CANDIDATE'}">Trạng thái</th>
             <th></th>
         </tr>
         </thead>
@@ -74,21 +74,21 @@
             <td th:text="${post.description}"></td>
             <td th:text="${post.postedDate}"></td>
             <td th:text="${post.userInfo.firstName} + ' ' + ${post.userInfo.lastName}"></td>
-            <td th:if="${session.authInfo.role.toString() != 'CANDIDATE'}">
+            <td th:if="${session.auth.role.toString() != 'CANDIDATE'}">
                 <span th:switch="${post.status.toString()}">
                     <span th:case="'PENDING'" class="text-warning">Chờ duyệt</span>
                     <span th:case="'APPROVED'" class="text-success">Đã duyệt</span>
                     <span th:case="'REJECTED'" class="text-danger">Đã từ chối</span>
                 </span>
             </td>
-            <td th:if="${session.authInfo.role.toString() == 'RECRUITER'} and ${post.status.toString() != 'APPROVED'}">
+            <td th:if="${session.auth.role.toString() == 'RECRUITER'} and ${post.status.toString() != 'APPROVED'}">
                 <a th:href="@{/posts/{id}/edit(id=${post.id})}" class="btn btn-outline-purple btn-sm">Sửa</a>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <div th:if="${session.authInfo.role.toString() == 'RECRUITER'}">
+    <div th:if="${session.auth.role.toString() == 'RECRUITER'}">
         <h3 class="mt-4">Danh sách ứng viên</h3>
         <table class="table table-bordered table-hover">
             <thead>
@@ -118,7 +118,7 @@
         </table>
     </div>
 
-    <div th:if="${session.authInfo.role.toString() == 'CANDIDATE'}">
+    <div th:if="${session.auth.role.toString() == 'CANDIDATE'}">
         <div class="d-grid gap-2 col-6 mx-auto">
             <a th:href="@{/posts/{id}/apply(id=${post.id})}" class="btn btn-purple btn-lg">Ứng tuyển ngay</a>
             <a th:href="@{/candidates}" class="btn btn-outline-purple btn-lg">Về trang chủ</a>
@@ -126,9 +126,9 @@
     </div>
 
     <div class="text-center mt-4">
-        <a th:if="${session.authInfo.role.toString() == 'RECRUITER'}" th:href="@{/posts/my-post}"
+        <a th:if="${session.auth.role.toString() == 'RECRUITER'}" th:href="@{/posts/my-post}"
            class="btn btn-outline-purple btn-lg">Quay lại</a>
-        <a th:if="${session.authInfo.role.toString() == 'ADMIN'}" th:href="@{/posts/list}"
+        <a th:if="${session.auth.role.toString() == 'ADMIN'}" th:href="@{/posts/list}"
            class="btn btn-outline-purple btn-lg">Quay lại</a>
     </div>
 </div>

@@ -60,7 +60,7 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">Danh sách tin tuyển dụng</h2>
 
-    <div th:if="${session.authInfo.role.toString() == 'RECRUITER'}" class="text-end mb-3">
+    <div th:if="${session.auth.role.toString() == 'RECRUITER'}" class="text-end mb-3">
         <a th:href="@{/posts/create}" class="btn btn-purple">Thêm tin mới</a>
     </div>
 
@@ -91,7 +91,7 @@
                     <a th:href="@{/posts/{id}/detail(id=${post.id})}" class="btn btn-outline-primary btn-sm mb-1">Chi
                         tiết</a>
 
-                    <span th:if="${session.authInfo.role.toString() == 'ADMIN'}">
+                    <span th:if="${session.auth.role.toString() == 'ADMIN'}">
                         <a th:if="${post.status.toString() == 'PENDING'}"
                            th:href="@{/posts/{id}/approve(id=${post.id})}"
                            class="btn btn-outline-success btn-sm mb-1">Duyệt</a>
@@ -100,7 +100,7 @@
                            class="btn btn-outline-danger btn-sm mb-1">Từ chối</a>
                     </span>
 
-                    <span th:if="${session.authInfo.role.toString() == 'RECRUITER'}">
+                    <span th:if="${session.auth.role.toString() == 'RECRUITER'}">
                         <a th:href="@{/posts/{id}/delete(id=${post.id})}" class="btn btn-outline-danger btn-sm mb-1"
                            onclick="return confirmDelete()">Xóa</a>
                     </span>
@@ -110,11 +110,11 @@
         </table>
     </div>
     <div class="d-flex justify-content-between mt-4">
-        <a th:if="${session.authInfo.role.toString() == 'ADMIN'}" th:href="@{/admin}" class="btn btn-outline-purple">Quay
+        <a th:if="${session.auth.role.toString() == 'ADMIN'}" th:href="@{/admin}" class="btn btn-outline-purple">Quay
             lại</a>
-        <a th:if="${session.authInfo.role.toString() == 'RECRUITER'}" th:href="@{/recruiters}"
+        <a th:if="${session.auth.role.toString() == 'RECRUITER'}" th:href="@{/recruiters}"
            class="btn btn-outline-purple">Quay lại</a>
-        <a th:if="${session.authInfo.role.toString() == 'CANDIDATE'}" th:href="@{/candidates}"
+        <a th:if="${session.auth.role.toString() == 'CANDIDATE'}" th:href="@{/candidates}"
            class="btn btn-outline-purple">Quay lại</a>
     </div>
 </div>

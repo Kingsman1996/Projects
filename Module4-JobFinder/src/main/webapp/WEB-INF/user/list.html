@@ -79,10 +79,10 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="authInfo, iterStat : ${authInfoList}">
+        <tr th:each="auth, iterStat : ${authList}">
             <td th:text="${iterStat.index + 1}"></td>
-            <td th:text="${authInfo.username}"></td>
-            <td th:switch="${authInfo.role.toString()}">
+            <td th:text="${auth.username}"></td>
+            <td th:switch="${auth.role.toString()}">
                 <span th:case="'RECRUITER'">Nhà tuyển dụng</span>
                 <span th:case="'CANDIDATE'">Ứng viên</span>
             </td>

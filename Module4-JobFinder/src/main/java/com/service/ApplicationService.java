@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -24,16 +23,19 @@ public class ApplicationService {
         return applicationRepository.findByPost(post);
     }
 
-    public void save(Long id, HttpSession session, MultipartFile cvFile) throws IOException {
+    public void save(Long id, UserInfo candidateInfo, MultipartFile cvFile) {
         Application application = new Application();
         application.setPost(postService.findById(id));
-        UserInfo candidateInfo = (UserInfo) session.getAttribute("userInfo");
         application.setUserInfo(candidateInfo);
         application.setAppliedAt(LocalDate.now());
         String fileName = cvFile.getOriginalFilename();
         String uploadDir = "uploads/cv/";
         File dest = new File(uploadDir + fileName);
-        cvFile.transferTo(dest);
+        try {
+            cvFile.transferTo(dest);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
         application.setCvLink(fileName);
         applicationRepository.save(application);
     }

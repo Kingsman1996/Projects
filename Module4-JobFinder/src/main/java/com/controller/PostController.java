@@ -2,10 +2,8 @@ package com.controller;
 
 import com.entity.Application;
 import com.entity.Post;
-import com.entity.AuthInfo;
 import com.enums.Status;
 import com.entity.UserInfo;
-import com.exception.DeleteAppliedPostException;
 import com.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,9 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -25,61 +20,44 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
     private final ApplicationService applicationService;
-    private final UserInfoService userInfoService;
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {
-        Post post = new Post();
-        model.addAttribute("post", post);
+        model.addAttribute("post", new Post());
         return "post/create";
     }
 
     @PostMapping("/create")
     public String create(@ModelAttribute Post post,
-                         RedirectAttributes redirectAttributes,
-                         HttpSession session) {
-        postService.save(post, session);
+                         @SessionAttribute("userInfo") UserInfo recruiterInfo,
+                         RedirectAttributes redirectAttributes) {
+        post.setUserInfo(recruiterInfo);
+        postService.save(post);
         redirectAttributes.addFlashAttribute("success", "Đăng bài thành công");
         return "redirect:/posts/create";
     }
 
     @GetMapping("/{id}/edit")
-    public String showUpdateForm(@PathVariable Long id, HttpSession session,
-                                 RedirectAttributes redirectAttributes, Model model) {
-        Post checkedPost = checkPostOwner(session, id);
-        if (checkedPost == null) {
-            redirectAttributes.addFlashAttribute("error", "Không thể chỉnh sửa bài đăng của người khác");
-            return "redirect:/posts/{id}/edit";
-        }
-        model.addAttribute("checkedPost", checkedPost);
+    public String showUpdateForm(@PathVariable Long id, Model model) {
+        Post post = postService.findById(id);
+        model.addAttribute("post", post);
         return "post/edit";
     }
 
-    private Post checkPostOwner(HttpSession session, Long postId) {
-        Post post = postService.findById(postId);
-        AuthInfo currentAuthInfo = (AuthInfo) session.getAttribute("authInfo");
-        UserInfo ownerInfo = userInfoService.findById(post.getUserInfo().getId());
-        if (currentAuthInfo.getUsername().equals(ownerInfo.getAuthInfo().getUsername())) {
-            return post;
-        }
-        return null;
-    }
-
     @PostMapping("/{id}/edit")
-    public String update(@ModelAttribute Post post, RedirectAttributes redirectAttributes, HttpSession session) {
-        postService.save(post, session);
+    public String update(@ModelAttribute Post post,
+                         RedirectAttributes redirectAttributes,
+                         @SessionAttribute ("userInfo") UserInfo userInfo) {
+        post.setUserInfo(userInfo);
+        postService.save(post);
         redirectAttributes.addFlashAttribute("success", "Sửa bài thành công");
         return "redirect:/posts/{id}/edit";
     }
 
     @GetMapping("/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        try {
-            postService.deleteById(id);
-            redirectAttributes.addFlashAttribute("success", "Xóa bài thành công");
-        } catch (DeleteAppliedPostException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
-        }
+        postService.deleteById(id);
+        redirectAttributes.addFlashAttribute("success", "Xóa bài thành công");
         return "redirect:/posts/my-post";
     }
 
@@ -107,24 +85,20 @@ public class PostController {
     @GetMapping("/list")
     public String searchPosts(@RequestParam(required = false) String status,
                               Model model) {
-        List<Post> filteredPosts = new ArrayList<>();
+        List<Post> filteredPosts;
         if (status == null || status.isEmpty()) {
             filteredPosts = postService.findAll();
         } else {
-            try {
-                Status postStatus = Status.valueOf(status);
-                filteredPosts = postService.findByStatus(postStatus);
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            }
+            Status postStatus = Status.valueOf(status);
+            filteredPosts = postService.findByStatus(postStatus);
         }
         model.addAttribute("posts", filteredPosts);
         return "post/list";
     }
 
     @GetMapping("/my-post")
-    public String searchPosts(Model model, HttpSession session) {
-        UserInfo userInfo = (UserInfo) session.getAttribute("userInfo");
+    public String searchPosts(Model model,
+                              @SessionAttribute("userInfo") UserInfo userInfo) {
         model.addAttribute("posts", postService.findByUserInfo(userInfo));
         return "post/list";
     }
@@ -138,15 +112,10 @@ public class PostController {
     @PostMapping("/{id}/apply")
     public String applyForPost(@PathVariable Long id,
                                @RequestParam("cvFile") MultipartFile cvFile,
-                               HttpSession session,
+                               @SessionAttribute("userInfo") UserInfo userInfo,
                                RedirectAttributes redirectAttributes) {
-        try {
-            applicationService.save(id, session, cvFile);
-            redirectAttributes.addFlashAttribute("success", "Gửi thành công");
-            return "redirect:/posts/{id}/detail";
-        } catch (IOException e) {
-            redirectAttributes.addFlashAttribute("error", "Gửi thất bại");
-            return "redirect:/posts/{id}/apply";
-        }
+        applicationService.save(id, userInfo, cvFile);
+        redirectAttributes.addFlashAttribute("success", "Gửi thành công");
+        return "redirect:/posts/{id}/apply";
     }
 }
