@@ -1,6 +1,6 @@
 package com.teamtaskmanager.controller;
 
-import com.teamtaskmanager.dto.ProjectRequest;
+import com.teamtaskmanager.dto.project.ProjectRequest;
 import com.teamtaskmanager.service.ProjectService;
 import com.teamtaskmanager.util.MessageHelper;
 import jakarta.validation.Valid;
@@ -30,7 +30,7 @@ public class ProjectController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
-        projectService.add(projectRequest);
-        return ResponseEntity.ok(messageHelper.get("project.created.success"));
+        projectService.create(projectRequest);
+        return ResponseEntity.ok(messageHelper.get("project.create.success"));
     }
 }

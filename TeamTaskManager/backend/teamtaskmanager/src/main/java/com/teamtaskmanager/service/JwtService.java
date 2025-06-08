@@ -1,8 +1,7 @@
 package com.teamtaskmanager.service;
 
-import com.teamtaskmanager.entity.Account;
-import com.teamtaskmanager.entity.Authority;
-import com.teamtaskmanager.repository.AuthorityRepository;
+import com.teamtaskmanager.entity.User;
+import com.teamtaskmanager.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -11,30 +10,28 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class JwtService {
-    private final AuthorityRepository authorityRepository;
-    public static final String ROLE_CLAIM = "roleList";
+    private final UserRepository userRepository;
+    public static final String ROLE_CLAIM = "roles";
 
     @Value("${jwt.secret}")
     private String secretKey;
 
-    public String generateToken(Account account) {
-        List<Authority> authorityList = authorityRepository.findByAccount(account);
-        List<String> roleList = new ArrayList<>();
-        for (Authority authority : authorityList) {
-            roleList.add(authority.getRole().getName());
-        }
+    @Value("${jwt.expiration}")
+    private long jwtExpirationMs;
+
+    public String generateToken(User user) {
+        List<String> roles = user.getAuthorities().stream().map(item -> item.getRole().name()).toList();
         return Jwts.builder()
-                .setSubject(account.getUsername())
-                .claim(ROLE_CLAIM, roleList)
+                .setSubject(user.getUsername())
+                .claim(ROLE_CLAIM, roles)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(signKey())
                 .compact();
     }

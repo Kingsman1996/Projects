@@ -3,8 +3,8 @@ package com.teamtaskmanager.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Date;
 
+import java.util.List;
 
 @Entity
 @Setter
@@ -16,7 +16,11 @@ public class Project {
 
     private String name;
     private String description;
-    private boolean active;
-    private Date startDate;
-    private Date endDate;
+
+    @OneToOne
+    @JoinColumn
+    private Team team;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private List<Task> tasks;
 }

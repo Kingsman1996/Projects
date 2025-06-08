@@ -1,72 +1,64 @@
-import {useState} from 'react';
+'use client'
+
+import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import axiosPublic from "../../js/axiosPublic.js";
-import {Container, TextField, Button, Typography, Box} from '@mui/material';
-import {jwtDecode} from "jwt-decode";
+import {Container, TextField, Button, Typography, Box, CircularProgress} from '@mui/material';
+import {login} from "../../service/login.js";
+import {useFormik} from "formik";
+import getNavigateUrl from "../../service/navigate.js";
 
 const LoginForm = () => {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        username: '',
-        password: ''
-    });
-    const [serverMessage, setServerMessage] = useState({
+    const [loadingState, setLoadingState] = useState(false);
+    const [messageState, setMessageState] = useState({
         content: '',
-        color: ''
+        color: '',
     });
-    const [loading, setLoading] = useState(false);
 
-    const handleChange = (e) => {
-        setFormData({...formData, [e.target.name]: e.target.value});
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-            const response = await axiosPublic.post('/login', formData);
-            const token = response.data;
-            localStorage.setItem('token', token);
-            const role = jwtDecode(token).role;
-            switch (role) {
-                case 'ADMIN':
-                    navigate('/admin');
-                    break;
-                case 'MANAGER':
-                    navigate('/manager');
-                    break;
-                case 'MEMBER':
-                    navigate('/member');
-                    break;
-                default:
-                    navigate('/login');
+    const formik = useFormik({
+        initialValues: {
+            username: '',
+            password: '',
+        },
+        onSubmit: async (values) => {
+            setLoadingState(true);
+            try {
+                const roleList = await login(values);
+                navigate(getNavigateUrl(roleList));
+            } catch (error) {
+                setMessageState({
+                    content: error.content,
+                    color: error.color,
+                });
+            } finally {
+                setLoadingState(false);
             }
-        } catch (error) {
-            setServerMessage({
-                content: error.response?.data?.message,
-                color: 'red',
-            });
-        }
-        setLoading(false);
-    };
+        },
+    });
+
+    if (loadingState) {
+        return (
+            <CircularProgress/>
+        )
+    }
 
     return (
         <Container maxWidth="xs">
             <Box sx={{textAlign: 'center', mt: 5, p: 3, boxShadow: 3, borderRadius: 2}}>
                 <Typography variant="h4" gutterBottom>Đăng Nhập</Typography>
-                <form onSubmit={handleSubmit}>
-                    <TextField fullWidth label="Tên đăng nhập" name="username" value={formData.username}
-                               onChange={handleChange} margin="normal" variant="outlined"/>
-                    <TextField fullWidth label="Mật khẩu" type="password" name="password" value={formData.password}
-                               onChange={handleChange} margin="normal" variant="outlined"/>
-                    <Button fullWidth type="submit" variant="contained" color="primary" sx={{mt: 2}} disabled={loading}>
-                        {loading ? "Đang xử lý..." : "Đăng nhập"}
+                <form onSubmit={formik.handleSubmit}>
+                    <TextField fullWidth label="Tên đăng nhập" name="username" value={formik.values.username}
+                               onChange={formik.handleChange} margin="normal" variant="outlined"/>
+                    <TextField fullWidth label="Mật khẩu" type="password" name="password" value={formik.values.password}
+                               onChange={formik.handleChange} margin="normal" variant="outlined"/>
+                    <Button fullWidth type="submit" variant="contained" color="primary" sx={{mt: 2}}>
+                        Đăng nhập
                     </Button>
                 </form>
 
-                {serverMessage.content && (
-                    <Typography sx={{mt: 2, color: serverMessage.color}}>
-                        {serverMessage.content}
+                {messageState.content && (
+                    <Typography sx={{mt: 2, color: messageState.color}}>
+                        {messageState.content}
                     </Typography>
                 )}
 

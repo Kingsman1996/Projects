@@ -31,10 +31,13 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register", "/logout").permitAll()
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                        .requestMatchers("/projects/**").hasAnyAuthority("ADMIN", "MANAGER")
-                        .anyRequest().authenticated()
+                                .requestMatchers("/users/login"
+                                        , "/users/register"
+                                        , "/users/logout")
+                                .permitAll()
+//                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
+//                                .requestMatchers("/projects/**").hasAnyAuthority("ADMIN", "MANAGER")
+                                .anyRequest().authenticated()
                 )
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)

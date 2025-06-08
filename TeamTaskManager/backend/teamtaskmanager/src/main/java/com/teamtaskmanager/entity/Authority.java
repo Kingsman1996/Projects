@@ -1,22 +1,34 @@
 package com.teamtaskmanager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 @Entity
 @Setter
 @Getter
-public class Authority {
+@NoArgsConstructor
+public class Authority  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long id;
 
-    @JoinColumn(nullable = false)
-    @ManyToOne
-    private Account account;
-
-    @JoinColumn(nullable = false)
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, unique = true)
     private Role role;
+
+    public Authority(Role role) {
+        this.role = role;
+    }
+
+    public enum Role {
+        ADMIN,
+        MANAGER,
+        LEADER,
+        MEMBER
+    }
 }

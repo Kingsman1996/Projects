@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,8 +18,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.teamtaskmanager.service.JwtService.ROLE_CLAIM;
 
@@ -51,19 +52,18 @@ public class JwtFilter extends OncePerRequestFilter {
                 return;
             }
 
-            Object authorities = claims.get(ROLE_CLAIM);
-            if (authorities instanceof List<?> authorityList) {
-                List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-                for (Object item : authorityList) {
-                    if (item instanceof String roleName) {
-                        grantedAuthorities.add(new SimpleGrantedAuthority(roleName));
-                    }
-                }
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(username, null, grantedAuthorities);
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-                filterChain.doFilter(request, response);
-            }
+            @SuppressWarnings("unchecked")
+            List<String> roles = (List<String>) claims.get(ROLE_CLAIM);
+
+            List<GrantedAuthority> authorities = roles.stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    username, null, authorities
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            filterChain.doFilter(request, response);
         } catch (JwtException | IllegalArgumentException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
